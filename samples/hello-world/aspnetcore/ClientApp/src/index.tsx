@@ -6,8 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import eventStore from './stores/EventStore'
 
-import addonSdk from '@outreach/client-addon-sdk'
-import { AddonMessageType } from '@outreach/client-addon-sdk/dist/messages/AddonMessageType';
+import addonSdk, { LogLevel } from '@outreach/client-addon-sdk'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,13 +20,47 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-addonSdk.onInit = (e) => {
+addonSdk.logging = LogLevel.Debug;
+
+addonSdk.onInit = (ctx) => {
+  console.log("[Addon]::addonSdk.onInit", ctx);
   eventStore.addEvent({
     timestamp: new Date(),
-    sender: 'host',
-    payload: JSON.stringify(e),
-    type: AddonMessageType.INIT,
-  })
+    sender: "host",
+    message: JSON.stringify(ctx),
+    type: "init",
+    context: []
+  });
 }
+
+addonSdk.onInfo = (e) => {
+  console.log("[Addon]::addonSdk.onInfo", e);
+
+  eventStore.addEvent({
+    timestamp: new Date(),
+    sender: "addon",
+    message: e.message || '',
+    type: getLevel(e.level),
+    context: e.context
+  });
+}
+
+const getLevel = (level: LogLevel) => {
+  switch (level) {
+    case LogLevel.Trace:
+      return "Trace";
+    case LogLevel.Debug:
+      return "Debug";
+    case LogLevel.Info:
+      return "Info";
+    case LogLevel.Warning:
+      return "Warning";
+    case LogLevel.Error:
+      return "Error";
+    default:
+      return level.toString();
+  }
+}
+
 
 addonSdk.ready();

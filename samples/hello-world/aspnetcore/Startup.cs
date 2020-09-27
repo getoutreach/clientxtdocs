@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -51,7 +52,7 @@ namespace Outreach.CXT.Demo.Server
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
+ endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
@@ -59,11 +60,13 @@ namespace Outreach.CXT.Demo.Server
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
+                spa.Options.DefaultPage = "/index.html";
+/*
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
+*/
             });
         }
     }
