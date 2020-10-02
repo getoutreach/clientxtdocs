@@ -20,10 +20,11 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-addonSdk.logging = LogLevel.Debug;
+addonSdk.logging = LogLevel.Trace;
+console.debug("[HelloWorld]::LogLevel->Warning");
 
 addonSdk.onInit = (ctx) => {
-  console.log("[Addon]::addonSdk.onInit", ctx);
+  console.debug("[HelloWorld]::addonSdk.onInit", ctx);
   eventStore.addEvent({
     timestamp: new Date(),
     sender: "host",
@@ -34,7 +35,13 @@ addonSdk.onInit = (ctx) => {
 }
 
 addonSdk.onInfo = (e) => {
-  console.log("[Addon]::addonSdk.onInfo", e);
+
+  if ( e.level <= addonSdk.logging ) {
+      // message is with to low level priority - ignore.
+      return;
+  }
+
+  console.debug("[HelloWorld]::addonSdk.onInfo", e);
 
   eventStore.addEvent({
     timestamp: new Date(),
@@ -62,5 +69,5 @@ const getLevel = (level: LogLevel) => {
   }
 }
 
-
+console.debug("[HelloWorld]::addonSdk.ready()");
 addonSdk.ready();

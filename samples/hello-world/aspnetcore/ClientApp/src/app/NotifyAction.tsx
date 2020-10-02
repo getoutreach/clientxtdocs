@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite'
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, createStyles, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Theme, Typography } from '@material-ui/core';
+import { Button, createStyles, FormControl, InputLabel, MenuItem, Select, TextField, Theme, Typography } from '@material-ui/core';
 
 import addonSdk from '@outreach/client-addon-sdk'
 import { NotificationType } from '@outreach/client-addon-sdk/messages/NotificationType';
@@ -88,13 +88,19 @@ const NotifyAction: React.FC = observer(() =>   {
                 Send notification
             </Button>
             <FormControl component="fieldset" className={classes.options} >
-                <FormLabel component="legend">Notification type</FormLabel>
-                <RadioGroup aria-label="notification-type" name="gender1" value={type} onChange={(e) => setType(e.currentTarget.value)}  >
-                    <FormControlLabel value="success" control={<Radio />} label="success" />
-                    <FormControlLabel value="info" control={<Radio />} label="information" />
-                    <FormControlLabel value="warning" control={<Radio />} label="warning" />
-                    <FormControlLabel value="error" control={<Radio />} label="error" />
-                </RadioGroup>
+                <InputLabel  id='notification-type-title'>Notification type</InputLabel>
+                <Select
+                    labelId="notification-type-title"
+                    variant="filled"
+                    value={type}
+                    onChange={(e) => setType(e.target.value as string)}
+                    >
+                    <MenuItem value="success">success</MenuItem>
+                    <MenuItem value="info">information</MenuItem>
+                    <MenuItem value="warning">warning</MenuItem>
+                    <MenuItem value="error">error</MenuItem>
+                    </Select>
+
             </FormControl>
       </div>);
 });
