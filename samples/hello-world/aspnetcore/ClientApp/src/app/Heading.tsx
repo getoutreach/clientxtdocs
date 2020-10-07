@@ -1,42 +1,33 @@
-import React from 'react';
+import React from "react";
+import { observer } from "mobx-react-lite";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 
-import { observer } from 'mobx-react-lite'
+import { useStyles } from "../styles/styles";
 
-import { makeStyles } from '@material-ui/core/styles';
-
-import { createStyles, Theme, Typography } from '@material-ui/core';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      heading: {
-        paddingBottom: 0,
-      },
-      subtitle: {
-        
-      },
-      root: {
-        display: "flex",
-        flexDirection: "column",
-        padding: theme.spacing(2),
-        paddingBottom: 0,
-      },
-    })
-);
-
-const Heading: React.FC = observer(() =>   {
-
+const Heading: React.FC = observer(() => {
   const classes = useStyles();
 
-  return <div className={classes.root}>
-      <Typography variant="h4" className={classes.heading}>
-        Hello World - Client extensibility demo addon
+  return (
+    <>
+      <Typography variant="h1" className={classes.heading}>
+        Hello World
       </Typography>
-      <Typography variant="subtitle1" className={classes.subtitle}>
-        <em>This is a demo addon where you can see how the addon gets initialized, 
-        what events are sent and received, 
-        and try out supported actions: authenticate, notify, and decorate.</em>
-      </Typography>
-  </div>;
+      <Container className={classes.root}>
+        <Typography variant="h2" color="primary" className={classes.subtitle}>
+          Client extensibility demo addon
+        </Typography>
+
+        <Typography variant="body1" className={classes.paragraph}>
+          This is a demo addon where you can see how the addon gets initialized,
+          what events are sent and received, and try out supported actions:
+          <Typography variant="caption" className={classes.strong}>
+            authenticate, notify and decorate.
+          </Typography>
+        </Typography>
+      </Container>
+    </>
+  );
 });
 
 export default Heading;
