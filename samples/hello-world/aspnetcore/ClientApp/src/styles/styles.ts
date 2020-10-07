@@ -25,6 +25,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: 20,
       fontWeight: 500,
     },
+    main: {
+      paddingTop: 80,
+    },
     root: {
       display: "flex",
       flexDirection: "column",
@@ -39,8 +42,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "row",
     },
-    strong: {
-      fontWeight: 800,
+    eventDate: {
+      paddingLeft: 10,
+    },
+    eventMessage: {
+      paddingLeft: 20,
+      fontSize: 16,
+    },
+    eventContext: {
+      fontFamily: "monospace",
+      fontSize: 14,
     },
     params: {
       display: "inline",
