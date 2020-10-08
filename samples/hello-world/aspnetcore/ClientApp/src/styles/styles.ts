@@ -42,7 +42,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "row",
     },
+    eventTable: {
+      padding: 0,
+      marginTop: 10,
+      marginBottom: 20,
+    },
     eventDate: {
+      paddingLeft: 10,
+    },
+    eventSender: {
+      paddingTop: 5,
       paddingLeft: 10,
     },
     eventMessage: {
