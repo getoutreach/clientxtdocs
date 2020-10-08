@@ -1456,10 +1456,10 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@outreach/client-addon-sdk@0.0.72":
-  version "0.0.72"
-  resolved "https://registry.yarnpkg.com/@outreach/client-addon-sdk/-/client-addon-sdk-0.0.72.tgz#dcdb51f860eed4fe8abfcd0bac0f4bee83f4dd64"
-  integrity sha512-WorRvoh9Dni9AIYN2ozhyVQhmZM3R3i+Ux5Y1HE6FhYkERr1lPlv34o/31xguTfozCz0Irb4BHcUR1585itbEQ==
+"@outreach/client-addon-sdk@0.0.772":
+  version "0.0.772"
+  resolved "https://registry.yarnpkg.com/@outreach/client-addon-sdk/-/client-addon-sdk-0.0.772.tgz#a1ef4794f81aae2c4492512b5348af8e795ee47c"
+  integrity sha512-Bs+S7CB7HvL2QziTfuI3sM7W83iLfYitn1+IwsMUDIJLObCiVQUvBpB8UU88VGlNRzUQokeMjJDz5KNiKJ3i1A==
 
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"

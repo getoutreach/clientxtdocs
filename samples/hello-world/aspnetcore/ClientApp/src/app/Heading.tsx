@@ -1,9 +1,8 @@
-import React from "react";
-import { observer } from "mobx-react-lite";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-
-import { useStyles } from "../styles/styles";
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import { useStyles } from '../styles/styles';
 
 const Heading: React.FC = observer(() => {
   const classes = useStyles();
@@ -15,9 +14,8 @@ const Heading: React.FC = observer(() => {
       </Typography>
 
       <Typography variant="body1" className={classes.paragraph}>
-        This is a demo addon where you can see how the addon gets initialized,
-        what events are sent and received, and try out supported actions:
-        authenticate, notify and decorate.
+        This is a demo addon where you can see how the addon gets initialized, what events are sent and received, and
+        try out supported actions: authenticate, notify and decorate.
       </Typography>
     </Container>
   );
