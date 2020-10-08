@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './app/App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./app/App";
+import * as serviceWorker from "./serviceWorker";
 
-import eventStore from './stores/EventStore'
+import eventStore, { Sender } from "./stores/EventStore";
 
-import addonSdk, { LogLevel } from '@outreach/client-addon-sdk'
+import addonSdk, { LogLevel } from "@outreach/client-addon-sdk";
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
@@ -27,30 +27,29 @@ addonSdk.onInit = (ctx) => {
   console.debug("[HelloWorld]::addonSdk.onInit", ctx);
   eventStore.addEvent({
     timestamp: new Date(),
-    sender: "host",
+    sender: Sender.Host,
     message: JSON.stringify(ctx),
     type: "init",
-    context: []
+    context: [],
   });
-}
+};
 
 addonSdk.onInfo = (e) => {
-
-  if ( e.level <= addonSdk.logging ) {
-      // message is with to low level priority - ignore.
-      return;
+  if (e.level <= addonSdk.logging) {
+    // message is with to low level priority - ignore.
+    return;
   }
 
   console.debug("[HelloWorld]::addonSdk.onInfo", e);
 
   eventStore.addEvent({
     timestamp: new Date(),
-    sender: "addon",
-    message: e.message || '',
+    sender: Sender.Addon,
+    message: e.message || "",
     type: getLevel(e.level),
-    context: e.context
+    context: e.context,
   });
-}
+};
 
 const getLevel = (level: LogLevel) => {
   switch (level) {
@@ -67,7 +66,7 @@ const getLevel = (level: LogLevel) => {
     default:
       return level.toString();
   }
-}
+};
 
 console.debug("[HelloWorld]::addonSdk.ready()");
 addonSdk.ready();

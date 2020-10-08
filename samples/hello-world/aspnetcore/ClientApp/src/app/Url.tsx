@@ -1,57 +1,50 @@
-import React from 'react';
-
-import { observer } from 'mobx-react-lite'
-
-import { makeStyles } from '@material-ui/core/styles';
-import { createStyles, Theme, Typography } from '@material-ui/core';
-
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        heading: {
-            padding: theme.spacing(2),
-            paddingTop: theme.spacing(3),
-            paddingBottom: 0,
-        },
-        subtitle: {
-            paddingLeft: theme.spacing(2),
-        },
-        table: {
-            margin: theme.spacing(2), 
-            marginTop: theme.spacing(1), 
-            width: 200
-        },
-        container: {
-            display: 'flex',
-            flexDirection: 'row'
-        }
-    })
-);
+import React from "react";
+import { observer } from "mobx-react-lite";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { useStyles } from "../styles/styles";
 
 interface QueryParam {
-    key: string;
-    value: string;
+  key: string;
+  value: string;
 }
 
-const Url: React.FC = observer(() =>   {
-
+const Url: React.FC = observer(() => {
   const classes = useStyles();
 
-  var queryParams: QueryParam[] = [];
+  let queryParams: QueryParam[] = [];
   const urlSearchParams = new URLSearchParams(window.location.search);
 
   for (const [key, value] of urlSearchParams) {
-    queryParams.push({ key, value } );
+    queryParams.push({ key, value });
   }
 
-  return (<>
-            <Typography variant="h5" className={classes.heading}>
-                Iframe source url
-            </Typography>
-            <Typography variant="subtitle2" className={classes.subtitle}>
-                {window.location.href}
-            </Typography>
-    </>);
+  return (
+    <Container className={classes.root}>
+      <Typography variant="h2" color="primary" className={classes.subtitle}>
+        Iframe source url
+      </Typography>
+
+      <Typography variant="body1" className={classes.paragraph}>
+        {window.location.href}
+        <br />
+        {queryParams.length > 0 && (
+          <>
+            {queryParams.map((param, index) => (
+              <Typography
+                variant="caption"
+                className={classes.params}
+                key={index}
+              >
+                <span className={classes.key}>{param["key"]}</span>
+                <span className={classes.value}>{param["value"]}</span>
+              </Typography>
+            ))}
+          </>
+        )}
+      </Typography>
+    </Container>
+  );
 });
 
 export default Url;
