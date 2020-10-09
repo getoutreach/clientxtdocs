@@ -1,9 +1,10 @@
-import { action, observable } from "mobx";
-import React from "react";
+import { action, observable } from 'mobx';
+import React from 'react';
 
 export enum Sender {
-  Host = "host",
-  Addon = "addon",
+  Host = 'host',
+  Addon = 'addon',
+  Debug = 'debug',
 }
 export class Event {
   public timestamp!: Date;
