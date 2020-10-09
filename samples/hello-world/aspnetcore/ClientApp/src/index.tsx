@@ -7,6 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 import eventStore, { Sender } from "./stores/EventStore";
 
 import addonSdk, { LogLevel } from "@outreach/client-addon-sdk";
+import { AddonLogger } from "./AddonLogger";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,7 +21,9 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-addonSdk.logging = LogLevel.Trace;
+console.log("[Logger]", window.outreach);
+
+addonSdk.logger = new AddonLogger();
 console.debug("[HelloWorld]::LogLevel->Warning");
 
 addonSdk.onInit = (ctx) => {
@@ -34,24 +37,7 @@ addonSdk.onInit = (ctx) => {
   });
 };
 
-addonSdk.onInfo = (e) => {
-  if (e.level <= addonSdk.logging) {
-    // message is with to low level priority - ignore.
-    return;
-  }
-
-  console.debug("[HelloWorld]::addonSdk.onInfo", e);
-
-  eventStore.addEvent({
-    timestamp: new Date(),
-    sender: Sender.Addon,
-    message: e.message || "",
-    type: getLevel(e.level),
-    context: e.context,
-  });
-};
-
-const getLevel = (level: LogLevel) => {
+export const getLevel = (level: LogLevel) => {
   switch (level) {
     case LogLevel.Trace:
       return "Trace";
@@ -70,3 +56,5 @@ const getLevel = (level: LogLevel) => {
 
 console.debug("[HelloWorld]::addonSdk.ready()");
 addonSdk.ready();
+
+
