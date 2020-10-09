@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite';
 
-import { Grid, Typography } from "@material-ui/core";
-import NotifyAction from "./NotifyAction";
-import DecorateAction from "./DecorateAction";
-import AuthenticateAction from "./AuhenticateAction";
-import { useStyles } from "../styles/styles";
+import { Grid, Typography } from '@material-ui/core';
+import NotifyAction from './NotifyAction';
+import DecorateAction from './DecorateAction';
+import AuthenticateAction from './AuhenticateAction';
+import { useStyles } from '../styles/styles';
 
 const Actions: React.FC = observer(() => {
   const classes = useStyles();
