@@ -11,9 +11,11 @@ const EventSenderIcon = (props: { sender: Sender }) => {
 
   return (
     <Box className={classes.eventSender}>
-      {props.sender === Sender.Addon ? <ExtensionIcon /> : <DesktopMacIcon />}
-      <ArrowForwardIcon />
-      {props.sender === Sender.Addon ? <DesktopMacIcon /> : <ExtensionIcon />}
+      {props.sender === Sender.Addon ?
+        <><ExtensionIcon /><ArrowForwardIcon /><DesktopMacIcon /></> :
+        props.sender === Sender.Host ?
+          <><DesktopMacIcon /><ArrowForwardIcon /><ExtensionIcon /></> :
+          <ExtensionIcon />}
     </Box>
   );
 };
