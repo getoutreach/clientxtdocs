@@ -5,6 +5,8 @@ import { observer } from 'mobx-react-lite'
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Checkbox, createStyles, FormControlLabel, Theme, Typography } from '@material-ui/core';
 
+import addonSdk from "@outreach/client-addon-sdk";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,6 +40,11 @@ const AuthenticateAction: React.FC = observer(() =>   {
   const classes = useStyles();
   const [forced, setForced] = useState<boolean>(false);
 
+  const onAuthenticateClick = () => {
+    const token = addonSdk.getToken(forced);
+    console.debug("[HelloWorld][Addon]-onAuthenticateClick", token);
+  }
+
   return (<div className={classes.root}>
 
             <Typography variant="h6" className={classes.heading}>
@@ -49,7 +56,8 @@ const AuthenticateAction: React.FC = observer(() =>   {
             />
             <Button variant="contained" 
                     className={classes.button}
-                    color="primary">
+                    color="primary" 
+                    onClick={onAuthenticateClick}>
                 Authenticate
             </Button>
       </div>);
