@@ -9,7 +9,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
-import { EventStoreContext,Sender } from '../stores/EventStore';
+import { EventStoreContext } from '../stores/EventStore';
 import { useStyles } from '../styles/styles';
 import EventSenderIcon from './components/EventSenderIcons';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -23,9 +23,7 @@ const Events: React.FC = observer(() => {
 
   const eventStore = useContext(EventStoreContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  const [eventFilter, setEventFilter] = React.useState({
-    debugMessages: true,
-  });
+
   const [page, setPage] = React.useState(1);
 
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
@@ -33,7 +31,9 @@ const Events: React.FC = observer(() => {
   };
 
   const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEventFilter({ ...eventFilter, [event.target.name]: event.target.checked });
+    eventStore.setFilter({
+      internalLogMessages: event.target.checked
+    })
   };
 
   const handlePagination = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -41,8 +41,7 @@ const Events: React.FC = observer(() => {
   };
 
   const eventsPerPage = 5;
-  let events = eventStore.events.filter(event => (eventFilter.debugMessages ? true : event.sender !== Sender.Debug));
-  const pagesCount = Math.round(events.length / eventsPerPage +.44);
+  const pagesCount = Math.round(eventStore.filteredEvents.length / eventsPerPage +.44);
 
   return (
     <Container className={classes.root}>
@@ -54,7 +53,7 @@ const Events: React.FC = observer(() => {
               control={
                 <Switch
                   color="primary"
-                  checked={eventFilter.debugMessages}
+                  checked={eventStore.filter.internalLogMessages}
                   onChange={handleFilter}
                   name="debugMessages"
                 />
@@ -65,7 +64,7 @@ const Events: React.FC = observer(() => {
         </Grid>
       </Typography>
 
-      {events.length > 0 && (
+      {eventStore.filteredEvents.length > 0 && (
         <Container className={classes.eventTable}>
           {eventStore.events
             .slice(eventsPerPage * (page - 1), eventsPerPage * (page - 1) + eventsPerPage)
@@ -76,7 +75,7 @@ const Events: React.FC = observer(() => {
                   <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`${id}-content`} id={`${id}-header`}>
                     <Box>
                       <Typography variant="caption">
-                        <Chip icon={<EventSenderIcon sender={event.sender} />} label={event.type} />
+                        <Chip icon={<EventSenderIcon origin={event.origin} type={event.type} />} label={event.type} />
                       </Typography>
                       <Typography variant="caption" className={classes.eventDate}>
                         {moment(event.timestamp).format('lll')}

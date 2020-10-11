@@ -1,5 +1,5 @@
-import eventStore, { Sender } from './stores/EventStore';
-import addonSdk, { LogLevel, ILogger, Event } from '@outreach/client-addon-sdk';
+import eventStore from './stores/EventStore';
+import addonSdk, { LogLevel, ILogger, Event, EventOrigin, EventType } from '@outreach/client-addon-sdk';
 
 export const getLevel = (level: LogLevel) => {
   switch (level) {
@@ -26,10 +26,11 @@ export class AddonLogger implements ILogger {
     }
     console.debug('[HelloWorld]::addonSdk.onInfo', e);
     eventStore.addEvent({
+      origin: EventOrigin.ADDON,
+      type: EventType.INTERNAL,
+      logLevel: getLevel(e.level),
       timestamp: new Date(),
-      sender: Sender.Debug,
       message: e.message || '',
-      type: getLevel(e.level),
       context: e.context,
     });
   };
