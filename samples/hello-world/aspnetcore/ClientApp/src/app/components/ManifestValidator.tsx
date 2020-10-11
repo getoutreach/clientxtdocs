@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useStyles } from '../../styles/styles';
 import { Box, Container, TextField } from '@material-ui/core';
 import MockManifest from '../../mock/MockManifest';
-import { Manifest } from '@outreach/client-addon-sdk';
+import { Manifest, validate } from '@outreach/client-addon-sdk';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
@@ -33,9 +33,8 @@ const ManifestValidator = () => {
     setText(text);
 
     try {
-      const json = JSON.parse(text);
-      const manifest = new Manifest(json as Manifest);
-      setValidationIssues(manifest.validate());
+      const manifest = JSON.parse(text) as Manifest;
+      setValidationIssues(validate(manifest));
     } catch (e) {
       setValidationIssues([getManifestValidatorMessages(ManifestValidatorMessages.InValidJson)]);
     }

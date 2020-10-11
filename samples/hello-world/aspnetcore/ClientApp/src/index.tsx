@@ -24,7 +24,7 @@ serviceWorker.unregister();
 console.log('[HelloWorld]::[Logger]', window.outreach);
 
 addonSdk.logger = new AddonLogger();
-console.debug('[HelloWorld]::LogLevel->Warning');
+console.debug('[HelloWorld]::LogLevel->' + addonSdk.logger.level);
 
 addonSdk.onInit = ctx => {
   console.debug('[HelloWorld]::addonSdk.onInit', ctx);

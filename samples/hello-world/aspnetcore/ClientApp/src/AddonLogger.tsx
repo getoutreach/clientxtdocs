@@ -18,7 +18,7 @@ export const getLevel = (level: LogLevel) => {
   }
 };
 export class AddonLogger implements ILogger {
-  public level: LogLevel = LogLevel.Info;
+  public level: LogLevel = LogLevel.Trace;
   public log = (e: Event) => {
     if (e.level <= addonSdk.logger.level) {
       // message is with to low level priority - ignore.
