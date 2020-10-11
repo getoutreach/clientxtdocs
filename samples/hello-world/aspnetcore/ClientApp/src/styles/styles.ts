@@ -50,6 +50,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     eventDate: {
       paddingLeft: 10,
     },
+    eventDetails: {
+      display: "flex",
+      flexDirection: "column",
+    },
     eventSender: {
       paddingTop: 5,
       paddingLeft: 10,
@@ -61,6 +65,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     eventContext: {
       fontFamily: 'monospace',
       fontSize: 14,
+      marginBottom: theme.spacing(1),
     },
     params: {
       display: 'inline',

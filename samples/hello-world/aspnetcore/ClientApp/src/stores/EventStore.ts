@@ -8,7 +8,7 @@ class EventStore {
   public events: Event[] = [];
 
   @observable
-  public filter: EventFilter = { internalLogMessages: true }
+  public filter: EventFilter = { internalLogMessages: false }
 
   @computed
   public get filteredEvents() {

@@ -66,7 +66,7 @@ const Events: React.FC = observer(() => {
 
       {eventStore.filteredEvents.length > 0 && (
         <Container className={classes.eventTable}>
-          {eventStore.events
+          {eventStore.filteredEvents
             .slice(eventsPerPage * (page - 1), eventsPerPage * (page - 1) + eventsPerPage)
             .map((event, idx) => {
               const id = `row-${idx}`;
@@ -75,28 +75,32 @@ const Events: React.FC = observer(() => {
                   <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`${id}-content`} id={`${id}-header`}>
                     <Box>
                       <Typography variant="caption">
-                        <Chip icon={<EventSenderIcon origin={event.origin} type={event.type} />} label={event.type} />
+                        <Chip icon={<EventSenderIcon origin={event.origin} type={event.type} />} />
                       </Typography>
                       <Typography variant="caption" className={classes.eventDate}>
-                        {moment(event.timestamp).format('lll')}
+                        {moment(event.timestamp).format('HH:mm:ss (MMM Do, YYYY)')}
                       </Typography>
                       <Typography variant="caption" className={classes.eventMessage}>
                         {event.message}
                       </Typography>
                     </Box>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography className={classes.eventContext}>{event.context}</Typography>
+                  <AccordionDetails className={classes.eventDetails}>
+                      { event.context.map((ctx, idx) => 
+                         <Typography key={`ctx-${idx}`} className={classes.eventContext}>
+                           {ctx}
+                        </Typography>
+                      )}
                   </AccordionDetails>
                 </Accordion>
               );
             })}
         </Container>
       )}
-      {pagesCount > 0 && (
+      {pagesCount > 1 && (
         <Grid container direction="row" justify="center" alignItems="center">
           <Pagination count={pagesCount} shape="rounded" page={page} onChange={handlePagination} />
-          {eventStore.events.length} events
+          {eventStore.filteredEvents.length} events
         </Grid>
       )}
     </Container>
