@@ -17,8 +17,10 @@ const mock = {
     en: 'Hello world (opportunity addon)',
   },
   api: {
-    scopes: ['users.read', 'opportunities.read'],
-    token: 'https://cxt-demo.azurewebsites.net/token',
+      scopes: ['users.read', 'opportunities.read'],
+      token: 'https://cxt-demo.azurewebsites.net/token',
+      applicationId: 'WHnHrLrl1XEBP3liH1YIzVgrWD2xxVcEdr_zmwLGcQ0',
+      redirectUri: 'https://cxt-demo.azurewebsites.net/authorize'
   },
   description: {
     en: 'Hello world addon for Outreach opportunity',

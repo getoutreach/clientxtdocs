@@ -1,26 +1,29 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import React from 'react';
-
-export enum Sender {
-  Host = 'host',
-  Addon = 'addon',
-  Debug = 'debug',
-}
-export class Event {
-  public timestamp!: Date;
-
-  public sender!: Sender;
-
-  public type!: string;
-
-  public message!: string;
-
-  public context!: unknown[];
-}
+import { Event } from './Event';
+import { EventType } from '@outreach/client-addon-sdk';
 
 class EventStore {
   @observable
   public events: Event[] = [];
+
+  @observable
+  public filter: EventFilter = { internalLogMessages: true }
+
+  @computed
+  public get filteredEvents() {
+    let result = this.events;
+    if (!this.filter.internalLogMessages) {
+      result = result.filter(p => p.type !== EventType.INTERNAL);
+    }
+
+    return result;
+  }
+  
+  @action 
+  public setFilter = (filter: EventFilter) => {
+    this.filter = filter;
+  }
 
   @action
   public addEvent = (event: Event) => {
@@ -31,3 +34,8 @@ class EventStore {
 const eventStore = new EventStore();
 export const EventStoreContext = React.createContext(eventStore);
 export default eventStore;
+
+
+export declare type EventFilter = {
+  internalLogMessages: boolean;
+}

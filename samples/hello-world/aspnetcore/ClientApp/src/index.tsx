@@ -4,9 +4,9 @@ import './index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 
-import eventStore, { Sender } from './stores/EventStore';
+import eventStore from './stores/EventStore';
 
-import addonSdk, { LogLevel } from '@outreach/client-addon-sdk';
+import addonSdk, { LogLevel, EventOrigin, EventType } from '@outreach/client-addon-sdk';
 import { AddonLogger, getLevel } from './AddonLogger';
 
 ReactDOM.render(
@@ -30,10 +30,13 @@ addonSdk.onInit = ctx => {
   console.debug('[HelloWorld]::addonSdk.onInit', ctx);
   eventStore.addEvent({
     timestamp: new Date(),
-    sender: Sender.Addon,
-    message: '[HelloWorld]::addonSdk.onInit',
-    type: getLevel(LogLevel.Info),
-    context: [JSON.stringify(ctx)],
+    type: EventType.INTERNAL,
+    origin: EventOrigin.ADDON,
+    message: '[HelloWorld]::onInit handler',
+    logLevel: getLevel(LogLevel.Info),
+    context: [
+      `context: ${JSON.stringify(ctx)}`
+    ],
   });
 };
 
