@@ -46,6 +46,7 @@ const Events: React.FC = observer(() => {
 
   const eventsPerPage: number = 5;
   const pagesCount: number = Math.round(eventStore.filteredEvents.length / eventsPerPage + 0.44);
+  const eventStartIndex: number = eventsPerPage * (page - 1);
 
   return (
     <div className={classes.root}>
@@ -71,44 +72,42 @@ const Events: React.FC = observer(() => {
       {eventStore.filteredEvents.length > 0 && (
         <Container className={classes.eventTable}>
           <Timeline align="alternate">
-            {eventStore.filteredEvents
-              .slice(eventsPerPage * (page - 1), eventsPerPage * (page - 1) + eventsPerPage)
-              .map((event, idx) => {
-                const id = `row-${idx}`;
-                return (
-                  <TimelineItem key={`${idx}-message`}>
-                    <TimelineOppositeContent>
-                      <Typography variant="body2" color="textSecondary" className={classes.eventDate}>
-                        {moment(event.timestamp).format('HH:mm:ss (MMM Do, YYYY)')}
-                      </Typography>
-                    </TimelineOppositeContent>
-                    <TimelineSeparator>
-                      <EventSenderIcon origin={event.origin} type={event.type} />
-                      <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent>
-                      <Accordion expanded={expanded === id} onChange={handleChange(id)} key={id}>
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={`${id}-content`}
-                          id={`${id}-header`}
-                        >
-                          <Typography variant="caption" className={classes.eventMessage}>
-                            {event.message}
+            {eventStore.filteredEvents.slice(eventStartIndex, eventStartIndex + eventsPerPage).map((event, idx) => {
+              const id = `row-${idx}`;
+              return (
+                <TimelineItem key={`${idx}-message`}>
+                  <TimelineOppositeContent>
+                    <Typography variant="body2" color="textSecondary" className={classes.eventDate}>
+                      {moment(event.timestamp).format('HH:mm:ss (MMM Do, YYYY)')}
+                    </Typography>
+                  </TimelineOppositeContent>
+                  <TimelineSeparator>
+                    <EventSenderIcon origin={event.origin} type={event.type} />
+                    {eventStore.filteredEvents.length > eventStartIndex + idx + 1 && <TimelineConnector />}
+                  </TimelineSeparator>
+                  <TimelineContent>
+                    <Accordion expanded={expanded === id} onChange={handleChange(id)} key={id}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={`${id}-content`}
+                        id={`${id}-header`}
+                      >
+                        <Typography variant="caption" className={classes.eventMessage}>
+                          {event.message}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails className={classes.eventDetails}>
+                        {event.context.map((ctx, idx) => (
+                          <Typography key={`ctx-${idx}`} className={classes.eventContext}>
+                            {ctx}
                           </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails className={classes.eventDetails}>
-                          {event.context.map((ctx, idx) => (
-                            <Typography key={`ctx-${idx}`} className={classes.eventContext}>
-                              {ctx}
-                            </Typography>
-                          ))}
-                        </AccordionDetails>
-                      </Accordion>
-                    </TimelineContent>
-                  </TimelineItem>
-                );
-              })}
+                        ))}
+                      </AccordionDetails>
+                    </Accordion>
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            })}
           </Timeline>
         </Container>
       )}
