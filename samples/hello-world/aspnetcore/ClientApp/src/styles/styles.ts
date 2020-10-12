@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       paddingBottom: 0,
     },
+    paper: {
+      padding: '6px 16px',
+    },
     table: {
       margin: theme.spacing(2),
       marginTop: theme.spacing(1),
@@ -48,19 +51,23 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 20,
     },
     eventDate: {
-      paddingLeft: 10,
+      paddingTop: '15px',
+    },
+    eventDetails: {
+      display: 'flex',
+      flexDirection: 'column',
     },
     eventSender: {
-      paddingTop: 5,
-      paddingLeft: 10,
+      padding: 5,
+      paddingBottom: 0,
     },
     eventMessage: {
-      paddingLeft: 20,
       fontSize: 16,
     },
     eventContext: {
       fontFamily: 'monospace',
       fontSize: 14,
+      marginBottom: theme.spacing(1),
     },
     params: {
       display: 'inline',

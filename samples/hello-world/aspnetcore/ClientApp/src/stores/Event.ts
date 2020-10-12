@@ -6,5 +6,5 @@ export class Event {
   public logLevel!: string;
   public message!: string;
   public messageType?: AddonMessageType;
-  public context!: unknown[];
+  public context!: string[];
 }

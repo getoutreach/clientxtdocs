@@ -17,7 +17,7 @@ export const getLevel = (level: LogLevel) => {
       return level.toString();
   }
 };
-export class AddonLogger implements ILogger {
+export class HelloWorldAddonLogger implements ILogger {
   public level: LogLevel = LogLevel.Trace;
   public log = (e: Event) => {
     if (e.level <= addonSdk.logger.level) {
