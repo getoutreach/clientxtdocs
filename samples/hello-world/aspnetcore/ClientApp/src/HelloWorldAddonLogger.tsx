@@ -1,5 +1,5 @@
 import eventStore from './stores/EventStore';
-import addonSdk, { LogLevel, ILogger, Event, EventOrigin, EventType } from '@outreach/client-addon-sdk';
+import addonSdk, { LogLevel, ILogger, Event } from '@outreach/client-addon-sdk';
 
 export const getLevel = (level: LogLevel) => {
   switch (level) {
@@ -24,10 +24,9 @@ export class HelloWorldAddonLogger implements ILogger {
       // message is with to low level priority - ignore.
       return;
     }
-    console.debug('[HelloWorld]::addonSdk.onInfo', e);
     eventStore.addEvent({
-      origin: EventOrigin.ADDON,
-      type: EventType.INTERNAL,
+      origin: e.origin,
+      type: e.type,
       logLevel: getLevel(e.level),
       timestamp: new Date(),
       message: e.message || '',
