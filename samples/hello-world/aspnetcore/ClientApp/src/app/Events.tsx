@@ -114,7 +114,7 @@ const Events: React.FC = observer(() => {
                         <EventSenderIcon origin={event.origin} type={event.type} />
                       </Typography>
                       <Typography variant="caption" className={classes.eventDate}>
-                        {moment(event.timestamp).format('lll')}
+                        {moment(event.timestamp).format('HH:mm:ss (MMM Do, YYYY)')}
                       </Typography>
                       <Typography variant="caption" className={classes.eventMessage}>
                         {event.message}
