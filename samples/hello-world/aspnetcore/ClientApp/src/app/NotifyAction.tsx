@@ -3,7 +3,33 @@ import { observer } from 'mobx-react-lite';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import addonSdk from '@outreach/client-addon-sdk';
 import { NotificationType } from '@outreach/client-addon-sdk/messages/NotificationType';
-import { useStyles } from '../styles/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    actionButton: {
+      marginTop: theme.spacing(),
+      marginBottom: theme.spacing(),
+    },
+    actionHeading: {
+      paddingBottom: theme.spacing(),
+    },
+    actionOptions: {
+      marginTop: theme.spacing(),
+    },
+    actionRoot: {
+      alignSelf: 'flex-start',
+      borderColor: theme.palette.divider,
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderRadius: theme.spacing(),
+      display: 'flex',
+      flexDirection: 'column',
+      margin: theme.spacing(2),
+      padding: theme.spacing(),
+    },
+  })
+);
 
 const NotifyAction: React.FC = observer(() => {
   const classes = useStyles();

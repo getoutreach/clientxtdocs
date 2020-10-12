@@ -2,7 +2,28 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import { useStyles } from '../styles/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paragraph: {
+      fontSize: 16,
+      paddingTop: 20,
+      paddingBottom: 20,
+      fontWeight: 500,
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: theme.spacing(2),
+      paddingBottom: 0,
+    },
+    subtitle: {
+      fontSize: 28,
+      fontWeight: 500,
+    },
+  })
+);
 
 const Heading: React.FC = observer(() => {
   const classes = useStyles();

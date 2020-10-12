@@ -1,9 +1,34 @@
 import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Button, TextField, Typography } from '@material-ui/core';
-import addonSdk from '@outreach/client-addon-sdk';
-import { useStyles } from '../styles/styles';
+import { Button, TextField, Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
+import addonSdk  from '@outreach/client-addon-sdk';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    actionButton: {
+      marginTop: theme.spacing(),
+      marginBottom: theme.spacing(),
+    },
+    actionHeading: {
+      paddingBottom: theme.spacing(),
+    },
+    actionOptions: {
+      marginTop: theme.spacing(),
+    },
+    actionRoot: {
+      alignSelf: 'flex-start',
+      borderColor: theme.palette.divider,
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderRadius: theme.spacing(),
+      display: 'flex',
+      flexDirection: 'column',
+      margin: theme.spacing(2),
+      padding: theme.spacing(),
+    },
+  })
+);
 
 const DecorateAction: React.FC = observer(() => {
   const [text, setText] = useState<string>('');

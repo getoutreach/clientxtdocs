@@ -3,10 +3,22 @@ import ManifestValidator from './ManifestValidator';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import { useStyles } from '../../styles/styles';
 import { Container } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    modalWrapper: { background: 'white', margin: theme.spacing(6), padding: theme.spacing(4) },
+  })
+);
 
 const ManifestModal = (props: { open: boolean; onHandleClose: any }) => {
   const classes = useStyles();

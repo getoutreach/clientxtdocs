@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useStyles } from '../../styles/styles';
 import { Box, Container, TextField } from '@material-ui/core';
 import MockManifest from '../../mock/MockManifest';
 import { Manifest, validate } from '@outreach/client-addon-sdk';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    validationSuccess: {},
+    validationError: { color: theme.palette.error.main },
+    manifestTextField: { width: '100%' },
+  })
+);
 
 enum ManifestValidatorMessages {
   Valid = 'is-valid',
