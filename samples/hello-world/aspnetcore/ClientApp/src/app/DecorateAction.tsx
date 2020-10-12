@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Button, TextField, Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
+import { Button, TextField, makeStyles, createStyles, Theme, DialogContent, Dialog, DialogTitle } from '@material-ui/core';
 import addonSdk  from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -27,10 +27,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       padding: theme.spacing(),
     },
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   })
 );
 
-const DecorateAction: React.FC = observer(() => {
+
+interface IDecorationActionProps {
+  onClose: () => void;
+  open: boolean;
+}
+
+
+const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecorationActionProps) => {
   const [text, setText] = useState<string>('');
   const classes = useStyles();
 
@@ -44,22 +55,22 @@ const DecorateAction: React.FC = observer(() => {
     setText('');
   };
 
-  return (
-    <div className={classes.actionRoot}>
-      <Typography variant="h6" className={classes.actionHeading}>
-        Decorate action
-      </Typography>
-      <TextField
-        placeholder="Enter the text to decorate addon entry point"
-        label="Decoration text"
-        variant="outlined"
-        onChange={e => setText(e.currentTarget.value)}
-        value={text}
-      />
-      <Button variant="contained" className={classes.actionButton} disabled={!text} color="primary" onClick={decorate}>
-        Update decoration
-      </Button>
-    </div>
+  return  (
+    <Dialog onClose={props.onClose} open={props.open}>
+      <DialogTitle>Outreach host addon decoration</DialogTitle>
+      <DialogContent className={classes.root}>
+        <TextField
+          placeholder="Enter the text to decorate addon entry point"
+          label="Decoration text"
+          variant="outlined"
+          onChange={e => setText(e.currentTarget.value)}
+          value={text}
+        />
+        <Button variant="contained" className={classes.actionButton} disabled={!text} color="primary" onClick={decorate}>
+          Update decoration
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 });
 

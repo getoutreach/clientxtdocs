@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import addonSdk from '@outreach/client-addon-sdk';
 import { NotificationType } from '@outreach/client-addon-sdk/messages/NotificationType';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: theme.spacing(),
     },
     actionOptions: {
+      marginBottom: theme.spacing(),
       marginTop: theme.spacing(),
     },
     actionRoot: {
@@ -28,11 +29,22 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       padding: theme.spacing(),
     },
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   })
 );
 
-const NotifyAction: React.FC = observer(() => {
+interface INotifyActionProps {
+  onClose: () => void;
+  open: boolean;
+}
+
+const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyActionProps) => {
+  
   const classes = useStyles();
+  
   const [text, setText] = useState<string>('');
   const [type, setType] = useState<NotificationType>('info');
 
@@ -64,45 +76,47 @@ const NotifyAction: React.FC = observer(() => {
     setText('');
   };
 
+
   return (
-    <div className={classes.actionRoot}>
-      <Typography variant="h6" className={classes.actionHeading}>
-        Notify action
-      </Typography>
+    <Dialog onClose={props.onClose} open={props.open}>
+      <DialogTitle>Outreach host notifications</DialogTitle>
+      <DialogContent className={classes.root}>
+        <FormControl component="fieldset" className={classes.actionOptions}>
+          <InputLabel id="notification-type-title">Notification type</InputLabel>
+          <Select
+            labelId="notification-type-title"
+            variant="filled"
+            value={type}
+            onChange={e => setType(e.target.value as NotificationType)}
+          >
+            <MenuItem value="success">success</MenuItem>
+            <MenuItem value="info">information</MenuItem>
+            <MenuItem value="warning">warning</MenuItem>
+            <MenuItem value="error">error</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          placeholder="Enter the notification text here"
+          label="Notification text"
+          onChange={e => setText(e.currentTarget.value)}
+          value={text}
+          variant="outlined"
+        />
 
-      <TextField
-        placeholder="Enter the notification text here"
-        label="Notification text"
-        onChange={e => setText(e.currentTarget.value)}
-        value={text}
-        variant="outlined"
-      />
-
-      <Button
-        variant="contained"
-        type="submit"
-        className={classes.actionButton}
-        color="primary"
-        disabled={!text}
-        onClick={e => notify()}
-      >
-        Send notification
-      </Button>
-      <FormControl component="fieldset" className={classes.actionOptions}>
-        <InputLabel id="notification-type-title">Notification type</InputLabel>
-        <Select
-          labelId="notification-type-title"
-          variant="filled"
-          value={type}
-          onChange={e => setType(e.target.value as NotificationType)}
+        <Button
+          variant="contained"
+          type="submit"
+          className={classes.actionButton}
+          color="primary"
+          disabled={!text}
+          onClick={e => notify()}
         >
-          <MenuItem value="success">success</MenuItem>
-          <MenuItem value="info">information</MenuItem>
-          <MenuItem value="warning">warning</MenuItem>
-          <MenuItem value="error">error</MenuItem>
-        </Select>
-      </FormControl>
-    </div>
+          Send notification
+        </Button>
+
+      </DialogContent>
+    </Dialog>
+    
   );
 });
 

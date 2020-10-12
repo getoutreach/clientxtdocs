@@ -14,7 +14,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
-import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
 
@@ -70,8 +69,6 @@ const Events: React.FC = observer(() => {
   const eventStore = useContext(EventStoreContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const [page, setPage] = React.useState(1);
-
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -81,13 +78,6 @@ const Events: React.FC = observer(() => {
       internalLogMessages: event.target.checked
     })
   };
-
-  const handlePagination = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
-
-  const eventsPerPage = 5;
-  const pagesCount = Math.round(eventStore.filteredEvents.length / eventsPerPage +.44);
 
   return (
     <Container className={classes.root}>
@@ -113,7 +103,6 @@ const Events: React.FC = observer(() => {
       {eventStore.filteredEvents.length > 0 && (
         <Container className={classes.eventTable}>
           {eventStore.events
-            .slice(eventsPerPage * (page - 1), eventsPerPage * (page - 1) + eventsPerPage)
             .map((event, idx) => {
               const id = `row-${idx}`;
               return (
@@ -138,12 +127,6 @@ const Events: React.FC = observer(() => {
               );
             })}
         </Container>
-      )}
-      {pagesCount > 1 && (
-        <Grid container direction="row" justify="center" alignItems="center">
-          <Pagination count={pagesCount} shape="rounded" page={page} onChange={handlePagination} />
-          {eventStore.events.length} events
-        </Grid>
       )}
     </Container>
   );

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite'
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Checkbox, createStyles, FormControlLabel, Theme, Typography } from '@material-ui/core';
+import { Button, Checkbox, createStyles, FormControlLabel, Theme, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 
 import addonSdk from "@outreach/client-addon-sdk";
 
@@ -31,11 +31,21 @@ const useStyles = makeStyles((theme: Theme) =>
         options: {
             marginBottom: theme.spacing(),
             marginTop: theme.spacing(),
+        },
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
         }
     })
 );
 
-const AuthenticateAction: React.FC = observer(() =>   {
+
+interface IAuthenticationActionProps {
+    onClose: () => void;
+    open: boolean;
+  }
+
+const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((props: IAuthenticationActionProps) =>   {
 
   const classes = useStyles();
   const [forced, setForced] = useState<boolean>(false);
@@ -45,11 +55,10 @@ const AuthenticateAction: React.FC = observer(() =>   {
     console.debug("[HelloWorld][Addon]-onAuthenticateClick", token);
   }
 
-  return (<div className={classes.root}>
-
-            <Typography variant="h6" className={classes.heading}>
-                Authenticate action
-            </Typography>    
+  return (
+    <Dialog onClose={props.onClose} open={props.open}>
+        <DialogTitle>Outreach host addon decoration</DialogTitle>
+        <DialogContent className={classes.container}>
             <FormControlLabel className={classes.options}
                 control={<Checkbox  checked={forced} onChange={(e) => setForced(e.target.checked)} />}
                 label="First time experience"
@@ -60,7 +69,9 @@ const AuthenticateAction: React.FC = observer(() =>   {
                     onClick={onAuthenticateClick}>
                 Authenticate
             </Button>
-      </div>);
+        </DialogContent>
+    </Dialog>
+  );
 });
 
-export default AuthenticateAction;
+export default AuthenticationAction;

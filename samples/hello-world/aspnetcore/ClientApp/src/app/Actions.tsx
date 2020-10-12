@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Grid, Typography, createStyles, makeStyles, Theme } from '@material-ui/core';
+import { Grid, Typography, createStyles, makeStyles, Theme, Button } from '@material-ui/core';
+
+import AuthenticationAction from './AuthenticationAction';
 import NotifyAction from './NotifyAction';
 import DecorateAction from './DecorateAction';
-import AuthenticateAction from './AuhenticateAction';
-
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    actionButton: {
+      marginTop: theme.spacing(),
+      marginBottom: theme.spacing(),
+      textTransform: "none"
+    },
     actions: {
       display: 'flex',
       flexDirection: 'row',
+    },
+    item: {
+      margin: theme.spacing()
     },
     root: {
       display: 'flex',
@@ -31,6 +39,11 @@ const Actions: React.FC = observer(() => {
 
   const classes = useStyles();
 
+  const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
+  const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
+  const [authorizationDialog, setAuthenticationDialog] = useState<boolean>(false);
+
+
   return (
     <div className={classes.root}>
       <Typography variant="h2" color="primary" className={classes.subtitle}>
@@ -38,16 +51,44 @@ const Actions: React.FC = observer(() => {
       </Typography>
 
       <Grid container={true} className={classes.actions}>
-        <Grid item={true}>
-          <NotifyAction />
+        <Grid item={true} className={classes.item}>
+          <Button
+            variant="contained"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setNotificationDialog(true)}
+          >
+            sdk.notify()
+        </Button>
         </Grid>
-        <Grid item={true}>
-          <DecorateAction />
+        <Grid item={true} className={classes.item}>
+          <Button
+              autoCapitalize="false"
+              variant="contained"
+              type="submit"
+              className={classes.actionButton}
+              color="primary"
+              onClick={e => setDecorationDialog(true)}
+            >
+              sdk.decorate()
+          </Button>
         </Grid>
-        <Grid item={true}>
-          <AuthenticateAction />
+        <Grid item={true} className={classes.item}>
+          <Button
+              variant="contained"
+              type="submit"
+              className={classes.actionButton}
+              color="primary"
+              onClick={e => setAuthenticationDialog(true)}
+            >
+              sdk.getToken()
+          </Button>
         </Grid>
       </Grid>
+      <NotifyAction open={notificationDialog} onClose={() => setNotificationDialog(false)} />
+      <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
+      <AuthenticationAction open={authorizationDialog} onClose={() => setAuthenticationDialog(false)} />
     </div>
   );
 });
