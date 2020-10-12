@@ -53,7 +53,7 @@ const Actions: React.FC = observer(() => {
       <Grid container={true} className={classes.actions}>
         <Grid item={true} className={classes.item}>
           <Button
-            variant="contained"
+            variant="outlined"
             type="submit"
             className={classes.actionButton}
             color="primary"
@@ -65,7 +65,7 @@ const Actions: React.FC = observer(() => {
         <Grid item={true} className={classes.item}>
           <Button
               autoCapitalize="false"
-              variant="contained"
+              variant="outlined"
               type="submit"
               className={classes.actionButton}
               color="primary"
@@ -76,7 +76,7 @@ const Actions: React.FC = observer(() => {
         </Grid>
         <Grid item={true} className={classes.item}>
           <Button
-              variant="contained"
+              variant="outlined"
               type="submit"
               className={classes.actionButton}
               color="primary"
