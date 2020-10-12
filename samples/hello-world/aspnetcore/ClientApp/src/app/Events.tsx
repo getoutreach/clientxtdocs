@@ -33,7 +33,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     eventDate: {
-      
+      marginLeft: theme.spacing(),
+      marginRight: theme.spacing(),
     },
     eventDetails: {
       overflow: 'scroll',
@@ -102,7 +103,7 @@ const Events: React.FC = observer(() => {
 
       {eventStore.filteredEvents.length > 0 && (
         <Container className={classes.eventTable}>
-          {eventStore.events
+          {eventStore.filteredEvents
             .map((event, idx) => {
               const id = `row-${idx}`;
               return (
