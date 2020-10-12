@@ -2,13 +2,33 @@ import React from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, createStyles, makeStyles, Theme } from '@material-ui/core';
 import NotifyAction from './NotifyAction';
 import DecorateAction from './DecorateAction';
 import AuthenticateAction from './AuhenticateAction';
-import { useStyles } from '../styles/styles';
+
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    actions: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: theme.spacing(2),
+      paddingBottom: 0,
+    },
+    subtitle: {
+      fontSize: 28,
+      fontWeight: 500,
+    },
+  })
+);
 
 const Actions: React.FC = observer(() => {
+
   const classes = useStyles();
 
   return (

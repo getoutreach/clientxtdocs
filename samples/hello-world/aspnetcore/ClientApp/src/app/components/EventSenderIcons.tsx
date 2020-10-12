@@ -1,37 +1,46 @@
 import React from 'react';
 import ExtensionIcon from '@material-ui/icons/Extension';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import DesktopMacIcon from '@material-ui/icons/DesktopMac';
-import BugReportIcon from '@material-ui/icons/BugReport';
 import Box from '@material-ui/core/Box';
-import { useStyles } from '../../styles/styles';
-import { EventOrigin, EventType } from '@outreach/client-addon-sdk';
-import TimelineDot from '@material-ui/lab/TimelineDot';
 
-const EventSenderIcon = (props: { origin: EventOrigin; type: EventType }) => {
+import { EventOrigin, EventType, Theme } from '@outreach/client-addon-sdk';
+import { makeStyles, createStyles } from '@material-ui/core';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    eventSender: {
+      padding: 5,
+      paddingBottom: 0,
+      width: 64,
+    }
+  })
+);
+
+const EventSenderIcon = (props: { origin: EventOrigin, type: EventType }) => {
   const classes = useStyles();
 
-  const getIconStyle = (): { color: 'grey' | 'primary' | 'secondary'; icon: JSX.Element } => {
-    const addonToHostMessageIcon = <ExtensionIcon />;
-    const hostToAddonMessageIcon = <DesktopMacIcon />;
-    const internalEventIcon = <BugReportIcon />;
-
+  const getIcon = () => {
+    const addonToHostMessageIcon = <><ExtensionIcon /><ArrowForwardIcon /><DesktopMacIcon /></>;
+    const hostToAddonMessageIcon = <><DesktopMacIcon /><ArrowForwardIcon /><ExtensionIcon /></> ;
+    const internalEventIcon = <ExtensionIcon />;
+  
     if (props.type === EventType.INTERNAL) {
-      return { color: 'grey', icon: internalEventIcon };
+      return internalEventIcon;
     }
-
+  
     if (props.origin === EventOrigin.ADDON) {
-      return { color: 'secondary', icon: addonToHostMessageIcon };
+      return addonToHostMessageIcon;
     }
-
-    return { color: 'primary', icon: hostToAddonMessageIcon };
-  };
-
-  const { icon, color } = getIconStyle();
-
+  
+    return hostToAddonMessageIcon;
+  }
+  
   return (
-    <TimelineDot color={color}>
-      <Box className={classes.eventSender}>{icon}</Box>
-    </TimelineDot>
+
+    <Box className={classes.eventSender}>
+        { getIcon() }
+    </Box>
   );
 };
 
