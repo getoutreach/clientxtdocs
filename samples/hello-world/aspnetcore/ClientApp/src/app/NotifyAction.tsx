@@ -74,6 +74,7 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
     addonSdk.notify(text, notificationType);
 
     setText('');
+    props.onClose();
   };
 
 

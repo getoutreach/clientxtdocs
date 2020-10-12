@@ -53,6 +53,7 @@ const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((pro
   const onAuthenticateClick = () => {
     const token = addonSdk.getToken(forced);
     console.debug("[HelloWorld][Addon]-onAuthenticateClick", token);
+    props.onClose();
   }
 
   return (

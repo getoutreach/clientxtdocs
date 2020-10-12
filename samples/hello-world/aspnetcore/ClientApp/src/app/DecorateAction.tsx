@@ -53,6 +53,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
     addonSdk.decorate(text);
 
     setText('');
+    props.onClose();
   };
 
   return  (
