@@ -50,12 +50,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 10,
       marginBottom: 20,
     },
+    eventBlock: {
+      overflow: 'scroll',
+    },
     eventDate: {
       paddingTop: '15px',
     },
     eventDetails: {
-      display: 'flex',
-      flexDirection: 'column',
+      overflow: 'scroll',
     },
     eventSender: {
       padding: 5,

@@ -85,7 +85,7 @@ const Events: React.FC = observer(() => {
                     <EventSenderIcon origin={event.origin} type={event.type} />
                     {eventStore.filteredEvents.length > eventStartIndex + idx + 1 && <TimelineConnector />}
                   </TimelineSeparator>
-                  <TimelineContent>
+                  <TimelineContent className={classes.eventBlock}>
                     <Accordion expanded={expanded === id} onChange={handleChange(id)} key={id}>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
