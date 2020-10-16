@@ -56,8 +56,8 @@ const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((pro
         token = await addonSdk.getToken(forced);
         if (token) {
             alert("Token received silently:" + token);
+            return;
         }
-        return;
     }
     
     if (!token) {
@@ -74,7 +74,7 @@ const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((pro
         <DialogContent className={classes.container}>
             <FormControlLabel className={classes.options}
                 control={<Checkbox  checked={forced} onChange={(e) => setForced(e.target.checked)} />}
-                label="First time experience"
+                label="Ignore cached credentials"
             />
             <Button variant="contained" 
                     className={classes.button}

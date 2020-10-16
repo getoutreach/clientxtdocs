@@ -82,7 +82,7 @@ const Actions: React.FC = observer(() => {
               color="primary"
               onClick={e => setAuthenticationDialog(true)}
             >
-              sdk.getToken()
+              sdk.authenticate()
           </Button>
         </Grid>
       </Grid>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Outreach.CXT.Demo.Server.Services;
 using Polly;
 using Polly.Retry;
 
@@ -25,7 +26,7 @@ namespace Outreach.CXT.Demo.Server
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            services.AddMemoryCache();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -42,6 +43,8 @@ namespace Outreach.CXT.Demo.Server
                     client.Timeout = new TimeSpan(0, 0, 30);
                 })
                 .AddTransientHttpErrorPolicy(DefaultRetryPolicy);
+
+            services.AddTransient<IOutreachService, OutreachService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
