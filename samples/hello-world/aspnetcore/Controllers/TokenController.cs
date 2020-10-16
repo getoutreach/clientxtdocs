@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Outreach.CXT.Demo.Server.Models;
 
 namespace Outreach.CXT.Demo.Server.Controllers
 {
@@ -38,17 +39,5 @@ namespace Outreach.CXT.Demo.Server.Controllers
             this.logger.LogInformation("[TokenController]: Cached token for userId:" + tokenRequest.UserId + " - FOUND");
             return Ok(token);
         }
-    }
-
-    public class TokenRequest
-    {
-        public string UserId { get; set; }
-    }
-
-    public class Token
-    {
-        public string Value { get; set; }
-
-        public DateTime ExpiresAt { get; set; }
     }
 }

@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+<script>
+
+    var url = new URL(window.location.href);
+    var token = url.searchParams.get("token");
+    var expiresAt = url.searchParams.get("expiresAt");
+
+    var data = JSON.stringify(token, expiresAt);
+    if (window.parent) {
+
+        // * is fine as the parent of the popup is addon iframe itself (not outreach appand no one else to listen there other then addon
+        const targetOrigin = "*";
+        window.parent.postMessage(JSON.stringify(data), targetOrigin);
+    }
+
+
+</script>
+</body>
+</html>

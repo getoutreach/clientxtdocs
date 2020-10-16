@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -5,6 +7,8 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Retry;
 
 namespace Outreach.CXT.Demo.Server
 {
@@ -21,6 +25,7 @@ namespace Outreach.CXT.Demo.Server
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -28,6 +33,15 @@ namespace Outreach.CXT.Demo.Server
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            
+            // define default http client retry policy as 10 sec timeout with 3 retries
+            services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT, client =>
+                {
+                    client.DefaultRequestVersion = new Version(2, 0);
+                    client.Timeout = new TimeSpan(0, 0, 30);
+                })
+                .AddTransientHttpErrorPolicy(DefaultRetryPolicy);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +81,22 @@ namespace Outreach.CXT.Demo.Server
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
 */
+            });
+        }
+
+           
+        /// <summary>
+        /// Defaults the retry policy (network failures, HTTP 5xx, HTTP 408)
+        /// </summary>
+        /// <param name="policy">The policy.</param>
+        /// <returns></returns>
+        private static AsyncRetryPolicy<HttpResponseMessage> DefaultRetryPolicy(PolicyBuilder<HttpResponseMessage> policy)
+        {
+            return policy.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(3),
+                TimeSpan.FromSeconds(5)
             });
         }
     }

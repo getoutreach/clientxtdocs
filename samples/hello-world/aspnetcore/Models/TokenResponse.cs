@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
-namespace Outreach.CXT.Demo.Server.Controllers
+namespace Outreach.CXT.Demo.Server.Models
 {
     public class TokenInfo
     {
@@ -11,7 +12,7 @@ namespace Outreach.CXT.Demo.Server.Controllers
         public string TokenType { get; set; }
 
         [JsonProperty("expires_in")]
-        public int ExpiresIn { get; set; }
+        public long ExpiresIn { get; set; }
 
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
@@ -20,6 +21,6 @@ namespace Outreach.CXT.Demo.Server.Controllers
         public string Scope { get; set; }
 
         [JsonProperty("created_at")] 
-        public string CreatedAt { get; set; }
+        public long CreatedAt { get; set; }
     }
 }
