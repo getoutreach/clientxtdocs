@@ -50,9 +50,21 @@ const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((pro
   const classes = useStyles();
   const [forced, setForced] = useState<boolean>(false);
 
-  const onAuthenticateClick = () => {
-    const token = addonSdk.getToken(forced);
-    console.debug("[HelloWorld][Addon]-onAuthenticateClick", token);
+  const onAuthenticateClick = async () => {
+    let token: string | null = null;
+    if (!forced) {
+        token = await addonSdk.getToken(forced);
+        if (token) {
+            alert("Token received silently:" + token);
+        }
+        return;
+    }
+    
+    if (!token) {
+        token = await addonSdk.authenticate();
+        alert("Token received from oauth:" + token);
+    }
+    
     props.onClose();
   }
 
