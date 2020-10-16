@@ -35,7 +35,7 @@ namespace Outreach.CXT.Demo.Server.Controllers
         [HttpGet]
         public async Task<ActionResult> Index([FromQuery]string code)
         {
-            var pattern = new Regex(@"%\d\w", RegexOptions.Compiled);
+            var pattern2 = new Regex(@"%\d\w", RegexOptions.Compiled);
 
             var userId = this.Request.Cookies[Constants.AUTH_USER_COOKIE_NAME];
 
