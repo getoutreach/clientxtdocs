@@ -1,0 +1,34 @@
+﻿@model Outreach.CXT.Demo.Server.Controllers.ConnectViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Outreach login connect page</title>
+</head>
+<body>
+    <script>
+
+    var url = new URL(window.location.href);
+    var token = '@Model.Token';
+    var expiresAt = '@Model.ExpiresAt';
+    var target = '*'; //'@Model.AddonHostOrigin';
+
+    var data = JSON.stringify({
+        type: 'cxt:sdk:token',
+        token, 
+        expiresAt
+    });
+    if (window.opener) {
+        window.opener.postMessage(data, target);
+    }
+    
+    </script>
+
+
+</body >
+</html >
