@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { MouseEventHandler, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { observer } from 'mobx-react-lite';
+import { EventStoreContext } from '../stores/EventStore';
+
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,18 +20,31 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AppHeader = (props: { onInfoClick: any }) => {
+interface IAppHeaderProps {
+  onInfoClick: MouseEventHandler<SVGSVGElement>;
+}
+
+const AppHeader: React.FC<IAppHeaderProps> = observer((props: IAppHeaderProps) => {
   const classes = useStyles();
+  const eventStore = useContext(EventStoreContext);
+
+  const title = () => {
+    if (!eventStore.manifest) {
+      return '...';
+    } else {
+      return eventStore.manifest.title.en;
+    }
+  }
 
   return (
     <AppBar>
       <Toolbar>
         <Typography variant="h1" className={classes.heading}>
-          Hello World (opportunity addon) <InfoIcon onClick={props.onInfoClick} />
+        { title() } <InfoIcon onClick={props.onInfoClick} />
         </Typography>
       </Toolbar>
     </AppBar>
   );
-};
+});
 
 export default AppHeader;

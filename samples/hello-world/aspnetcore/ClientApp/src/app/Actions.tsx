@@ -7,6 +7,7 @@ import { Grid, Typography, createStyles, makeStyles, Theme, Button } from '@mate
 import AuthenticationAction from './AuthenticationAction';
 import NotifyAction from './NotifyAction';
 import DecorateAction from './DecorateAction';
+import TokenAction from './TokenAction';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,7 +43,7 @@ const Actions: React.FC = observer(() => {
   const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
   const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
   const [authorizationDialog, setAuthenticationDialog] = useState<boolean>(false);
-
+  const [tokenDialog, setTokenDialog] = useState<boolean>(false);
 
   return (
     <div className={classes.root}>
@@ -80,6 +81,17 @@ const Actions: React.FC = observer(() => {
               type="submit"
               className={classes.actionButton}
               color="primary"
+              onClick={e => setTokenDialog(true)}
+            >
+              sdk.getToken()
+          </Button>
+        </Grid>
+        <Grid item={true} className={classes.item}>
+          <Button
+              variant="outlined"
+              type="submit"
+              className={classes.actionButton}
+              color="primary"
               onClick={e => setAuthenticationDialog(true)}
             >
               sdk.authenticate()
@@ -89,6 +101,7 @@ const Actions: React.FC = observer(() => {
       <NotifyAction open={notificationDialog} onClose={() => setNotificationDialog(false)} />
       <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
       <AuthenticationAction open={authorizationDialog} onClose={() => setAuthenticationDialog(false)} />
+      <TokenAction open={tokenDialog} onClose={() => setTokenDialog(false)} />
     </div>
   );
 });

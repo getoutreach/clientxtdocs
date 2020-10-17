@@ -1,9 +1,13 @@
 import { action, observable, computed } from 'mobx';
 import React from 'react';
 import { Event } from './Event';
-import { EventType } from '@outreach/client-addon-sdk';
+import { EventType, Manifest } from '@outreach/client-addon-sdk';
 
 class EventStore {
+
+  @observable
+  public manifest?: Manifest;
+
   @observable
   public events: Event[] = [];
 
@@ -20,6 +24,11 @@ class EventStore {
     return result;
   }
   
+  @action
+  public setManifest = (manifest: Manifest) => {
+    this.manifest = manifest;
+  }
+
   @action 
   public setFilter = (filter: EventFilter) => {
     this.filter = filter;

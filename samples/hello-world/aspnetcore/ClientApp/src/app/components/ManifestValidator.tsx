@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Container, TextField } from '@material-ui/core';
 import { Manifest, validate } from '@outreach/client-addon-sdk';
 import CheckIcon from '@material-ui/icons/Check';
@@ -6,7 +6,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
-import addonSdk from '@outreach/client-addon-sdk';
+import { observer } from 'mobx-react-lite';
+import { EventStoreContext } from '../../stores/EventStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,8 +34,10 @@ function getManifestValidatorMessages(key: ManifestValidatorMessages): string {
   }
 }
 
-const ManifestValidator = () => {
-  const [text, setText] = useState<string>(JSON.stringify(addonSdk.manifest(), null, 2));
+const ManifestValidator = observer(() => {
+  
+  const eventStore = useContext(EventStoreContext);
+  const [text, setText] = useState<string>(JSON.stringify(eventStore.manifest, null, 2));
   const [validationIssues, setValidationIssues] = useState<string[]>([]);
   const classes = useStyles();
 
@@ -80,6 +83,6 @@ const ManifestValidator = () => {
       </Box>
     </Container>
   );
-};
+});
 
 export default ManifestValidator;

@@ -16,7 +16,7 @@
     var url = new URL(window.location.href);
     var token = '@Model.Token';
     var expiresAt = '@Model.ExpiresAt';
-    var target = '*'; //'@Model.AddonHostOrigin';
+    var target ='@Model.AddonHostOrigin';
 
     var data = JSON.stringify({
         type: 'cxt:connect:token',

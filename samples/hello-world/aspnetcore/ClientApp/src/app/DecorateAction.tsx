@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Button, TextField, makeStyles, createStyles, Theme, DialogContent, Dialog, DialogTitle } from '@material-ui/core';
+import { Button, TextField, makeStyles, createStyles, Theme, DialogContent, Dialog, DialogTitle, Divider, Typography } from '@material-ui/core';
 import addonSdk  from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -27,6 +27,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       padding: theme.spacing(),
     },
+    code: {
+      padding: theme.spacing(0.5),
+      fontFamily: 'Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New',
+      fontWeight: "lighter"
+    },
+    divider: {
+      marginBottom: theme.spacing(0.5),
+    },
     root: {
       display: 'flex',
       flexDirection: 'column',
@@ -45,6 +53,18 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
   const [text, setText] = useState<string>('');
   const classes = useStyles();
 
+  const codeSample = () => {
+    return <div>
+      <Divider className={classes.divider}  />
+      <Typography variant="overline">
+          Code sample
+      </Typography>
+      <Typography variant="body2" className={classes.code}>
+          addonSdk.decorate('{text}')
+      </Typography>
+    </div>
+  }
+
   const decorate = () => {
     if (!text) {
       return;
@@ -61,7 +81,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
       <DialogTitle>Outreach host addon decoration</DialogTitle>
       <DialogContent className={classes.root}>
         <TextField
-          placeholder="Enter the text to decorate addon entry point"
+          placeholder="Addon entry point decoration"
           label="Decoration text"
           variant="outlined"
           onChange={e => setText(e.currentTarget.value)}
@@ -70,6 +90,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
         <Button variant="contained" className={classes.actionButton} disabled={!text} color="primary" onClick={decorate}>
           Update decoration
         </Button>
+        { codeSample() }
       </DialogContent>
     </Dialog>
   );

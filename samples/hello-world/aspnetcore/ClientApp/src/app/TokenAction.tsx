@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite'
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, createStyles, Theme, Dialog, DialogTitle, DialogContent, Divider, Typography } from '@material-ui/core';
+import { Button, Checkbox, createStyles, FormControlLabel, Theme, Dialog, DialogTitle, DialogContent, Divider, Typography } from '@material-ui/core';
 
 import addonSdk from "@outreach/client-addon-sdk";
 
@@ -11,7 +11,8 @@ import addonSdk from "@outreach/client-addon-sdk";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         button: {
-            marginBottom: theme.spacing(2),
+            marginTop: theme.spacing(),
+            marginBottom: theme.spacing(),
         },
         code: {
             padding: theme.spacing(0.5),
@@ -47,21 +48,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-interface IAuthenticationActionProps {
+interface ITokenActionProps {
     onClose: () => void;
     open: boolean;
   }
 
-const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((props: IAuthenticationActionProps) =>   {
+const TokenAction: React.FC<ITokenActionProps> = observer((props: ITokenActionProps) =>   {
 
   const classes = useStyles();
+  const [forced, setForced] = useState<boolean>(false);
 
-  const onAuthenticateClick = async () => {
-    const token = await addonSdk.authenticate();
-    alert("Token received from oauth:" + token);
+  const onTokenGetClick = async () => {
+    const token = await addonSdk.getToken(forced);
+    if (token) {
+        alert("Token received silently:" + token);
+    }
+    
     props.onClose();
   }
-  
   const codeSample = () => {
     return <div>
       <Divider className={classes.divider}  />
@@ -69,25 +73,30 @@ const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((pro
           Code sample
       </Typography>
       <Typography variant="body2" className={classes.code}>
-        const token = await addonSdk.authenticate()
+          {`const token = await addonSdk.getToken(${forced});`}
       </Typography>
     </div>
-}
+  }
 
   return (
     <Dialog onClose={props.onClose} open={props.open}>
-        <DialogTitle>Outreach API authentication</DialogTitle>
+        <DialogTitle>Refresh a token</DialogTitle>
         <DialogContent className={classes.container}>
+            <FormControlLabel className={classes.options}
+                control={<Checkbox  checked={forced} onChange={(e) => setForced(e.target.checked)} />}
+                label="Ignore locally cached credentials"
+            />
             <Button variant="contained" 
                     className={classes.button}
                     color="primary" 
-                    onClick={onAuthenticateClick}>
-                Authenticate
+                    onClick={onTokenGetClick}>
+                Fetch token
             </Button>
+            <Divider className={classes.divider}  />
             { codeSample() }
         </DialogContent>
     </Dialog>
   );
 });
 
-export default AuthenticationAction;
+export default TokenAction;
