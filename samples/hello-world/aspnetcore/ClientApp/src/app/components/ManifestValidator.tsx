@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, TextField } from '@material-ui/core';
-import MockManifest from '../../mock/MockManifest';
 import { Manifest, validate } from '@outreach/client-addon-sdk';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+
+import addonSdk from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +34,7 @@ function getManifestValidatorMessages(key: ManifestValidatorMessages): string {
 }
 
 const ManifestValidator = () => {
-  const [text, setText] = useState<string>(JSON.stringify(MockManifest, null, 2));
+  const [text, setText] = useState<string>(JSON.stringify(addonSdk.manifest(), null, 2));
   const [validationIssues, setValidationIssues] = useState<string[]>([]);
   const classes = useStyles();
 
