@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Outreach.CXT.Demo.Server.Controllers
+﻿namespace Outreach.CXT.Demo.Server.Models
 {
     public class ConnectViewModel
     {

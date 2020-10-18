@@ -1,7 +1,7 @@
 import { action, observable, computed } from 'mobx';
 import React from 'react';
 import { Event } from './Event';
-import { EventType, Manifest } from '@outreach/client-addon-sdk';
+import { EventType, Manifest, RuntimeContext } from '@outreach/client-addon-sdk';
 
 class EventStore {
 
@@ -9,10 +9,16 @@ class EventStore {
   public manifest?: Manifest;
 
   @observable
+  public token?: string;
+
+  @observable
   public events: Event[] = [];
 
   @observable
   public filter: EventFilter = { internalLogMessages: false }
+
+  @observable
+  public json: object | null = null;
 
   @computed
   public get filteredEvents() {
@@ -23,10 +29,21 @@ class EventStore {
 
     return result;
   }
+
+  @action
+  public setJson = (json: object | null) => {
+    this.json = json;
+  }
+
   
   @action
-  public setManifest = (manifest: Manifest) => {
-    this.manifest = manifest;
+  public setRuntime = (runtime: RuntimeContext) => {
+    this.manifest = runtime.manifest;
+  }
+  
+  @action 
+  public setToken = (token: string) => {
+    this.token = token;
   }
 
   @action 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { observer } from 'mobx-react-lite'
 
@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, createStyles, Theme, Dialog, DialogTitle, DialogContent, Divider, Typography } from '@material-ui/core';
 
 import addonSdk from "@outreach/client-addon-sdk";
+import { EventStoreContext } from '../stores/EventStore';
+import dataService from '../services/dataService';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,11 +57,19 @@ interface IAuthenticationActionProps {
 const AuthenticationAction: React.FC<IAuthenticationActionProps> = observer((props: IAuthenticationActionProps) =>   {
 
   const classes = useStyles();
+  const eventStore = useContext(EventStoreContext);
 
   const onAuthenticateClick = async () => {
     const token = await addonSdk.authenticate();
-    alert("Token received from oauth:" + token);
-    props.onClose();
+    if (token) {
+      eventStore.setToken(token);
+      var json  = await dataService.getInfo();
+      props.onClose();
+      eventStore.setJson(json);
+    } else {
+      // TODO: nimal, 18.10.2020 - User rejected consent - handle it.
+      props.onClose();
+    }
   }
   
   const codeSample = () => {

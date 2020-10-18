@@ -8,5 +8,7 @@ namespace Outreach.CXT.Demo.Server.Services
         Task<TokenInfo> GetTokenAsync(string code);
 
         Task<TokenInfo> RefreshTokenAsync(string refreshToken);
+
+        Task<OutreachInfo> GetInfoAsync(string token);
     }
 }

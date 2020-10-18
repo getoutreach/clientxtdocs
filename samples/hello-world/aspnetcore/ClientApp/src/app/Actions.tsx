@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -8,6 +8,8 @@ import AuthenticationAction from './AuthenticationAction';
 import NotifyAction from './NotifyAction';
 import DecorateAction from './DecorateAction';
 import TokenAction from './TokenAction';
+import JsonView from './JsonView';
+import { EventStoreContext } from '../stores/EventStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +41,8 @@ export const useStyles = makeStyles((theme: Theme) =>
 const Actions: React.FC = observer(() => {
 
   const classes = useStyles();
-
+  const eventStore = useContext(EventStoreContext);
+  
   const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
   const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
   const [authorizationDialog, setAuthenticationDialog] = useState<boolean>(false);
@@ -102,6 +105,8 @@ const Actions: React.FC = observer(() => {
       <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
       <AuthenticationAction open={authorizationDialog} onClose={() => setAuthenticationDialog(false)} />
       <TokenAction open={tokenDialog} onClose={() => setTokenDialog(false)} />
+      {eventStore.json && <JsonView json={eventStore.json} onClose={() => eventStore.setJson(null)} />}
+      
     </div>
   );
 });

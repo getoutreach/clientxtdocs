@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Outreach.CXT.Demo.Server.Extensions;
+using Outreach.CXT.Demo.Server.Models;
 
 namespace Outreach.CXT.Demo.Server.Controllers
 {

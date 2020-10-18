@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { observer } from 'mobx-react-lite'
 
@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Checkbox, createStyles, FormControlLabel, Theme, Dialog, DialogTitle, DialogContent, Divider, Typography } from '@material-ui/core';
 
 import addonSdk from "@outreach/client-addon-sdk";
+import { EventStoreContext } from '../stores/EventStore';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,14 +58,15 @@ const TokenAction: React.FC<ITokenActionProps> = observer((props: ITokenActionPr
 
   const classes = useStyles();
   const [forced, setForced] = useState<boolean>(false);
+  const [token, setToken] = useState<string>();
+  const eventStore = useContext(EventStoreContext);
 
   const onTokenGetClick = async () => {
     const token = await addonSdk.getToken(forced);
     if (token) {
-        alert("Token received silently:" + token);
+        eventStore.setToken(token);
+        setToken(token);
     }
-    
-    props.onClose();
   }
   const codeSample = () => {
     return <div>
@@ -94,6 +96,16 @@ const TokenAction: React.FC<ITokenActionProps> = observer((props: ITokenActionPr
             </Button>
             <Divider className={classes.divider}  />
             { codeSample() }
+
+            { token && <>
+                <Divider className={classes.divider}  />
+                <Typography variant="overline">
+                    TOKEN
+                </Typography>
+                <Typography variant="body2" className={classes.code}>
+                    { token }
+                </Typography>
+            </>}
         </DialogContent>
     </Dialog>
   );

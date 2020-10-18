@@ -27,7 +27,7 @@ console.debug("[HelloWorld] starting... Log level:" + getLevel(addonSdk.logger.l
 addonSdk.onInit = ctx => {
   console.debug('[HelloWorld]::addonSdk.onInit', ctx);
 
-  eventStore.setManifest(addonSdk.getManifest());
+  eventStore.setRuntime(addonSdk.getRuntime());
 
   eventStore.addEvent({
     timestamp: new Date(),

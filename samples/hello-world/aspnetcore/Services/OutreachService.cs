@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -43,7 +43,7 @@ namespace Outreach.CXT.Demo.Server.Services
             var content = await request.Content.ReadAsStringAsync();
             if (!request.IsSuccessStatusCode)
             {
-                this.logger.LogError($"[CXT][AuthorizeController]::Login-ERROR {request.StatusCode} - {content}");
+                this.logger.LogError($"[CXT][OutreachService]::GetTokenAsync-ERROR {request.StatusCode} - {content}");
                 request.EnsureSuccessStatusCode();
             }
 
@@ -71,11 +71,41 @@ namespace Outreach.CXT.Demo.Server.Services
             var content = await request.Content.ReadAsStringAsync();
             if (!request.IsSuccessStatusCode)
             {
-                this.logger.LogError($"[CXT][AuthorizeController]::Login-ERROR {request.StatusCode} - {content}");
+                this.logger.LogError($"[CXT][OutreachService]::RefreshTokenAsync-ERROR {request.StatusCode} - {content}");
                 request.EnsureSuccessStatusCode();
             }
 
             return JsonConvert.DeserializeObject<TokenInfo>(content);
         }
+
+
+ 
+        public async Task<OutreachInfo> GetInfoAsync(string token)
+        {
+            var outreachApiHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_API_KEY);
+
+            using var client = this.httpClientFactory.CreateClient(Constants.DEFAULT_HTTP_CLIENT);
+
+
+            var message = new HttpRequestMessage(HttpMethod.Get, $"{outreachApiHost}/api/v2")
+            {
+                Headers =
+                {
+                    Authorization = new AuthenticationHeaderValue("bearer", token)
+                }
+            };
+            
+            var request = await client.SendAsync(message);
+            var content = await request.Content.ReadAsStringAsync();
+            if (!request.IsSuccessStatusCode)
+            {
+                this.logger.LogError($"[CXT][OutreachService]::GetInfoAsync-ERROR {request.StatusCode} - {content}");
+                request.EnsureSuccessStatusCode();
+            }
+            this.logger.LogInformation($"[CXT][OutreachService]::GetInfoAsync-CONTENT {content}");
+
+            return JsonConvert.DeserializeObject<OutreachInfo>(content);
+        }
+
     }
 }
