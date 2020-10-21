@@ -10,13 +10,16 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-
-    modal: {
+    modal: { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    modalWrapper: {
+      background: 'white',
+      margin: theme.spacing(6),
+      padding: theme.spacing(4),
+      maxHeight: '90%',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: 'column',
     },
-    modalWrapper: { background: 'white', margin: theme.spacing(6), padding: theme.spacing(4) },
+    closeButton: { flex: '30px' },
   })
 );
 
@@ -37,7 +40,7 @@ const ManifestModal = (props: { open: boolean; onHandleClose: any }) => {
     >
       <Fade in={props.open}>
         <Container className={classes.modalWrapper}>
-          <Grid container direction="row" justify="flex-end" alignItems="flex-start">
+          <Grid container direction="row" justify="flex-end" alignItems="flex-start" className={classes.closeButton}>
             <CloseIcon onClick={props.onHandleClose} />
           </Grid>
           <ManifestValidator />

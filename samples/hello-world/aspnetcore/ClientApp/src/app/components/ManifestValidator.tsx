@@ -11,6 +11,7 @@ import { EventStoreContext } from '../../stores/EventStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: { overflow: 'auto', flex: 1 },
     validationSuccess: {},
     validationError: { color: theme.palette.error.main },
     manifestTextField: { width: '100%' },
@@ -35,7 +36,6 @@ function getManifestValidatorMessages(key: ManifestValidatorMessages): string {
 }
 
 const ManifestValidator = observer(() => {
-  
   const eventStore = useContext(EventStoreContext);
   const [text, setText] = useState<string>(JSON.stringify(eventStore.manifest, null, 2));
   const [validationIssues, setValidationIssues] = useState<string[]>([]);
@@ -58,7 +58,7 @@ const ManifestValidator = observer(() => {
   }, []);
 
   return (
-    <Container>
+    <Container className={classes.container}>
       <TextField
         className={classes.manifestTextField}
         onChange={e => changeHandler(e.currentTarget.value)}
