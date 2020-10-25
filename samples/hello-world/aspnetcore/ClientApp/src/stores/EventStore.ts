@@ -2,6 +2,7 @@ import { action, observable, computed } from 'mobx';
 import React from 'react';
 import { Event } from './Event';
 import { EventType, Manifest, RuntimeContext } from '@outreach/client-addon-sdk';
+import { ConfigurationValue } from '@outreach/client-addon-sdk/store/configuration/ConfigurationValue';
 
 class EventStore {
 
@@ -20,6 +21,9 @@ class EventStore {
   @observable
   public json: object | null = null;
 
+  @observable
+  public configuration?: ConfigurationValue[];
+
   @computed
   public get filteredEvents() {
     let result = this.events;
@@ -35,10 +39,10 @@ class EventStore {
     this.json = json;
   }
 
-  
   @action
   public setRuntime = (runtime: RuntimeContext) => {
     this.manifest = runtime.manifest;
+    this.configuration = runtime.configuration;
   }
   
   @action 

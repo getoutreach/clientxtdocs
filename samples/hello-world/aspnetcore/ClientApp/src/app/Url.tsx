@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import Parameter from "./components/Paramater";
+import { EventStoreContext } from '../stores/EventStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,24 +29,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       padding: theme.spacing(),
     },
-    key: {
-      display: 'inline',
-      fontSize: 14,
-      paddingRight: 5,
-      fontWeight: 300,
-    },
-    value: {
-      display: 'inline',
-      fontFamily: 'monospace',
-      fontSize: 16,
-      paddingRight: 0,
-      fontWeight: 700,
-    },
-    params: {
-      display: 'inline',
-      fontSize: 14,
-      paddingRight: 20,
-    },    
     paragraph: {
       fontSize: 16,
       paddingTop: 20,
@@ -64,13 +48,14 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface QueryParam {
+export interface QueryParam {
   key: string;
   value: string;
 }
 
 const Url: React.FC = observer(() => {
   const classes = useStyles();
+  const eventStore = useContext(EventStoreContext);
 
   let queryParams: QueryParam[] = [];
   const urlSearchParams = new URLSearchParams(window.location.search);
@@ -79,30 +64,31 @@ const Url: React.FC = observer(() => {
     queryParams.push({ key, value });
   }
 
+  const params: { name: string, params: QueryParam[] }[] = [{ name: "URL", params: queryParams }];
+  if (eventStore.configuration && eventStore.configuration.length > 0) {
+    params.push({ name: "Configuration", params: eventStore.configuration });
+  }
+
   return (
     <Container className={classes.root}>
       <Typography variant="h2" color="primary" className={classes.subtitle}>
-        Iframe source url
+        Iframe source values
       </Typography>
-
       <Typography variant="body1" className={classes.paragraph}>
         {window.location.href}
-        <br />
-        {queryParams.length > 0 && (
-          <>
-            {queryParams.map((param, index) => (
-              <Typography
-                variant="caption"
-                className={classes.params}
-                key={index}
-              >
-                <span className={classes.key}>{param["key"]}</span>
-                <span className={classes.value}>{param["value"]}</span>
-              </Typography>
-            ))}
-          </>
-        )}
       </Typography>
+
+      {params.map(paramGroup => paramGroup.params.length > 0 &&
+        <Typography key={paramGroup.name} variant="body1" className={classes.paragraph}>
+          <Typography variant="caption" className={classes.paragraph}>
+            {paramGroup.name}
+          </Typography>
+          <br />
+          {queryParams.length > 0 && queryParams.map((param) => (
+            <Parameter key={param.key} parameter={param} />
+          ))}
+        </Typography>
+      )}
     </Container>
   );
 });

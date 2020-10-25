@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, FormControl, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent, Typography, Divider } from '@material-ui/core';
-import addonSdk from '@outreach/client-addon-sdk';
-import { NotificationType } from '@outreach/client-addon-sdk/messages/NotificationType';
+import addonSdk, { NotificationType } from '@outreach/client-addon-sdk';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -106,7 +105,6 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
     <Dialog onClose={props.onClose} open={props.open}>
       <DialogTitle>Outreach host notifications</DialogTitle>
       <DialogContent className={classes.root}>
-        
         <TextField
           autoFocus={true}
           placeholder="Enter the text here"

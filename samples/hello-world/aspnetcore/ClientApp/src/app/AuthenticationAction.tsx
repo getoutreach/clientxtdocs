@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, createStyles, Theme, Dialog, DialogTitle, DialogContent, Divider, Typography } from '@material-ui/core';
 
-import addonSdk from "@outreach/client-addon-sdk";
+import addonSdk from '@outreach/client-addon-sdk';
 import { EventStoreContext } from '../stores/EventStore';
 import dataService from '../services/dataService';
 

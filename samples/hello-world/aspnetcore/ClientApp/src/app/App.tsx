@@ -18,7 +18,6 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
 const App: React.FC = observer(() => {
   const classes = useStyles();
   const [isModalOpen, setModalOpen] = useState(false);
