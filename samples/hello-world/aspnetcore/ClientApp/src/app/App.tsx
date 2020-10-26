@@ -13,7 +13,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     main: {
-      paddingTop: theme.spacing(9),
+      paddingTop: theme.spacing(10),
     },
   })
 );

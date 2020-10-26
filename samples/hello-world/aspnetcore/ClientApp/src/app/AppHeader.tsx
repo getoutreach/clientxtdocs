@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     heading: {
       color: 'white',
-      fontSize: 44,
+      fontSize: 40,
       fontWeight: 700,
       background: theme.palette.primary.main,
       padding: 15,

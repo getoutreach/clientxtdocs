@@ -31,8 +31,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     paragraph: {
       fontSize: 16,
-      paddingTop: 20,
-      paddingBottom: 20,
+      paddingTop: 10,
+      paddingBottom: 15,
       fontWeight: 500,
     },
     root: {
@@ -84,7 +84,7 @@ const Url: React.FC = observer(() => {
             {paramGroup.name}
           </Typography>
           <br />
-          {queryParams.length > 0 && queryParams.map((param) => (
+          {paramGroup.params.length > 0 && paramGroup.params.map((param) => (
             <Parameter key={param.key} parameter={param} />
           ))}
         </Typography>
