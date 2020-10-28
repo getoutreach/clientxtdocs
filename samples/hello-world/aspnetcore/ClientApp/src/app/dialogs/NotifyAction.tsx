@@ -1,47 +1,9 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, FormControl, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent, Typography, Divider } from '@material-ui/core';
+import { Button, FormControl, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import addonSdk, { NotificationType } from '@outreach/client-addon-sdk';
-import { makeStyles, createStyles, Theme } from '@material-ui/core';
-
-export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    actionButton: {
-      marginTop: theme.spacing(),
-      marginBottom: theme.spacing(),
-    },
-    actionHeading: {
-      paddingBottom: theme.spacing(),
-    },
-    actionOptions: {
-      marginBottom: theme.spacing(),
-      marginTop: theme.spacing(),
-    },
-    actionRoot: {
-      alignSelf: 'flex-start',
-      borderColor: theme.palette.divider,
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderRadius: theme.spacing(),
-      display: 'flex',
-      flexDirection: 'column',
-      margin: theme.spacing(2),
-      padding: theme.spacing(),
-    },
-    code: {
-      padding: theme.spacing(0.5),
-      fontFamily: 'Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New',
-      fontWeight: "lighter"
-    },
-    divider: {
-      marginBottom: theme.spacing(0.5),
-    },
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-    }
-  })
-);
+import CodeSample from '../components/CodeSample';
+import { useStyles } from './DialogStyle';
 
 interface INotifyActionProps {
   onClose: () => void;
@@ -49,11 +11,10 @@ interface INotifyActionProps {
 }
 
 const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyActionProps) => {
-  
   const classes = useStyles();
-  
   const [text, setText] = useState<string>('');
   const [type, setType] = useState<NotificationType>('info');
+  const notificationTypes: NotificationType[] = [ 'success', 'info', 'warning', 'error' ];
 
   const getNotificationType = () => {
     let notificationType: NotificationType;
@@ -89,22 +50,10 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
     props.onClose();
   };
 
-  const codeSample = () => {
-      return <div>
-        <Divider className={classes.divider}  />
-        <Typography variant="overline">
-            Code sample
-        </Typography>
-        <Typography variant="body2" className={classes.code}>
-            addonSdk.notify('{text}', '{getNotificationType()}' )
-        </Typography>
-      </div>
-  }
-
   return (
     <Dialog onClose={props.onClose} open={props.open}>
       <DialogTitle>Outreach host notifications</DialogTitle>
-      <DialogContent className={classes.root}>
+      <DialogContent className={classes.container}>
         <TextField
           autoFocus={true}
           placeholder="Enter the text here"
@@ -120,10 +69,7 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
             value={type}
             onChange={e => setType(e.target.value as NotificationType)}
           >
-            <MenuItem value="success">success</MenuItem>
-            <MenuItem value="info">information</MenuItem>
-            <MenuItem value="warning">warning</MenuItem>
-            <MenuItem value="error">error</MenuItem>
+            {notificationTypes.map(notificationType => <MenuItem key={notificationType} value={notificationType}>{notificationType}</MenuItem>)}
           </Select>
         </FormControl>
         <Button
@@ -136,12 +82,14 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
         >
           Send notification
         </Button>
-        { codeSample() }
+        <CodeSample>
+          <>
+            addonSdk.notify('{text}', '{getNotificationType()}')
+          </>
+        </CodeSample>
       </DialogContent>
     </Dialog>
   );
-
-
 });
 
 export default NotifyAction;
