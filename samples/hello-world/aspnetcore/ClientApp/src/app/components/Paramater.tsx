@@ -40,7 +40,7 @@ const Parameter: React.FC<ParameterProps> = observer((props: ParameterProps) => 
             className={classes.params}
         >
             <Typography variant="caption" className={classes.key}>{props.parameter.key}:</Typography>
-            <Typography variant="caption" className={classes.value}>{props.parameter.value}</Typography>
+            <Typography variant="caption" className={classes.value}>{props.parameter.value} </Typography>
         </Typography>
     );
 });
