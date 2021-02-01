@@ -19,7 +19,7 @@ namespace Outreach.CXT.Demo.Server.Controllers
         private readonly IOutreachService outreachService;
 
         public TokenController(ILogger<TokenController> logger, IMemoryCache memoryCache, IOutreachService outreachService)
-        {
+        { 
             this.logger = logger;
             this.memoryCache = memoryCache;
             this.outreachService = outreachService;

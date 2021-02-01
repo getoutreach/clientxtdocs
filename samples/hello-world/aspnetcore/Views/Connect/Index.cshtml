@@ -11,9 +11,8 @@
     <title>Outreach login connect page</title>
 </head>
 <body>
-    <script>
-
-    var url = new URL(window.location.href);
+<script>
+        
     var token = '@Model.Token';
     var expiresAt = '@Model.ExpiresAt';
     var target ='@Model.AddonHostOrigin';
@@ -27,8 +26,8 @@
         window.opener.postMessage(data, target);
     }
 
-        window.close();
-    </script>
+    window.close();
+</script>
 
 
 </body >

@@ -24,7 +24,7 @@ namespace Outreach.CXT.Demo.Server.Services
 
         public async Task<TokenInfo> GetTokenAsync(string code)
         {
-            var outreachHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_HOST_KEY);
+            var outreachHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_HOST);
             var clientId = this.configuration.GetValue<string>(AzureServiceKeys.APPLICATION_ID);
             var clientSecret = this.configuration.GetValue<string>(AzureServiceKeys.APPLICATION_SECRET);
             var redirectUri = this.configuration.GetValue<string>(AzureServiceKeys.REDIRECT_URI);
@@ -52,7 +52,7 @@ namespace Outreach.CXT.Demo.Server.Services
 
         public async Task<TokenInfo> RefreshTokenAsync(string refreshToken)
         {
-            var outreachHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_HOST_KEY);
+            var outreachHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_HOST);
             var clientId = this.configuration.GetValue<string>(AzureServiceKeys.APPLICATION_ID);
             var clientSecret = this.configuration.GetValue<string>(AzureServiceKeys.APPLICATION_SECRET);
             var redirectUri = this.configuration.GetValue<string>(AzureServiceKeys.REDIRECT_URI);
@@ -82,7 +82,7 @@ namespace Outreach.CXT.Demo.Server.Services
  
         public async Task<OutreachInfo> GetInfoAsync(string token)
         {
-            var outreachApiHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_API_KEY);
+            var outreachApiHost = this.configuration.GetValue<string>(AzureServiceKeys.OUTREACH_API_HOST);
 
             using var client = this.httpClientFactory.CreateClient(Constants.DEFAULT_HTTP_CLIENT);
 

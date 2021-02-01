@@ -13,8 +13,8 @@ namespace Outreach.CXT.Demo.Server
 
     public static class AzureServiceKeys {
         
-        public const string OUTREACH_API_KEY = "OUTREACH_API_KEY";
-        public const string OUTREACH_HOST_KEY = "OUTREACH_HOST";
+        public const string OUTREACH_HOST = "OUTREACH_HOST";
+        public const string OUTREACH_API_HOST = "OUTREACH_API_HOST";
         public const string APPLICATION_ID = "APPLICATION_ID";
         public const string APPLICATION_SECRET = "APPLICATION_SECRET";
         public const string REDIRECT_URI = "REDIRECT_URI";

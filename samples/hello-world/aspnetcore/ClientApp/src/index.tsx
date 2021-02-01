@@ -21,6 +21,7 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
+addonSdk.cookie.domain = 'meet.rs';
 addonSdk.logger = new HelloWorldAddonLogger();
 console.debug("[HelloWorld] starting... Log level:" + getLevel(addonSdk.logger.level));
 
