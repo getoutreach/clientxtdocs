@@ -11,6 +11,7 @@ import ConfigureAction from './dialogs/ConfigureAction';
 import TokenAction from './dialogs/TokenAction';
 import JsonView from './JsonView';
 import { EventStoreContext } from '../stores/EventStore';
+import NavigateAction from './dialogs/NavigateAction';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +45,7 @@ const Actions: React.FC = observer(() => {
   const classes = useStyles();
   const eventStore = useContext(EventStoreContext);
   
+  const [navigationDialog, setNavigationDialog] = useState<boolean>(false);
   const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
   const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
   const [configurationDialog, setConfigurationDialog] = useState<boolean>(false);
@@ -87,6 +89,18 @@ const Actions: React.FC = observer(() => {
               type="submit"
               className={classes.actionButton}
               color="primary"
+              onClick={e => setNavigationDialog(true)}
+            >
+              sdk.navigate()
+          </Button>
+        </Grid>        
+        <Grid item={true} className={classes.item}>
+          <Button
+              autoCapitalize="false"
+              variant="outlined"
+              type="submit"
+              className={classes.actionButton}
+              color="primary"
               onClick={e => setConfigurationDialog(true)}
             >
               sdk.configure()
@@ -115,6 +129,7 @@ const Actions: React.FC = observer(() => {
           </Button>
         </Grid>
       </Grid>
+      <NavigateAction open={navigationDialog} onClose={() => setNavigationDialog(false)} />
       <NotifyAction open={notificationDialog} onClose={() => setNotificationDialog(false)} />
       <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
       <ConfigureAction open={configurationDialog} onClose={() => setConfigurationDialog(false)} />
