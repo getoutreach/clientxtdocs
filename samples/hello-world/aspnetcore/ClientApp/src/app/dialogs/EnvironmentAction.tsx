@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Dialog, DialogTitle, DialogContent, Switch, FormControlLabel } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Switch,
+  FormControlLabel,
+  FormControl,
+  MenuItem,
+  Select,
+  InputLabel,
+} from '@material-ui/core';
 import addonSdk from '@outreach/client-addon-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
@@ -10,19 +21,26 @@ interface IEnvironmentActionProps {
   open: boolean;
 }
 
-const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props:IEnvironmentActionProps) => {
+declare type DecorationType = 'none' | 'simple' | 'full';
+
+const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props: IEnvironmentActionProps) => {
   const classes = useStyles();
-  const [fullWidth, setFullWidth] = useState<boolean>(false);
+  const [fullWidth, setFullWidth] = useState<boolean>(true);
+  const [badgeType, setBageType] = useState<DecorationType>('full');
 
   const update = () => {
     addonSdk.environment({
-      fullWidth
+      fullWidth: fullWidth,
+      decoration: badgeType,
     });
 
     props.onClose();
   };
 
-  const payload = `{ fullWidth: ${fullWidth}}`;
+  const payload = `{ 
+    fullWidth: ${fullWidth}, 
+    decoration:'${badgeType}'
+  }`;
 
   return (
     <Dialog onClose={props.onClose} open={props.open}>
@@ -30,15 +48,31 @@ const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props:IEn
       <DialogContent className={classes.container}>
         <FormControlLabel
           control={
-            <Switch
-              checked={fullWidth}
-              onChange={() => setFullWidth(!fullWidth)}
-              name="fullWidth"
-              color="primary"
-            />
+            <Switch checked={fullWidth} onChange={() => setFullWidth(!fullWidth)} name="fullWidth" color="primary" />
           }
           label="Full width"
         />
+        <FormControl component="fieldset" className={classes.actionOptions}>
+          <InputLabel id="badge-type-title">Badge type</InputLabel>
+          <Select
+            label="Badge type"
+            labelId="badge-type-title"
+            variant="outlined"
+            value={badgeType}
+            onChange={e => setBageType(e.target.value as DecorationType)}
+          >
+            <MenuItem key="none" value="none">
+              None
+            </MenuItem>
+            <MenuItem key="simple" value="simple">
+              Simple
+            </MenuItem>
+            <MenuItem key="full" value="full">
+              Full
+            </MenuItem>
+          </Select>
+        </FormControl>
+
         <Button
           variant="contained"
           type="submit"
@@ -49,9 +83,7 @@ const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props:IEn
           Send notification
         </Button>
         <CodeSample>
-          <>
-            addonSdk.environment({payload})
-          </>
+          <>addonSdk.environment({payload})</>
         </CodeSample>
       </DialogContent>
     </Dialog>

@@ -7,7 +7,7 @@ import { Grid, Typography, createStyles, makeStyles, Theme, Button } from '@mate
 import AuthenticationAction from './dialogs/AuthenticationAction';
 import NotifyAction from './dialogs/NotifyAction';
 import DecorateAction from './dialogs/DecorateAction';
-import ConfigureAction from './dialogs/ConfigureAction';
+// import ConfigureAction from './dialogs/ConfigureAction';
 import TokenAction from './dialogs/TokenAction';
 import JsonView from './JsonView';
 import { EventStoreContext } from '../stores/EventStore';
@@ -19,14 +19,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     actionButton: {
       marginTop: theme.spacing(),
       marginBottom: theme.spacing(),
-      textTransform: "none"
+      textTransform: 'none',
     },
     actions: {
       display: 'flex',
       flexDirection: 'row',
     },
     item: {
-      margin: theme.spacing()
+      margin: theme.spacing(),
     },
     root: {
       display: 'flex',
@@ -42,15 +42,14 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Actions: React.FC = observer(() => {
-
   const classes = useStyles();
   const eventStore = useContext(EventStoreContext);
-  
+
   const [environmentDialog, setEnvironmentDialog] = useState<boolean>(false);
   const [navigationDialog, setNavigationDialog] = useState<boolean>(false);
   const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
   const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
-  const [configurationDialog, setConfigurationDialog] = useState<boolean>(false);
+  // const [configurationDialog, setConfigurationDialog] = useState<boolean>(false);
   const [authorizationDialog, setAuthenticationDialog] = useState<boolean>(false);
   const [tokenDialog, setTokenDialog] = useState<boolean>(false);
 
@@ -70,45 +69,46 @@ const Actions: React.FC = observer(() => {
             onClick={e => setNotificationDialog(true)}
           >
             sdk.notify()
-        </Button>
-        </Grid>
-        <Grid item={true} className={classes.item}>
-          <Button
-              autoCapitalize="false"
-              variant="outlined"
-              type="submit"
-              className={classes.actionButton}
-              color="primary"
-              onClick={e => setDecorationDialog(true)}
-            >
-              sdk.decorate()
           </Button>
         </Grid>
         <Grid item={true} className={classes.item}>
           <Button
-              autoCapitalize="false"
-              variant="outlined"
-              type="submit"
-              className={classes.actionButton}
-              color="primary"
-              onClick={e => setNavigationDialog(true)}
-            >
-              sdk.navigate()
+            autoCapitalize="false"
+            variant="outlined"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setDecorationDialog(true)}
+          >
+            sdk.decorate()
           </Button>
-        </Grid>        
+        </Grid>
         <Grid item={true} className={classes.item}>
           <Button
-              autoCapitalize="false"
-              variant="outlined"
-              type="submit"
-              className={classes.actionButton}
-              color="primary"
-              onClick={e => setEnvironmentDialog(true)}
-            >
-              sdk.environment()
+            autoCapitalize="false"
+            variant="outlined"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setNavigationDialog(true)}
+          >
+            sdk.navigate()
           </Button>
-        </Grid>   
+        </Grid>
         <Grid item={true} className={classes.item}>
+          <Button
+            autoCapitalize="false"
+            variant="outlined"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setEnvironmentDialog(true)}
+          >
+            sdk.environment()
+          </Button>
+        </Grid>
+        {/*
+ <Grid item={true} className={classes.item}>
           <Button
               autoCapitalize="false"
               variant="outlined"
@@ -120,39 +120,39 @@ const Actions: React.FC = observer(() => {
               sdk.configure()
           </Button>
         </Grid>
+*/}
         <Grid item={true} className={classes.item}>
           <Button
-              variant="outlined"
-              type="submit"
-              className={classes.actionButton}
-              color="primary"
-              onClick={e => setTokenDialog(true)}
-            >
-              sdk.getToken()
+            variant="outlined"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setTokenDialog(true)}
+          >
+            sdk.getToken()
           </Button>
         </Grid>
         <Grid item={true} className={classes.item}>
           <Button
-              variant="outlined"
-              type="submit"
-              className={classes.actionButton}
-              color="primary"
-              onClick={e => setAuthenticationDialog(true)}
-            >
-              sdk.authenticate()
+            variant="outlined"
+            type="submit"
+            className={classes.actionButton}
+            color="primary"
+            onClick={e => setAuthenticationDialog(true)}
+          >
+            sdk.authenticate()
           </Button>
         </Grid>
       </Grid>
-      
+
       <EnvironmentAction open={environmentDialog} onClose={() => setEnvironmentDialog(false)} />
       <NavigateAction open={navigationDialog} onClose={() => setNavigationDialog(false)} />
       <NotifyAction open={notificationDialog} onClose={() => setNotificationDialog(false)} />
       <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
-      <ConfigureAction open={configurationDialog} onClose={() => setConfigurationDialog(false)} />
+      {/* <ConfigureAction open={configurationDialog} onClose={() => setConfigurationDialog(false)} /> */}
       <AuthenticationAction open={authorizationDialog} onClose={() => setAuthenticationDialog(false)} />
       <TokenAction open={tokenDialog} onClose={() => setTokenDialog(false)} />
       {eventStore.json && <JsonView json={eventStore.json} onClose={() => eventStore.setJson(null)} />}
-      
     </div>
   );
 });

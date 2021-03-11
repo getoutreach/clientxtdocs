@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, TextField, DialogContent, Dialog, DialogTitle, FormControl, Select, MenuItem } from '@material-ui/core';
-import addonSdk, { DecorationType }  from '@outreach/client-addon-sdk';
+import {
+  Button,
+  TextField,
+  DialogContent,
+  Dialog,
+  DialogTitle,
+  FormControl,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
+import addonSdk, { DecorationType } from '@outreach/client-addon-sdk';
 import { useStyles } from './DialogStyle';
 import CodeSample from '../components/CodeSample';
 
@@ -11,12 +20,11 @@ interface IDecorationActionProps {
 }
 
 const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecorationActionProps) => {
-  
   const classes = useStyles();
-  
+
   const [text, setText] = useState<string>('');
-  const [type, setType] = useState<DecorationType>('text');
-  const decorationTypes: DecorationType[] = [ 'text', 'badge', 'icon' ];
+  const [type, setType] = useState<DecorationType>('badge');
+  const decorationTypes: DecorationType[] = ['text', 'badge', 'icon'];
 
   const decorate = () => {
     if (!text) {
@@ -29,7 +37,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
     props.onClose();
   };
 
-  return  (
+  return (
     <Dialog onClose={props.onClose} open={props.open}>
       <DialogTitle>Outreach host addon decoration</DialogTitle>
       <DialogContent className={classes.container}>
@@ -47,10 +55,20 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
             value={type}
             onChange={e => setType(e.target.value as DecorationType)}
           >
-            {decorationTypes.map(decorationType => <MenuItem key={decorationType} value={decorationType}>{decorationType}</MenuItem>)}
+            {decorationTypes.map(decorationType => (
+              <MenuItem key={decorationType} value={decorationType}>
+                {decorationType}
+              </MenuItem>
+            ))}
           </Select>
-        </FormControl>        
-        <Button variant="contained" className={classes.actionButton} disabled={!text} color="primary" onClick={decorate}>
+        </FormControl>
+        <Button
+          variant="contained"
+          className={classes.actionButton}
+          disabled={!text}
+          color="primary"
+          onClick={decorate}
+        >
           Update decoration
         </Button>
         <CodeSample>

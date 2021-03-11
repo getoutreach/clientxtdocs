@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, FormControl, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import {
+  Button,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  InputLabel,
+} from '@material-ui/core';
 import addonSdk, { NotificationType } from '@outreach/client-addon-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
@@ -10,11 +20,11 @@ interface INotifyActionProps {
   open: boolean;
 }
 
-const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyActionProps) => {
+const NotifyAction: React.FC<INotifyActionProps> = observer((props: INotifyActionProps) => {
   const classes = useStyles();
   const [text, setText] = useState<string>('');
   const [type, setType] = useState<NotificationType>('info');
-  const notificationTypes: NotificationType[] = [ 'success', 'info', 'warning', 'error' ];
+  const notificationTypes: NotificationType[] = ['success', 'info', 'warning', 'error'];
 
   const getNotificationType = () => {
     let notificationType: NotificationType;
@@ -35,7 +45,7 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
         throw new Error('Unsupported type:' + type);
     }
     return notificationType;
-  }
+  };
 
   const notify = () => {
     if (!text) {
@@ -63,13 +73,18 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props:INotifyAction
           variant="outlined"
         />
         <FormControl component="fieldset" className={classes.actionOptions}>
+          <InputLabel id="notification-type-title">Notification type</InputLabel>
           <Select
             labelId="notification-type-title"
             variant="outlined"
             value={type}
             onChange={e => setType(e.target.value as NotificationType)}
           >
-            {notificationTypes.map(notificationType => <MenuItem key={notificationType} value={notificationType}>{notificationType}</MenuItem>)}
+            {notificationTypes.map(notificationType => (
+              <MenuItem key={notificationType} value={notificationType}>
+                {notificationType}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Button
