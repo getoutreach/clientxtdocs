@@ -1,18 +1,16 @@
+import { Button, Grid, Theme, Typography, createStyles, makeStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
 
-import { observer } from 'mobx-react-lite';
-
-import { Grid, Typography, createStyles, makeStyles, Theme, Button } from '@material-ui/core';
-
 import AuthenticationAction from './dialogs/AuthenticationAction';
-import NotifyAction from './dialogs/NotifyAction';
+import ConfigureAction from './dialogs/ConfigureAction';
 import DecorateAction from './dialogs/DecorateAction';
-// import ConfigureAction from './dialogs/ConfigureAction';
-import TokenAction from './dialogs/TokenAction';
-import JsonView from './JsonView';
-import { EventStoreContext } from '../stores/EventStore';
-import NavigateAction from './dialogs/NavigateAction';
 import EnvironmentAction from './dialogs/EnvironmentAction';
+import { EventStoreContext } from '../stores/EventStore';
+import JsonView from './JsonView';
+import NavigateAction from './dialogs/NavigateAction';
+import NotifyAction from './dialogs/NotifyAction';
+import TokenAction from './dialogs/TokenAction';
+import { observer } from 'mobx-react-lite';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,7 +47,7 @@ const Actions: React.FC = observer(() => {
   const [navigationDialog, setNavigationDialog] = useState<boolean>(false);
   const [notificationDialog, setNotificationDialog] = useState<boolean>(false);
   const [decorationDialog, setDecorationDialog] = useState<boolean>(false);
-  // const [configurationDialog, setConfigurationDialog] = useState<boolean>(false);
+  const [configurationDialog, setConfigurationDialog] = useState<boolean>(false);
   const [authorizationDialog, setAuthenticationDialog] = useState<boolean>(false);
   const [tokenDialog, setTokenDialog] = useState<boolean>(false);
 
@@ -107,9 +105,9 @@ const Actions: React.FC = observer(() => {
             sdk.environment()
           </Button>
         </Grid>
-        {/*
- <Grid item={true} className={classes.item}>
-          <Button
+        {
+          <Grid item={true} className={classes.item}>
+            <Button
               autoCapitalize="false"
               variant="outlined"
               type="submit"
@@ -118,9 +116,9 @@ const Actions: React.FC = observer(() => {
               onClick={e => setConfigurationDialog(true)}
             >
               sdk.configure()
-          </Button>
-        </Grid>
-*/}
+            </Button>
+          </Grid>
+        }
         <Grid item={true} className={classes.item}>
           <Button
             variant="outlined"
@@ -149,7 +147,7 @@ const Actions: React.FC = observer(() => {
       <NavigateAction open={navigationDialog} onClose={() => setNavigationDialog(false)} />
       <NotifyAction open={notificationDialog} onClose={() => setNotificationDialog(false)} />
       <DecorateAction open={decorationDialog} onClose={() => setDecorationDialog(false)} />
-      {/* <ConfigureAction open={configurationDialog} onClose={() => setConfigurationDialog(false)} /> */}
+      <ConfigureAction open={configurationDialog} onClose={() => setConfigurationDialog(false)} />
       <AuthenticationAction open={authorizationDialog} onClose={() => setAuthenticationDialog(false)} />
       <TokenAction open={tokenDialog} onClose={() => setTokenDialog(false)} />
       {eventStore.json && <JsonView json={eventStore.json} onClose={() => eventStore.setJson(null)} />}

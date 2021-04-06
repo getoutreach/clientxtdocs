@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, FormControl, MenuItem, Select, TextField, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import {
+  Button,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from '@material-ui/core';
 import addonSdk, { NavigationDestination } from '@outreach/client-addon-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
@@ -10,7 +19,7 @@ interface INavigateActionProps {
   open: boolean;
 }
 
-const NavigateAction: React.FC<INavigateActionProps> = observer((props:INavigateActionProps) => {
+const NavigateAction: React.FC<INavigateActionProps> = observer((props: INavigateActionProps) => {
   const classes = useStyles();
   const [id, setId] = useState<string>('');
   const [destination, setDestination] = useState<NavigationDestination>(NavigationDestination.ACCOUNT);
@@ -21,22 +30,30 @@ const NavigateAction: React.FC<INavigateActionProps> = observer((props:INavigate
     props.onClose();
   };
 
-
   return (
     <Dialog onClose={props.onClose} open={props.open}>
       <DialogTitle>Outreach host navigation</DialogTitle>
       <DialogContent className={classes.container}>
-      <FormControl component="fieldset" className={classes.actionOptions}>
+        <FormControl component="fieldset" className={classes.actionOptions}>
           <Select
             variant="outlined"
             value={destination}
             onChange={e => setDestination(e.target.value as NavigationDestination)}
           >
-            <MenuItem key={NavigationDestination.ACCOUNT} value={NavigationDestination.ACCOUNT}>Account</MenuItem>
-            <MenuItem key={NavigationDestination.PROSPECT} value={NavigationDestination.PROSPECT}>Prospect</MenuItem>
-            <MenuItem key={NavigationDestination.OPPORTUNITY} value={NavigationDestination.OPPORTUNITY}>Opportunity</MenuItem>
+            <MenuItem key={NavigationDestination.ACCOUNT} value={NavigationDestination.ACCOUNT}>
+              Account
+            </MenuItem>
+            <MenuItem key={NavigationDestination.PROSPECT} value={NavigationDestination.PROSPECT}>
+              Prospect
+            </MenuItem>
+            <MenuItem key={NavigationDestination.OPPORTUNITY} value={NavigationDestination.OPPORTUNITY}>
+              Opportunity
+            </MenuItem>
+            <MenuItem key={NavigationDestination.APP} value={NavigationDestination.APP}>
+              App
+            </MenuItem>
           </Select>
-        </FormControl>        
+        </FormControl>
         <TextField
           autoFocus={true}
           placeholder="Enter the route id here"
@@ -56,10 +73,14 @@ const NavigateAction: React.FC<INavigateActionProps> = observer((props:INavigate
           Send navigation request
         </Button>
         <CodeSample>
-            <>
-              { !id && <>addonSdk.navigate('{destination}');</>}
-              { id && <>addonSdk.navigate('{destination}', '{id}');</>}
-            </>
+          <>
+            {!id && <>addonSdk.navigate('{destination}');</>}
+            {id && (
+              <>
+                addonSdk.navigate('{destination}', '{id}');
+              </>
+            )}
+          </>
         </CodeSample>
       </DialogContent>
     </Dialog>
