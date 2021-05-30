@@ -24,23 +24,17 @@ serviceWorker.unregister();
 addonSdk.logger = new HelloWorldAddonLogger();
 console.debug('[HelloWorld] starting... Log level:' + getLevel(addonSdk.logger.level));
 
-const initSdk = () => {
-  return async () => {
-    console.debug('[HelloWorld]::addonSdk - ready');
-    const ctx = await addonSdk.init();
-    console.debug('[HelloWorld]::addonSdk - init', { ctx });
+addonSdk.init().then(ctx => {
+  console.debug('[HelloWorld] addonSdk.initialized', { ctx });
 
-    eventStore.setRuntime(addonSdk.getRuntime());
+  eventStore.setRuntime(addonSdk.getRuntime());
 
-    eventStore.addEvent({
-      timestamp: new Date(),
-      type: EventType.INTERNAL,
-      origin: EventOrigin.ADDON,
-      message: '[HelloWorld]::onInit handler',
-      logLevel: getLevel(LogLevel.Info),
-      context: [`context: ${JSON.stringify(ctx)}`],
-    });
-  };
-};
-
-initSdk();
+  eventStore.addEvent({
+    timestamp: new Date(),
+    type: EventType.INTERNAL,
+    origin: EventOrigin.ADDON,
+    message: '[HelloWorld]::onInit handler',
+    logLevel: getLevel(LogLevel.Info),
+    context: [`context: ${JSON.stringify(ctx)}`],
+  });
+});
