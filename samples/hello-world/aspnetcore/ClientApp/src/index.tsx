@@ -21,26 +21,26 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-addonSdk.cookie.domain = 'meet.rs';
 addonSdk.logger = new HelloWorldAddonLogger();
-console.debug("[HelloWorld] starting... Log level:" + getLevel(addonSdk.logger.level));
+console.debug('[HelloWorld] starting... Log level:' + getLevel(addonSdk.logger.level));
 
-addonSdk.onInit = ctx => {
-  console.debug('[HelloWorld]::addonSdk.onInit', ctx);
+const initSdk = () => {
+  return async () => {
+    console.debug('[HelloWorld]::addonSdk - ready');
+    const ctx = await addonSdk.init();
+    console.debug('[HelloWorld]::addonSdk - init', { ctx });
 
-  eventStore.setRuntime(addonSdk.getRuntime());
+    eventStore.setRuntime(addonSdk.getRuntime());
 
-  eventStore.addEvent({
-    timestamp: new Date(),
-    type: EventType.INTERNAL,
-    origin: EventOrigin.ADDON,
-    message: '[HelloWorld]::onInit handler',
-    logLevel: getLevel(LogLevel.Info),
-    context: [
-      `context: ${JSON.stringify(ctx)}`
-    ],
-  });
+    eventStore.addEvent({
+      timestamp: new Date(),
+      type: EventType.INTERNAL,
+      origin: EventOrigin.ADDON,
+      message: '[HelloWorld]::onInit handler',
+      logLevel: getLevel(LogLevel.Info),
+      context: [`context: ${JSON.stringify(ctx)}`],
+    });
+  };
 };
 
-console.debug('[HelloWorld]::addonSdk.ready()');
-addonSdk.ready();
+initSdk();
