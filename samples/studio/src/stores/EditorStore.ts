@@ -48,6 +48,8 @@ export class EditorStore {
             description: {
                 en: '',
             },
+            context: [],
+            store: 'personal',
         } as Manifest;
 
         this.addOrUpdateManifest(manifest, true);
