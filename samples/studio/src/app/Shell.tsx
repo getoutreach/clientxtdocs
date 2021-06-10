@@ -24,13 +24,13 @@ const Shell: React.FC = observer(() => {
             <div className={classes.root}>
                 <Switch>
                     <Route
-                        path={'/' + PredefinedRoute.EDITOR}
+                        path={`/${PredefinedRoute.EDITOR}/:id`}
                         component={Editor}
                         key="editor"
                         exact={true}
                     />
                     <Route
-                        path={'/' + PredefinedRoute.STUDIO}
+                        path={`/${PredefinedRoute.STUDIO}`}
                         component={Studio}
                         key="studio"
                         exact={true}

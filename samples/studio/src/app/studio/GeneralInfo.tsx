@@ -52,14 +52,14 @@ const BasicInfo: React.FC = observer(() => {
                     type="text"
                     label="App ID"
                     variant="outlined"
-                    value={editorStore.selectedManifest?.identifier}
+                    value={editorStore.selectedManifest?.identifier || ''}
                     onChange={(e) => {
                         const manifest = {
                             ...editorStore.selectedManifest!,
                             identifier: e.target.value,
                         };
 
-                        editorStore.setSelectedManifest(manifest);
+                        editorStore.setSelectedManifestId(manifest.identifier);
                     }}
                 ></TextField>
                 <TextField
@@ -72,10 +72,10 @@ const BasicInfo: React.FC = observer(() => {
                     style={{
                         marginLeft: 8,
                     }}
-                    value={editorStore.selectedManifest?.version}
+                    value={editorStore.selectedManifest?.version || ''}
                     placeholder="ex. 0.10"
                     onChange={(e) =>
-                        editorStore.setSelectedManifest({
+                        editorStore.addOrUpdateManifest({
                             ...editorStore.selectedManifest!,
                             version: e.target.value,
                         })
@@ -89,7 +89,7 @@ const BasicInfo: React.FC = observer(() => {
                 type="text"
                 label="App name"
                 variant="outlined"
-                value={editorStore.selectedManifest?.title.en}
+                value={editorStore.selectedManifest?.title.en || ''}
                 onChange={(e) => {
                     const manifest = {
                         ...editorStore.selectedManifest!,
@@ -97,7 +97,7 @@ const BasicInfo: React.FC = observer(() => {
                             en: e.target.value,
                         },
                     };
-                    editorStore.setSelectedManifest(manifest);
+                    editorStore.addOrUpdateManifest(manifest);
                 }}
             ></TextField>
             <TextField
@@ -109,9 +109,9 @@ const BasicInfo: React.FC = observer(() => {
                 type="text"
                 label="App description"
                 variant="outlined"
-                value={editorStore.selectedManifest?.description.en}
+                value={editorStore.selectedManifest?.description.en || ''}
                 onChange={(e) =>
-                    editorStore.setSelectedManifest({
+                    editorStore.addOrUpdateManifest({
                         ...editorStore.selectedManifest!,
                         description: {
                             en: e.target.value,
@@ -139,7 +139,7 @@ const AuthorInfo: React.FC = observer(() => {
                     label="Developer/Company Name"
                     placeholder="ex: Contoso Ltd"
                     variant="outlined"
-                    value={editorStore.selectedManifest?.author.company}
+                    value={editorStore.selectedManifest?.author.company || ''}
                     onChange={(e) =>
                         editorStore.setAuthorCompany(e.target.value)
                     }
@@ -158,7 +158,9 @@ const AuthorInfo: React.FC = observer(() => {
                     style={{
                         marginLeft: 8,
                     }}
-                    value={editorStore.selectedManifest?.author.websiteUrl}
+                    value={
+                        editorStore.selectedManifest?.author.websiteUrl || ''
+                    }
                     onChange={(e) =>
                         editorStore.setAuthorWebsite(e.target.value)
                     }
@@ -176,7 +178,9 @@ const AuthorInfo: React.FC = observer(() => {
                     label="Privacy statement"
                     placeholder="ex: https://www.contoso.com/privacy"
                     variant="outlined"
-                    value={editorStore.selectedManifest?.author.privacyUrl}
+                    value={
+                        editorStore.selectedManifest?.author.privacyUrl || ''
+                    }
                     onChange={(e) =>
                         editorStore.setAuthorPrivacyUrl(e.target.value)
                     }
@@ -195,7 +199,9 @@ const AuthorInfo: React.FC = observer(() => {
                     style={{
                         marginLeft: 8,
                     }}
-                    value={editorStore.selectedManifest?.author.termsOfUseUrl}
+                    value={
+                        editorStore.selectedManifest?.author.termsOfUseUrl || ''
+                    }
                     onChange={(e) =>
                         editorStore.setAuthorTermsOfUseUrl(e.target.value)
                     }

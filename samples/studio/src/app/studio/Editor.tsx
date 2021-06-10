@@ -1,7 +1,9 @@
 import { Link, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { EditorStoreContext } from '../../stores/EditorStore';
 import ApiInfo from './ApiInfo';
 import ConfigInfo from './ConfigInfo';
 import ContextInfo from './ContextInfo';
@@ -20,6 +22,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             flexGrow: 1,
             margin: theme.spacing(2),
+            marginTop: theme.spacing(4),
         },
         root: {
             display: 'flex',
@@ -38,36 +41,51 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const Editor: React.FC = observer(() => {
-    const classes = useStyles();
+interface IEditorProps {
+    id: string;
+}
 
-    const [activeStep, setActiveStep] = useState<number>(0);
+const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
+    (props: RouteComponentProps<IEditorProps>) => {
+        const classes = useStyles();
+        const [activeStep, setActiveStep] = useState<number>(0);
+        const editorStore = useContext(EditorStoreContext);
 
-    return (
-        <div className={classes.root}>
-            <div className={classes.stepper}>
-                <EditorStepper onStepChanged={(step) => setActiveStep(step)} />
-            </div>
-            <div className={classes.details}>
-                <div className={classes.title}>
-                    <Typography variant="h5">App details</Typography>
-                    <Typography>
-                        Provide some basic info about your app to get things
-                        going. Learn more about Outreach Apps and the &nbsp;
-                        <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md">
-                            Manifest Schema
-                        </Link>
-                    </Typography>
+        useEffect(() => {
+            const manifestId = props.match.params.id;
+            if (editorStore.selectedManifest?.identifier !== manifestId) {
+                editorStore.setSelectedManifestId(manifestId);
+            }
+        }, [editorStore, props.match.params.id]);
+
+        return (
+            <div className={classes.root}>
+                <div className={classes.stepper}>
+                    <EditorStepper
+                        onStepChanged={(step) => setActiveStep(step)}
+                    />
                 </div>
+                <div className={classes.details}>
+                    <div className={classes.title}>
+                        <Typography variant="h5">App details</Typography>
+                        <Typography>
+                            Provide some basic info about your app to get things
+                            going. Learn more about Outreach Apps and the &nbsp;
+                            <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md">
+                                Manifest Schema
+                            </Link>
+                        </Typography>
+                    </div>
 
-                {activeStep === 0 && <GeneralInfo />}
-                {activeStep === 1 && <HostInfo />}
-                {activeStep === 2 && <ContextInfo />}
-                {activeStep === 3 && <ApiInfo />}
-                {activeStep === 4 && <ConfigInfo />}
+                    {activeStep === 0 && <GeneralInfo />}
+                    {activeStep === 1 && <HostInfo />}
+                    {activeStep === 2 && <ContextInfo />}
+                    {activeStep === 3 && <ApiInfo />}
+                    {activeStep === 4 && <ConfigInfo />}
+                </div>
             </div>
-        </div>
-    );
-});
+        );
+    }
+);
 
 export default Editor;

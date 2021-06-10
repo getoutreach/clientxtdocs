@@ -62,7 +62,7 @@ const HostInfo: React.FC = observer(() => {
                             type: e.target.value as AddonType,
                         },
                     };
-                    editorStore.setSelectedManifest(manifest);
+                    editorStore.addOrUpdateManifest(manifest);
                 }}
             >
                 <MenuItem
@@ -109,7 +109,7 @@ const HostInfo: React.FC = observer(() => {
                             url: e.target.value,
                         },
                     };
-                    editorStore.setSelectedManifest(manifest);
+                    editorStore.addOrUpdateManifest(manifest);
                 }}
             ></TextField>
         </div>

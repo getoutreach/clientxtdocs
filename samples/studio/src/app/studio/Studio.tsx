@@ -6,8 +6,6 @@ import {
     Typography,
 } from '@material-ui/core';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import { Manifest } from '@outreach/client-addon-sdk';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
@@ -44,8 +42,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             flexDirection: 'row',
-            height: '100%',
             flexGrow: 1,
+            height: '100%',
+            marginTop: theme.spacing(2),
         },
     })
 );
@@ -55,30 +54,8 @@ const Actions: React.FC = observer(() => {
     const editorStore = useContext(EditorStoreContext);
 
     const handleCreateNewApp = () => {
-        const newManifest = {
-            identifier: uuidv4(),
-            version: '',
-            author: {
-                company: '',
-                privacyUrl: '',
-                termsOfUseUrl: '',
-                websiteUrl: '',
-            },
-            host: {
-                type: 'left-side-menu',
-                url: '',
-                icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAA/UlEQVRYw+2XMQ6DMAxF/xnYKs4CJ+BaHAKpEqpQOEaOAWLrAkuZYOviTlVRiUiIYzGAvZL/cOLYMXAOy6AxY4ZGJiGfgxaeh/97+vPAUegVQIcFTCvAFBZABj8tIIbCYBS0+QCF2CZ/w8tL/OujDfFgyRMIahvwZAP6bcCbDaALcAGkAXeUKFGhlQL8LEHHisOhd0dMhEPvTgOciCWKhg2w9O6aDZgOBghvkfAhC6ep0EUrpUsFSRe7gwEtKoft8wR0SBwTwAvQIXJOYS9AuuMSegCaXWVk03rjknpHIbQ8HZVxUWH8tvB5/MYYWYDRPiGYBhA3gNMActlR9gF7GV7fOJfTDAAAAABJRU5ErkJggg==',
-            },
-            title: {
-                en: '',
-            },
-            description: {
-                en: '',
-            },
-        } as Manifest;
-        editorStore.addOrUpdateManifest(newManifest, true);
-
-        window.location.hash = '/editor';
+        const manifest = editorStore.createNewManifest();
+        window.location.hash = `/editor/${manifest.identifier}`;
     };
 
     return (
