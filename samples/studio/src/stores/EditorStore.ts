@@ -4,12 +4,20 @@ import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuratio
 import { Manifest } from "@outreach/client-addon-sdk";
 import { v4 as uuidv4 } from "uuid";
 
+interface EditorCacheData {
+  manifests: Manifest[];
+  selectedManifestId: string;
+  useApi: boolean;
+}
+
 export class EditorStore {
-  private MANIFEST_CACHING_KEY = "cxt-studio-manifests";
+  private MANIFEST_CACHING_KEY = "cxt-studio-manifests-v1";
 
   public manifests: Manifest[] = [];
 
-  public selectedManifestId?: string;
+  public selectedManifestId?: string | null;
+
+  public useApi: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -72,22 +80,21 @@ export class EditorStore {
       this.manifests.splice(existingManifestIndex, 1, manifest);
     }
 
-    localStorage.setItem(
-      this.MANIFEST_CACHING_KEY,
-      JSON.stringify(this.manifests)
-    );
-
     if (selected) {
       this.selectedManifestId = manifest.identifier;
     }
+    this.cacheContextToLocalStorage();
   };
 
   public setManifests = (manifests: Manifest[]) => {
     this.manifests = manifests;
+
+    this.cacheContextToLocalStorage();
   };
 
   public setSelectedManifestId = (manifestId: string) => {
     this.selectedManifestId = manifestId;
+    this.cacheContextToLocalStorage();
   };
 
   public setAuthorCompany = (company: string) => {
@@ -253,12 +260,22 @@ export class EditorStore {
     this.addOrUpdateManifest(manifest);
   };
 
+  public setUseApi = (useApi: boolean) => {
+    this.useApi = useApi;
+    this.cacheContextToLocalStorage();
+  };
+
   public init = () => {
     const cachedManifests = localStorage.getItem(this.MANIFEST_CACHING_KEY);
     if (cachedManifests) {
-      this.manifests = JSON.parse(cachedManifests);
+      const data = JSON.parse(cachedManifests) as EditorCacheData;
+      this.manifests = data.manifests;
+      this.useApi = data.useApi;
+      this.selectedManifestId = data.selectedManifestId;
     } else {
       this.manifests = [];
+      this.useApi = false;
+      this.selectedManifestId = null;
     }
   };
 
@@ -270,6 +287,17 @@ export class EditorStore {
       redirectUri: "",
       token: "",
     };
+  };
+
+  private cacheContextToLocalStorage = () => {
+    localStorage.setItem(
+      this.MANIFEST_CACHING_KEY,
+      JSON.stringify({
+        manifests: this.manifests,
+        selectedManifestId: this.setSelectedManifestId,
+        useApi: this.useApi,
+      })
+    );
   };
 }
 

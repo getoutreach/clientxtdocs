@@ -5,6 +5,8 @@ import {
   FormGroup,
   FormLabel,
   Link,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -56,14 +58,6 @@ const ApiInfoEditor: React.FC = observer(() => {
 
   return (
     <div className={classes.info}>
-      <Typography variant="h6">API info</Typography>
-      <Typography variant="caption" style={{ marginBottom: 8 }}>
-        Outreach Application ID and redirect uri are values created by Outreach.
-        To learn more read{" "}
-        <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#setup-outreach-oauth-application">
-          here
-        </Link>
-      </Typography>
       <div className={classes.row}>
         <TextField
           className={classes.textField}
@@ -72,7 +66,7 @@ const ApiInfoEditor: React.FC = observer(() => {
           type="text"
           label="Outreach Application ID"
           variant="outlined"
-          value={editorStore.selectedManifest?.api?.applicationId}
+          value={editorStore.selectedManifest?.api?.applicationId || ""}
           onChange={(e) => editorStore.setApiApplicationId(e.target.value)}
         ></TextField>
         <TextField
@@ -126,7 +120,9 @@ const ScopesEditor: React.FC = observer(() => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const scope = event.target.value as Scopes;
-    const scopes = [...(editorStore.selectedManifest!.api?.scopes || [])];
+    let scopes = [...(editorStore.selectedManifest!.api?.scopes || [])];
+    scopes = JSON.parse(JSON.stringify(scopes));
+
     const selectedIndex = scopes.findIndex((p) => p === scope);
     if (selectedIndex === -1) {
       scopes.push(scope);
@@ -134,9 +130,11 @@ const ScopesEditor: React.FC = observer(() => {
       scopes.splice(selectedIndex, 1);
     }
 
-    const manifest = {
-      ...editorStore.selectedManifest!,
-    };
+    const manifest = JSON.parse(
+      JSON.stringify({
+        ...editorStore.selectedManifest!,
+      })
+    );
     manifest.api = manifest.api || {
       scopes: [],
       applicationId: "",
@@ -2055,11 +2053,48 @@ const ScopesEditor: React.FC = observer(() => {
 
 const ApiInfo: React.FC = observer(() => {
   const classes = useStyles();
+  const editorStore = useContext(EditorStoreContext);
 
   return (
     <div className={classes.root}>
-      <ApiInfoEditor />
-      <ScopesEditor />
+      <Typography variant="h6">API info</Typography>
+      <Typography variant="caption" style={{ marginBottom: 8 }}>
+        Outreach Application ID and redirect uri are values created by Outreach.
+        To learn more read{" "}
+        <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#setup-outreach-oauth-application">
+          here
+        </Link>
+      </Typography>
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">
+          Does your extension need OAuth access to Outreach API?
+        </FormLabel>
+        <RadioGroup
+          aria-label="Outreach API access"
+          name="outreachApiAccess"
+          value={editorStore.useApi}
+          onChange={() => {
+            editorStore.setUseApi(!editorStore.useApi);
+          }}
+        >
+          <FormControlLabel
+            value={true}
+            control={<Radio />}
+            label="Yes, it needs OAuth API Access"
+          />
+          <FormControlLabel
+            value={false}
+            control={<Radio />}
+            label="No, API access is not needed"
+          />
+        </RadioGroup>
+      </FormControl>
+      {editorStore.useApi && (
+        <>
+          <ApiInfoEditor />
+          <ScopesEditor />
+        </>
+      )}
     </div>
   );
 });
