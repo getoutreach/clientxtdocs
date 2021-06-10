@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
 import { Manifest } from "@outreach/client-addon-sdk";
 import { v4 as uuidv4 } from "uuid";
+import { isUrl } from "../app/utils";
 
 interface EditorCacheData {
   manifests: Manifest[];
@@ -27,6 +28,70 @@ export class EditorStore {
     return this.manifests?.find(
       (p) => p.identifier === this.selectedManifestId
     );
+  }
+
+  public get generalInfoValid(): boolean {
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.version &&
+      !!this.selectedManifest.identifier &&
+      !!this.selectedManifest.title.en &&
+      !!this.selectedManifest.description.en &&
+      !!this.selectedManifest.author.company &&
+      isUrl(this.selectedManifest.author.privacyUrl) &&
+      isUrl(this.selectedManifest.author.termsOfUseUrl) &&
+      isUrl(this.selectedManifest.author.websiteUrl)
+    );
+  }
+
+  public get hostInfoValid(): boolean {
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.host &&
+      !!this.selectedManifest?.host.icon &&
+      !!this.selectedManifest?.host.type &&
+      isUrl(this.selectedManifest?.host.url)
+    );
+  }
+
+  public get contextInfoValid(): boolean {
+    return !!this.selectedManifest && this.selectedManifest.context.length > 0;
+  }
+
+  public get apiInfoValid(): boolean {
+    if (!this.useApi) {
+      return true;
+    }
+
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.api &&
+      !!this.selectedManifest?.api.applicationId &&
+      isUrl(this.selectedManifest?.api.connect) &&
+      isUrl(this.selectedManifest?.api.redirectUri) &&
+      isUrl(this.selectedManifest?.api.token) &&
+      !!this.selectedManifest?.api.scopes
+    );
+  }
+
+  public get configInfoValid(): boolean {
+    if (!this.selectedManifestId) {
+      return false;
+    }
+
+    if (
+      !this.selectedManifest!.configuration ||
+      this.selectedManifest!.configuration.length === 0
+    ) {
+      return true;
+    }
+
+    let valid = false;
+    this.selectedManifest!.configuration.forEach((config) => {
+      valid = valid && !!config.key && !!config.text && !!config.type;
+    });
+
+    return valid;
   }
 
   public createNewManifest = (): Manifest => {
