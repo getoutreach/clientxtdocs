@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 
 import {
+    Checkbox,
     createStyles,
+    FormControlLabel,
     Link,
     makeStyles,
     MenuItem,
@@ -16,6 +18,12 @@ import { AddonType } from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        formControl: {
+            margin: theme.spacing(1),
+        },
+        formControlLabel: {
+            width: 350,
+        },
         input: {
             '&:invalid': {
                 // border: 'red solid 2px',
@@ -26,6 +34,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
         },
         textField: {
+            marginTop: theme.spacing(),
             marginBottom: theme.spacing(),
         },
     })
@@ -34,6 +43,9 @@ export const useStyles = makeStyles((theme: Theme) =>
 const HostInfo: React.FC = observer(() => {
     const classes = useStyles();
     const editorStore = useContext(EditorStoreContext);
+
+    const appExtension =
+        editorStore.selectedManifest!.host.type === AddonType.LeftSideMenu;
 
     return (
         <div className={classes.root}>
@@ -112,6 +124,110 @@ const HostInfo: React.FC = observer(() => {
                     editorStore.addOrUpdateManifest(manifest);
                 }}
             ></TextField>
+
+            <TextField
+                className={classes.textField}
+                fullWidth={true}
+                required={true}
+                type="url"
+                label="Icon url or data uri"
+                title="Url of the application tile icon file or a data URI value of the icon file"
+                placeholder="ex. https://www.addon-host.com/icon.png"
+                variant="outlined"
+                value={editorStore.selectedManifest?.host.icon}
+                onChange={(e) => {
+                    const manifest = {
+                        ...editorStore.selectedManifest!,
+                        host: {
+                            ...editorStore.selectedManifest!.host,
+                            icon: e.target.value,
+                        },
+                    };
+                    editorStore.addOrUpdateManifest(manifest);
+                }}
+            ></TextField>
+
+            <Typography
+                variant="h6"
+                style={{
+                    marginTop: 8,
+                }}
+            >
+                Environment requirements
+            </Typography>
+            {!appExtension && (
+                <FormControlLabel
+                    className={classes.formControlLabel}
+                    control={
+                        <Checkbox
+                            checked={
+                                editorStore.selectedManifest?.host.environment
+                                    ?.fullWidth || false
+                            }
+                            onChange={(e) => {
+                                const manifest = {
+                                    ...editorStore.selectedManifest!,
+                                    host: {
+                                        ...editorStore.selectedManifest!.host,
+                                        environment: {
+                                            ...(editorStore.selectedManifest!
+                                                .host.environment || {
+                                                fullWidth: false,
+                                                decoration: 'none',
+                                            }),
+                                            fullWidth: e.target.checked,
+                                        },
+                                    },
+                                };
+                                editorStore.addOrUpdateManifest(manifest);
+                            }}
+                        />
+                    }
+                    label={`Request full width (hide Outreach sidebar)`}
+                />
+            )}
+
+            {appExtension && (
+                <TextField
+                    className={classes.textField}
+                    fullWidth={true}
+                    required={true}
+                    select={true}
+                    label="Badge decoration type"
+                    variant="outlined"
+                    value={
+                        editorStore.selectedManifest?.host.environment
+                            ?.decoration || 'none'
+                    }
+                    onChange={(e) => {
+                        const manifest = {
+                            ...editorStore.selectedManifest!,
+                            host: {
+                                ...editorStore.selectedManifest!.host,
+                                environment: {
+                                    ...(editorStore.selectedManifest!.host
+                                        .environment || {
+                                        fullWidth: false,
+                                        decoration: 'none',
+                                    }),
+                                    decoration: e.target.value as any,
+                                },
+                            },
+                        };
+                        editorStore.addOrUpdateManifest(manifest);
+                    }}
+                >
+                    <MenuItem key="none" value="none">
+                        None
+                    </MenuItem>
+                    <MenuItem key="simple" value="simple">
+                        Simple
+                    </MenuItem>
+                    <MenuItem key="full" value="full">
+                        Full
+                    </MenuItem>
+                </TextField>
+            )}
         </div>
     );
 });
