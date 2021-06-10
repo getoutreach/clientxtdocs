@@ -7,8 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 export class EditorStore {
   private MANIFEST_CACHING_KEY = "cxt-studio-manifests";
 
-  public configuration: ConfigurationItem[] = [];
-
   public manifests: Manifest[] = [];
 
   public selectedManifestId?: string;
@@ -50,6 +48,7 @@ export class EditorStore {
       },
       context: [],
       store: "personal",
+      configuration: [],
     } as Manifest;
 
     this.addOrUpdateManifest(manifest, true);
@@ -195,9 +194,33 @@ export class EditorStore {
     this.addOrUpdateManifest(manifest);
   };
 
-  public addConfigurationOption = (item: ConfigurationItem, index: number) => {
-    const options = this.configuration[index].options || [];
+  public createNewConfigurationItem = () => {
+    const configurationItem = {
+      id: Date.now(),
+      key: "",
+      text: {
+        en: "",
+      },
+      required: true,
+      type: "string",
+      urlInclude: true,
+      defaultValue: "",
+      validator: "",
+      options: [{ text: { en: "" }, value: "" }],
+    } as ConfigurationItem;
 
+    editorStore.selectedManifest?.configuration?.push(configurationItem);
+  };
+
+  public addNewConfigurationOption = (index: number) => {
+    const configurations = this.selectedManifest?.configuration || [];
+
+    if (configurations.length < index) {
+      return;
+    }
+
+    const configuration = configurations[index];
+    const options = configuration.options || [];
     options?.push({
       text: {
         en: "",
@@ -205,29 +228,29 @@ export class EditorStore {
       value: "",
     });
 
-    this.configuration[index] = {
-      ...this.configuration[index],
-      options,
-    };
+    const manifest = {
+      ...this.selectedManifest,
+      configuration: configurations,
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest);
   };
 
-  public updateConfigurationOption = (
-    item: ConfigurationItem,
-    index: number
-  ) => {
-    const options = this.configuration[index].options || [];
+  public updateConfigurationItem = (item: ConfigurationItem, index: number) => {
+    const configurations = this.selectedManifest?.configuration || [];
 
-    this.configuration[index] = {
-      ...this.configuration[index],
-      options,
-    };
-  };
+    if (configurations.length < index) {
+      return;
+    }
 
-  public addOrUpdateConfiguration = (
-    item: ConfigurationItem,
-    index: number
-  ) => {
-    this.configuration.splice(index, 1, item);
+    configurations.splice(index, 1, item);
+
+    const manifest = {
+      ...this.selectedManifest,
+      configuration: configurations,
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest);
   };
 
   public init = () => {
