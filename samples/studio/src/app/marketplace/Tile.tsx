@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Manifest } from '@outreach/client-addon-sdk';
 import { observer } from 'mobx-react-lite';
 
 import {
     createStyles,
+    Dialog,
+    DialogContent,
     Divider,
     IconButton,
     makeStyles,
@@ -13,9 +15,10 @@ import {
     Typography,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { downloadFile } from '../utils';
 import ConsentDialog from '../shared/ConstentDialog';
-import editorStore from '../../stores/EditorStore';
+import ManifestInfo from '../studio/ManifestInfo';
+import { EditorStoreContext } from '../../stores/EditorStore';
+import { CloseableDialogTitle } from '../shared/CloseableDialogTitle';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -64,6 +67,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IContextMenuProps extends ITitleProps {
+    onManifest: () => void;
     onDelete: () => void;
 }
 
@@ -79,7 +83,7 @@ const ContextMenu: React.FC<IContextMenuProps> = (props: IContextMenuProps) => {
         setAnchorEl(null);
     };
 
-    const handleOpenManifest = () => {
+    const handleOpenExtension = () => {
         if (!props.manifest) {
             return;
         }
@@ -87,18 +91,13 @@ const ContextMenu: React.FC<IContextMenuProps> = (props: IContextMenuProps) => {
         props.onSelected(props.manifest);
     };
 
-    const handleDownloadClick = () => {
-        if (!props.manifest) {
-            return;
-        }
-        downloadFile(
-            `manifest-${props.manifest.identifier}`,
-            JSON.stringify(props.manifest, null, 2)
-        );
-    };
-
     const handleDeleteClick = () => {
         props.onDelete();
+        handleClose();
+    };
+
+    const handleManifestClick = () => {
+        props.onManifest();
         handleClose();
     };
 
@@ -114,10 +113,14 @@ const ContextMenu: React.FC<IContextMenuProps> = (props: IContextMenuProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleOpenManifest}>Open</MenuItem>
-                <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+                <MenuItem onClick={handleOpenExtension}>
+                    Open extension
+                </MenuItem>
+                <MenuItem onClick={handleDeleteClick}>
+                    Delete extension
+                </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleDownloadClick}>Download</MenuItem>
+                <MenuItem onClick={handleManifestClick}>View manifest</MenuItem>
             </Menu>
         </div>
     );
@@ -130,8 +133,10 @@ interface ITitleProps {
 
 const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
     const classes = useStyles();
+    const editorStore = useContext(EditorStoreContext);
     const [focused, setFocused] = useState<boolean>(false);
-    const [showConsent, setShowConsent] = useState<boolean>(false);
+    const [showDeleteConsent, setShowDeleteConsent] = useState<boolean>(false);
+    const [showManifest, setShowManifest] = useState<boolean>(false);
 
     const handleDeleteTile = () => {
         if (props.manifest) {
@@ -177,7 +182,8 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
 
                     <ContextMenu
                         {...props}
-                        onDelete={() => setShowConsent(true)}
+                        onDelete={() => setShowDeleteConsent(true)}
+                        onManifest={() => setShowManifest(true)}
                     />
                 </div>
             </div>
@@ -194,15 +200,33 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
                 </Typography>
             </div>
 
-            {showConsent && (
+            {showDeleteConsent && (
                 <ConsentDialog
                     title="Deleting app extension"
                     description="Are you sure you want to delete this app extension"
                     onAccept={handleDeleteTile}
-                    onCancel={() => setShowConsent(false)}
+                    onCancel={() => setShowDeleteConsent(false)}
                     open={true}
                 />
             )}
+
+            <Dialog
+                disableBackdropClick={true}
+                open={showManifest && !!props.manifest}
+                onClose={() => setShowManifest(false)}
+                maxWidth="md"
+            >
+                <CloseableDialogTitle
+                    id="manifest-dialog-title"
+                    onClose={() => setShowManifest(false)}
+                >
+                    <Typography variant="h5">Extension manifest</Typography>
+                </CloseableDialogTitle>
+
+                <DialogContent>
+                    <ManifestInfo manifest={props.manifest!} />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 });

@@ -1,24 +1,17 @@
-import {
-    Button,
-    createStyles,
-    makeStyles,
-    Theme,
-    Typography,
-} from '@material-ui/core';
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 
-import { observer } from 'mobx-react-lite';
-import React, { useContext } from 'react';
+import React from 'react';
 import ReactJson from 'react-json-view';
-import { EditorStoreContext } from '../../stores/EditorStore';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { downloadFile } from '../utils';
+import { Manifest } from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         button: {
             alignSelf: 'flex-start',
             marginLeft: theme.spacing(0),
-            marginTop: theme.spacing(),
+            marginTop: theme.spacing(-2),
             margin: theme.spacing(2),
         },
         root: {
@@ -30,12 +23,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const ManifestInfo: React.FC = observer(() => {
+interface IManifestInfoProps {
+    manifest: Manifest;
+}
+
+const ManifestInfo: React.FC<IManifestInfoProps> = (
+    props: IManifestInfoProps
+) => {
     const classes = useStyles();
-    const editorStore = useContext(EditorStoreContext);
     return (
         <div className={classes.root}>
-            <Typography variant="h6">Extension manifest</Typography>
             <Button
                 variant="contained"
                 color="primary"
@@ -43,16 +40,16 @@ const ManifestInfo: React.FC = observer(() => {
                 startIcon={<GetAppIcon />}
                 onClick={() =>
                     downloadFile(
-                        `manifest-${editorStore.selectedManifest?.identifier}`,
-                        JSON.stringify(editorStore.selectedManifest, null, 2)
+                        `manifest-${props.manifest.identifier}`,
+                        JSON.stringify(props.manifest, null, 2)
                     )
                 }
             >
                 Download manifest file
             </Button>
-            <ReactJson src={editorStore.selectedManifest!} />;
+            <ReactJson src={props.manifest} />
         </div>
     );
-});
+};
 
 export default ManifestInfo;

@@ -83,7 +83,19 @@ const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
                     {activeStep === 2 && <ContextInfo />}
                     {activeStep === 3 && <ApiInfo />}
                     {activeStep === 4 && <ConfigInfo />}
-                    {activeStep === 5 && <ManifestInfo />}
+                    {activeStep === 5 && (
+                        <>
+                            <Typography
+                                variant="h6"
+                                style={{ marginBottom: 8 }}
+                            >
+                                Extension manifest
+                            </Typography>
+                            <ManifestInfo
+                                manifest={editorStore.selectedManifest!}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
         );
