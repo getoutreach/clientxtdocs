@@ -93,8 +93,6 @@ export class EditorStore {
             valid = valid && !!config.key && !!config.text && !!config.type;
         });
 
-        console.log('[EditorStore]::configInfoValid', valid);
-
         return valid;
     }
 

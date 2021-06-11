@@ -207,8 +207,6 @@ const ScopesEditor: React.FC = observer(() => {
 
     const headingClass = selectedApiCount() === 0 ? classes.invalid : '';
 
-    console.debug('[ApiInfo]', { headingClass });
-
     return (
         <div className={classes.scopes}>
             <Typography variant="h6" className={headingClass}>

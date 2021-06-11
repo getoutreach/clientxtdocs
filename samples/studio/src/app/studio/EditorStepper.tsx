@@ -278,7 +278,9 @@ const EditorStepper: React.FC<IEditorStepperProps> = observer(
                     <Tile
                         manifest={editorStore.selectedManifest}
                         onSelected={(manifest) =>
-                            console.debug('[EditorStepper]', { manifest })
+                            console.info('[EditorStepper.tsx]::Tile selected', {
+                                manifest,
+                            })
                         }
                     />
                 </div>

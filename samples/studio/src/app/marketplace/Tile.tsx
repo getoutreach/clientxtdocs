@@ -220,7 +220,7 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
                     id="manifest-dialog-title"
                     onClose={() => setShowManifest(false)}
                 >
-                    <Typography variant="h5">Extension manifest</Typography>
+                    <Typography>Extension manifest</Typography>
                 </CloseableDialogTitle>
 
                 <DialogContent>

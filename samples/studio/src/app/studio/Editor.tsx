@@ -89,7 +89,7 @@ const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
                     {activeStep === 5 && (
                         <>
                             <Typography
-                                variant="h6"
+                                variant="subtitle1"
                                 style={{ marginBottom: 8 }}
                             >
                                 Extension manifest
