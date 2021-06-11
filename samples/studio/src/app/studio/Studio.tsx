@@ -11,6 +11,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
 import Tile from '../marketplace/Tile';
 import { EditorStoreContext } from '../../stores/EditorStore';
+import { NotificationStoreContext } from '../../stores/NotificationStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,10 +53,53 @@ export const useStyles = makeStyles((theme: Theme) =>
 const Actions: React.FC = observer(() => {
     const classes = useStyles();
     const editorStore = useContext(EditorStoreContext);
+    const notificationStore = useContext(NotificationStoreContext);
 
     const handleCreateNewApp = () => {
         const manifest = editorStore.createNewManifest();
         window.location.hash = `/editor/${manifest.identifier}`;
+    };
+
+    const handleImportManifest = () => {
+        var input = document.createElement('input') as HTMLInputElement;
+        input.type = 'file';
+
+        input.onchange = (e: Event) => {
+            let fileInput = e.target as HTMLInputElement;
+
+            if (!e.target || !fileInput.files) {
+                return;
+            }
+
+            // getting a hold of the file reference
+            var file = fileInput.files[0];
+
+            // setting up the reader
+            var reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+
+            // here we tell the reader what to do when it's done reading...
+            reader.onload = (readerEvent: ProgressEvent<FileReader>) => {
+                const content = readerEvent.target!.result as string;
+                try {
+                    const manifest = JSON.parse(content) as Manifest;
+
+                    if (!manifest.identifier) {
+                        throw new Error('Invalid manifest file:\n' + content);
+                    }
+
+                    editorStore.addOrUpdateManifest(manifest, false);
+                } catch (e) {
+                    console.error(e);
+                    notificationStore.showToast(
+                        'Invalid manifest file',
+                        'error'
+                    );
+                }
+            };
+        };
+
+        input.click();
     };
 
     return (
@@ -82,7 +126,7 @@ const Actions: React.FC = observer(() => {
             <Button
                 variant="outlined"
                 className={classes.action}
-                disabled={true}
+                onClick={handleImportManifest}
             >
                 Import an existing app
             </Button>

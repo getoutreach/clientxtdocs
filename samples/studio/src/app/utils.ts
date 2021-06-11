@@ -1,3 +1,5 @@
+import { Manifest } from '@outreach/client-addon-sdk';
+
 export const isUrl = (url: string): boolean => {
     if (!url) {
         return false;
@@ -23,4 +25,18 @@ export const downloadFile = (filename: string, content: string) => {
     element.click();
 
     document.body.removeChild(element);
+};
+
+export const generalInfoValid = (manifest: Manifest): boolean => {
+    return (
+        !!manifest &&
+        !!manifest.version &&
+        !!manifest.identifier &&
+        !!manifest.title.en &&
+        !!manifest.description.en &&
+        !!manifest.author.company &&
+        isUrl(manifest.author.privacyUrl) &&
+        isUrl(manifest.author.termsOfUseUrl) &&
+        isUrl(manifest.author.websiteUrl)
+    );
 };

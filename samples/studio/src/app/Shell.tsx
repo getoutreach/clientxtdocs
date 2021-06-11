@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { PredefinedRoute } from './enums/PredefinedRoute';
 import Studio from './studio/Studio';
 import Editor from './studio/Editor';
+import Toast from './shared/Toast';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +38,8 @@ const Shell: React.FC = observer(() => {
                     />
                     <Route path="/" component={Studio} key="home" />
                 </Switch>
+
+                <Toast />
             </div>
         </HashRouter>
     );
