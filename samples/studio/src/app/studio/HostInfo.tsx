@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         input: {
             '&:invalid': {
-                // border: 'red solid 2px',
+                borderLeft: 'red solid 4px',
             },
         },
         root: {
@@ -123,13 +123,16 @@ const HostInfo: React.FC = observer(() => {
                     };
                     editorStore.addOrUpdateManifest(manifest);
                 }}
+                inputProps={{
+                    className: classes.input,
+                }}
             ></TextField>
 
             <TextField
                 className={classes.textField}
                 fullWidth={true}
                 required={true}
-                type="url"
+                type="text"
                 label="Icon url or data uri"
                 title="Url of the application tile icon file or a data URI value of the icon file"
                 placeholder="ex. https://www.addon-host.com/icon.png"
@@ -144,6 +147,9 @@ const HostInfo: React.FC = observer(() => {
                         },
                     };
                     editorStore.addOrUpdateManifest(manifest);
+                }}
+                inputProps={{
+                    className: classes.input,
                 }}
             ></TextField>
 

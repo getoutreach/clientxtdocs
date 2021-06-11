@@ -10,6 +10,7 @@ import ContextInfo from './ContextInfo';
 import EditorStepper from './EditorStepper';
 import GeneralInfo from './GeneralInfo';
 import HostInfo from './HostInfo';
+import ManifestInfo from './ManifestInfo';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -82,6 +83,7 @@ const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
                     {activeStep === 2 && <ContextInfo />}
                     {activeStep === 3 && <ApiInfo />}
                     {activeStep === 4 && <ConfigInfo />}
+                    {activeStep === 5 && <ManifestInfo />}
                 </div>
             </div>
         );

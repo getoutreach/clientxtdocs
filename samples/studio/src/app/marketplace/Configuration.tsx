@@ -23,7 +23,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         input: {
             '&:invalid': {
-                border: 'red solid 2px',
+                borderLeft: 'red solid 4px',
             },
         },
         root: {

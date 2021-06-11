@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         input: {
             '&:invalid': {
-                // border: 'red solid 2px',
+                borderLeft: 'red solid 4px',
             },
         },
         root: {
@@ -80,6 +80,10 @@ const BasicInfo: React.FC = observer(() => {
                             version: e.target.value,
                         })
                     }
+                    inputProps={{
+                        className: classes.input,
+                        pattern: '\\d+.\\d+',
+                    }}
                 ></TextField>
             </div>
             <TextField
@@ -98,6 +102,9 @@ const BasicInfo: React.FC = observer(() => {
                         },
                     };
                     editorStore.addOrUpdateManifest(manifest);
+                }}
+                inputProps={{
+                    className: classes.input,
                 }}
             ></TextField>
             <TextField
@@ -118,6 +125,7 @@ const BasicInfo: React.FC = observer(() => {
                         },
                     })
                 }
+                inputProps={{}}
             ></TextField>
         </div>
     );
