@@ -53,7 +53,10 @@ const HostInfo: React.FC = observer(() => {
             <Typography variant="caption" style={{ marginBottom: 8 }}>
                 Describe the type of extension and where it will be hosted. To
                 learn more click
-                <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md#host">
+                <Link
+                    href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md#host"
+                    target="_blank"
+                >
                     here
                 </Link>
             </Typography>

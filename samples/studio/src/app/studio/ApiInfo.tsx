@@ -217,7 +217,10 @@ const ScopesEditor: React.FC = observer(() => {
             <Typography variant="caption" style={{ marginBottom: 8 }}>
                 Define one or more Outreach API scopes which your application
                 will need. To learn more click
-                <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/scopes.md">
+                <Link
+                    href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/scopes.md"
+                    target="_blank"
+                >
                     here
                 </Link>
             </Typography>
@@ -2183,7 +2186,10 @@ const ApiInfo: React.FC = observer(() => {
             <Typography variant="caption" style={{ marginBottom: 8 }}>
                 Outreach Application ID and redirect uri are values created by
                 Outreach. To learn more read{' '}
-                <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#setup-outreach-oauth-application">
+                <Link
+                    href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#setup-outreach-oauth-application"
+                    target="_blank"
+                >
                     here
                 </Link>
             </Typography>

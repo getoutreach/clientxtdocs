@@ -400,7 +400,10 @@ const ConfigInfo: React.FC = observer(() => {
                     <Typography variant="caption" style={{ marginBottom: 8 }}>
                         Define configuration values Outreach should collect
                         during the addon installation. To learn more click
-                        <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/configuration.md">
+                        <Link
+                            href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/configuration.md"
+                            target="_blank"
+                        >
                             {' '}
                             here
                         </Link>

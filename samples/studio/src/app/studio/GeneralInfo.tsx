@@ -1,10 +1,13 @@
 import {
     createStyles,
+    Link,
     makeStyles,
+    MenuItem,
     TextField,
     Theme,
     Typography,
 } from '@material-ui/core';
+import { AddonStore } from '@outreach/client-addon-sdk';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
 import { EditorStoreContext } from '../../stores/EditorStore';
@@ -31,6 +34,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'row',
         },
+        select: {},
         textField: {
             marginBottom: theme.spacing(),
         },
@@ -86,27 +90,60 @@ const BasicInfo: React.FC = observer(() => {
                     }}
                 ></TextField>
             </div>
-            <TextField
-                className={classes.textField}
-                fullWidth={true}
-                required={true}
-                type="text"
-                label="App name"
-                variant="outlined"
-                value={editorStore.selectedManifest?.title.en || ''}
-                onChange={(e) => {
-                    const manifest = {
-                        ...editorStore.selectedManifest!,
-                        title: {
-                            en: e.target.value,
-                        },
-                    };
-                    editorStore.addOrUpdateManifest(manifest);
-                }}
-                inputProps={{
-                    className: classes.input,
-                }}
-            ></TextField>
+            <div className={classes.row}>
+                <TextField
+                    className={classes.textField}
+                    fullWidth={true}
+                    required={true}
+                    type="text"
+                    label="App name"
+                    variant="outlined"
+                    value={editorStore.selectedManifest?.title.en || ''}
+                    onChange={(e) => {
+                        const manifest = {
+                            ...editorStore.selectedManifest!,
+                            title: {
+                                en: e.target.value,
+                            },
+                        };
+                        editorStore.addOrUpdateManifest(manifest);
+                    }}
+                    inputProps={{
+                        className: classes.input,
+                    }}
+                ></TextField>
+
+                <TextField
+                    id="store-type"
+                    className={classes.textField}
+                    fullWidth={true}
+                    select={true}
+                    required={true}
+                    variant="outlined"
+                    label="Extension store"
+                    value={editorStore.selectedManifest?.store}
+                    onChange={(e) => {
+                        const manifest = {
+                            ...editorStore.selectedManifest!,
+                            store: e.target.value as AddonStore,
+                        };
+                        editorStore.addOrUpdateManifest(manifest);
+                    }}
+                    inputProps={{
+                        className: classes.input,
+                    }}
+                >
+                    <MenuItem key="personal" value={AddonStore.Personal}>
+                        Personal store
+                    </MenuItem>
+                    <MenuItem key="number" value={AddonStore.Private}>
+                        Private store
+                    </MenuItem>
+                    <MenuItem key="public" value={AddonStore.Public}>
+                        Public store
+                    </MenuItem>
+                </TextField>
+            </div>
             <TextField
                 className={classes.textField}
                 fullWidth={true}

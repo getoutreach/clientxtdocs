@@ -161,7 +161,7 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
                     alt={props.manifest?.identifier}
                     className={classes.icon}
                     src={
-                        props.manifest?.host.icon ||
+                        props.manifest?.host?.icon ||
                         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAA/UlEQVRYw+2XMQ6DMAxF/xnYKs4CJ+BaHAKpEqpQOEaOAWLrAkuZYOviTlVRiUiIYzGAvZL/cOLYMXAOy6AxY4ZGJiGfgxaeh/97+vPAUegVQIcFTCvAFBZABj8tIIbCYBS0+QCF2CZ/w8tL/OujDfFgyRMIahvwZAP6bcCbDaALcAGkAXeUKFGhlQL8LEHHisOhd0dMhEPvTgOciCWKhg2w9O6aDZgOBghvkfAhC6ep0EUrpUsFSRe7gwEtKoft8wR0SBwTwAvQIXJOYS9AuuMSegCaXWVk03rjknpHIbQ8HZVxUWH8tvB5/MYYWYDRPiGYBhA3gNMActlR9gF7GV7fOJfTDAAAAABJRU5ErkJggg=='
                     }
                 />
@@ -173,10 +173,10 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
                         }
                     >
                         <Typography variant="subtitle1">
-                            {props.manifest?.title.en || 'App extension title'}
+                            {props.manifest?.title?.en || 'App extension title'}
                         </Typography>
                         <Typography variant="caption">
-                            {props.manifest?.author.company || 'Contoso Ltd'}
+                            {props.manifest?.author?.company || 'Contoso Ltd'}
                         </Typography>
                     </div>
 
@@ -195,7 +195,7 @@ const Tile: React.FC<ITitleProps> = observer((props: ITitleProps) => {
                 }
             >
                 <Typography variant="caption">
-                    {props.manifest?.description.en ||
+                    {props.manifest?.description?.en ||
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore....'}
                 </Typography>
             </div>

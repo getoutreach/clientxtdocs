@@ -72,7 +72,10 @@ const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
                         <Typography>
                             Provide some basic info about your app to get things
                             going. Learn more about Outreach Apps and the &nbsp;
-                            <Link href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md">
+                            <Link
+                                href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md"
+                                target="_blank"
+                            >
                                 Manifest Schema
                             </Link>
                         </Typography>
