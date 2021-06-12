@@ -16,7 +16,6 @@ import { validate } from "@outreach/client-addon-sdk/";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import StorefrontIcon from "@material-ui/icons/Storefront";
-import BugReportIcon from "@material-ui/icons/BugReport";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,17 +81,6 @@ const ManifestInfo: React.FC<IManifestInfoProps> = (
         >
           Download manifest file
         </Button>
-        <div title="Install extension for yourself and test it">
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.button}
-            startIcon={<BugReportIcon />}
-            disabled={true}
-          >
-            Test extension
-          </Button>
-        </div>
 
         <div title="Publish extension to Outreach extension store">
           <Button
