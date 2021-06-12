@@ -7,7 +7,6 @@ import { isUrl } from "../app/utils";
 
 interface EditorCacheData {
   manifests: Manifest[];
-  useApi: boolean;
 }
 
 export class EditorStore {
@@ -17,8 +16,6 @@ export class EditorStore {
   public manifests: Manifest[] = [];
 
   public selectedManifestId?: string | null;
-
-  public useApi: boolean = false;
 
   private initialized = false;
 
@@ -61,7 +58,7 @@ export class EditorStore {
   }
 
   public get apiInfoValid(): boolean {
-    if (!this.useApi) {
+    if (!!this.selectedManifest && !this.selectedManifest.api) {
       return true;
     }
 
@@ -355,20 +352,6 @@ export class EditorStore {
     this.addOrUpdateManifest(manifest);
   };
 
-  public setUseApi = (useApi: boolean) => {
-    this.useApi = useApi;
-
-    if (!this.useApi) {
-      const manifest = JSON.parse(
-        JSON.stringify(this.selectedManifest)
-      ) as Manifest;
-      delete manifest.api;
-      this.addOrUpdateManifest(manifest);
-    }
-
-    this.cacheContextToLocalStorage();
-  };
-
   public init = () => {
     this.initialized = false;
     const cachedManifests = localStorage.getItem(this.MANIFEST_CACHING_KEY);
@@ -376,10 +359,8 @@ export class EditorStore {
       const data = JSON.parse(cachedManifests) as EditorCacheData;
 
       this.manifests = data.manifests;
-      this.useApi = data.useApi;
     } else {
       this.manifests = [];
-      this.useApi = false;
     }
 
     this.selectedManifestId =
@@ -406,7 +387,6 @@ export class EditorStore {
     const context = JSON.stringify({
       manifests: this.manifests,
       selectedManifestId: this.setSelectedManifestId,
-      useApi: this.useApi,
     });
     localStorage.setItem(this.MANIFEST_CACHING_KEY, context);
   };
