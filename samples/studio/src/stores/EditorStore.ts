@@ -1,394 +1,426 @@
-import React from 'react';
-import { makeAutoObservable } from 'mobx';
-import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItem';
-import { Manifest } from '@outreach/client-addon-sdk';
-import { v4 as uuidv4 } from 'uuid';
-import { isUrl } from '../app/utils';
+import React from "react";
+import { makeAutoObservable } from "mobx";
+import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
+import { Manifest } from "@outreach/client-addon-sdk";
+import { v4 as uuidv4 } from "uuid";
+import { isUrl } from "../app/utils";
 
 interface EditorCacheData {
-    manifests: Manifest[];
-    selectedManifestId: string;
-    useApi: boolean;
+  manifests: Manifest[];
+  useApi: boolean;
 }
 
 export class EditorStore {
-    private MANIFEST_CACHING_KEY = 'cxt-studio-manifests-v1';
+  private MANIFEST_CACHING_KEY = "cxt-studio-manifests-v1";
+  private SELECTED_MANIFEST_CACHING_KEY = "cxt-studio-selected-manifest-v1";
 
-    public manifests: Manifest[] = [];
+  public manifests: Manifest[] = [];
 
-    public selectedManifestId?: string | null;
+  public selectedManifestId?: string | null;
 
-    public useApi: boolean = false;
+  public useApi: boolean = false;
 
-    constructor() {
-        makeAutoObservable(this);
+  private initialized = false;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  public get selectedManifest(): Manifest | undefined {
+    return this.manifests?.find(
+      (p) => p.identifier === this.selectedManifestId
+    );
+  }
+
+  public get generalInfoValid(): boolean {
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.version &&
+      !!this.selectedManifest.identifier &&
+      !!this.selectedManifest.title.en &&
+      !!this.selectedManifest.description.en &&
+      !!this.selectedManifest.author.company &&
+      isUrl(this.selectedManifest.author.privacyUrl) &&
+      isUrl(this.selectedManifest.author.termsOfUseUrl) &&
+      isUrl(this.selectedManifest.author.websiteUrl)
+    );
+  }
+
+  public get hostInfoValid(): boolean {
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.host &&
+      !!this.selectedManifest?.host.icon &&
+      !!this.selectedManifest?.host.type &&
+      isUrl(this.selectedManifest?.host.url)
+    );
+  }
+
+  public get contextInfoValid(): boolean {
+    return !!this.selectedManifest && this.selectedManifest.context.length > 0;
+  }
+
+  public get apiInfoValid(): boolean {
+    if (!this.useApi) {
+      return true;
     }
 
-    public get selectedManifest(): Manifest | undefined {
-        return this.manifests?.find(
-            (p) => p.identifier === this.selectedManifestId
-        );
+    return (
+      !!this.selectedManifest &&
+      !!this.selectedManifest.api &&
+      !!this.selectedManifest?.api.applicationId &&
+      isUrl(this.selectedManifest?.api.connect) &&
+      isUrl(this.selectedManifest?.api.redirectUri) &&
+      isUrl(this.selectedManifest?.api.token) &&
+      !!this.selectedManifest?.api.scopes
+    );
+  }
+
+  public get configInfoValid(): boolean {
+    if (!this.selectedManifest) {
+      return false;
     }
 
-    public get generalInfoValid(): boolean {
-        return (
-            !!this.selectedManifest &&
-            !!this.selectedManifest.version &&
-            !!this.selectedManifest.identifier &&
-            !!this.selectedManifest.title.en &&
-            !!this.selectedManifest.description.en &&
-            !!this.selectedManifest.author.company &&
-            isUrl(this.selectedManifest.author.privacyUrl) &&
-            isUrl(this.selectedManifest.author.termsOfUseUrl) &&
-            isUrl(this.selectedManifest.author.websiteUrl)
-        );
+    if (
+      !this.selectedManifest!.configuration ||
+      this.selectedManifest!.configuration.length === 0
+    ) {
+      return true;
     }
 
-    public get hostInfoValid(): boolean {
-        return (
-            !!this.selectedManifest &&
-            !!this.selectedManifest.host &&
-            !!this.selectedManifest?.host.icon &&
-            !!this.selectedManifest?.host.type &&
-            isUrl(this.selectedManifest?.host.url)
-        );
+    let valid = true;
+    this.selectedManifest!.configuration.forEach((config) => {
+      valid = valid && !!config.key && !!config.text && !!config.type;
+    });
+
+    return valid;
+  }
+
+  public createNewManifest = (): Manifest => {
+    const manifest = {
+      identifier: uuidv4(),
+      version: "",
+      author: {
+        company: "",
+        privacyUrl: "",
+        termsOfUseUrl: "",
+        websiteUrl: "",
+      },
+      host: {
+        type: "left-side-menu",
+        url: "",
+        icon: "",
+        environment: {
+          fullWidth: false,
+          decoration: "none",
+        },
+      },
+      title: {
+        en: "",
+      },
+      description: {
+        en: "",
+      },
+      context: [],
+      store: "personal",
+      configuration: [],
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest, true);
+
+    return manifest;
+  };
+
+  public deleteManifest = (manifestId: string) => {
+    const existingManifestIndex = this.manifests.findIndex(
+      (p) => p.identifier === manifestId
+    );
+
+    if (existingManifestIndex > -1) {
+      this.manifests.splice(existingManifestIndex, 1);
+      this.cacheContextToLocalStorage();
+    }
+  };
+
+  public addOrUpdateManifest = (
+    manifest: Manifest,
+    selected: boolean = false
+  ) => {
+    manifest = { ...manifest };
+
+    const existingManifestIndex = this.manifests.findIndex(
+      (p) => p.identifier === manifest.identifier
+    );
+
+    if (existingManifestIndex === -1) {
+      this.manifests.push(manifest);
+    } else {
+      this.manifests.splice(existingManifestIndex, 1, manifest);
     }
 
-    public get contextInfoValid(): boolean {
-        return (
-            !!this.selectedManifest && this.selectedManifest.context.length > 0
-        );
+    if (selected) {
+      this.selectedManifestId = manifest.identifier;
+    }
+    this.cacheContextToLocalStorage();
+  };
+
+  public setManifests = (manifests: Manifest[]) => {
+    this.manifests = manifests;
+
+    this.cacheContextToLocalStorage();
+  };
+
+  public setSelectedManifestId = (manifestId: string) => {
+    this.selectedManifestId = manifestId;
+    this.cacheSelectedManifestIdToLocalStorage();
+  };
+
+  public setAuthorCompany = (company: string) => {
+    if (!this.selectedManifest) {
+      return;
     }
 
-    public get apiInfoValid(): boolean {
-        if (!this.useApi) {
-            return true;
-        }
+    const manifest = {
+      ...this.selectedManifest,
+      author: {
+        ...this.selectedManifest.author,
+        company,
+      },
+    };
 
-        return (
-            !!this.selectedManifest &&
-            !!this.selectedManifest.api &&
-            !!this.selectedManifest?.api.applicationId &&
-            isUrl(this.selectedManifest?.api.connect) &&
-            isUrl(this.selectedManifest?.api.redirectUri) &&
-            isUrl(this.selectedManifest?.api.token) &&
-            !!this.selectedManifest?.api.scopes
-        );
+    this.addOrUpdateManifest(manifest);
+  };
+
+  public setAuthorWebsite = (websiteUrl: string) => {
+    if (!this.selectedManifest) {
+      return;
     }
 
-    public get configInfoValid(): boolean {
-        if (!this.selectedManifest) {
-            return false;
-        }
+    const manifest = {
+      ...this.selectedManifest,
+      author: {
+        ...this.selectedManifest.author,
+        websiteUrl,
+      },
+    };
 
-        if (
-            !this.selectedManifest!.configuration ||
-            this.selectedManifest!.configuration.length === 0
-        ) {
-            return true;
-        }
+    this.addOrUpdateManifest(manifest);
+  };
 
-        let valid = true;
-        this.selectedManifest!.configuration.forEach((config) => {
-            valid = valid && !!config.key && !!config.text && !!config.type;
-        });
-
-        return valid;
+  public setAuthorPrivacyUrl = (privacyUrl: string) => {
+    if (!this.selectedManifest) {
+      return;
     }
 
-    public createNewManifest = (): Manifest => {
-        const manifest = {
-            identifier: uuidv4(),
-            version: '',
-            author: {
-                company: '',
-                privacyUrl: '',
-                termsOfUseUrl: '',
-                websiteUrl: '',
-            },
-            host: {
-                type: 'left-side-menu',
-                url: '',
-                icon: '',
-                environment: {
-                    fullWidth: false,
-                    decoration: 'none',
-                },
-            },
-            title: {
-                en: '',
-            },
-            description: {
-                en: '',
-            },
-            context: [],
-            store: 'personal',
-            configuration: [],
-        } as Manifest;
-
-        this.addOrUpdateManifest(manifest, true);
-
-        return manifest;
+    const manifest = {
+      ...this.selectedManifest,
+      author: {
+        ...this.selectedManifest.author,
+        privacyUrl,
+      },
     };
 
-    public deleteManifest = (manifestId: string) => {
-        const existingManifestIndex = this.manifests.findIndex(
-            (p) => p.identifier === manifestId
-        );
+    this.addOrUpdateManifest(manifest);
+  };
 
-        if (existingManifestIndex > -1) {
-            this.manifests.splice(existingManifestIndex, 1);
-            this.cacheContextToLocalStorage();
-        }
+  public setAuthorTermsOfUseUrl = (termsOfUseUrl: string) => {
+    if (!this.selectedManifest) {
+      return;
+    }
+
+    const manifest = {
+      ...this.selectedManifest,
+      author: {
+        ...this.selectedManifest.author,
+        termsOfUseUrl,
+      },
     };
 
-    public addOrUpdateManifest = (
-        manifest: Manifest,
-        selected: boolean = false
-    ) => {
-        manifest = { ...manifest };
+    this.addOrUpdateManifest(manifest);
+  };
 
-        const existingManifestIndex = this.manifests.findIndex(
-            (p) => p.identifier === manifest.identifier
-        );
-
-        if (existingManifestIndex === -1) {
-            this.manifests.push(manifest);
-        } else {
-            this.manifests.splice(existingManifestIndex, 1, manifest);
-        }
-
-        if (selected) {
-            this.selectedManifestId = manifest.identifier;
-        }
-        this.cacheContextToLocalStorage();
+  public setApiApplicationId = (applicationId: string) => {
+    const manifest = {
+      ...editorStore.selectedManifest!,
     };
+    manifest.api = manifest.api || this.newManifestApi();
+    manifest.api.applicationId = applicationId;
 
-    public setManifests = (manifests: Manifest[]) => {
-        this.manifests = manifests;
+    this.addOrUpdateManifest(manifest);
+  };
 
-        this.cacheContextToLocalStorage();
+  public setApiRedirectUrl = (redirectUrl: string) => {
+    const manifest = {
+      ...editorStore.selectedManifest!,
     };
+    manifest.api = manifest.api || this.newManifestApi();
+    manifest.api.redirectUri = redirectUrl;
 
-    public setSelectedManifestId = (manifestId: string) => {
-        this.selectedManifestId = manifestId;
-        this.cacheContextToLocalStorage();
+    this.addOrUpdateManifest(manifest);
+  };
+
+  public setApiConnectEndpoint = (connect: string) => {
+    const manifest = {
+      ...editorStore.selectedManifest!,
     };
+    manifest.api = manifest.api || this.newManifestApi();
+    manifest.api.connect = connect;
 
-    public setAuthorCompany = (company: string) => {
-        if (!this.selectedManifest) {
-            return;
-        }
+    this.addOrUpdateManifest(manifest);
+  };
 
-        const manifest = {
-            ...this.selectedManifest,
-            author: {
-                ...this.selectedManifest.author,
-                company,
-            },
-        };
-
-        this.addOrUpdateManifest(manifest);
+  public setApiTokenEndpoint = (token: string) => {
+    const manifest = {
+      ...editorStore.selectedManifest!,
     };
+    manifest.api = manifest.api || this.newManifestApi();
+    manifest.api.token = token;
 
-    public setAuthorWebsite = (websiteUrl: string) => {
-        if (!this.selectedManifest) {
-            return;
-        }
+    this.addOrUpdateManifest(manifest);
+  };
 
-        const manifest = {
-            ...this.selectedManifest,
-            author: {
-                ...this.selectedManifest.author,
-                websiteUrl,
-            },
-        };
+  public createNewConfigurationItem = () => {
+    const configurationItem = {
+      id: Date.now(),
+      key: "",
+      text: {
+        en: "",
+      },
+      required: true,
+      type: "string",
+      urlInclude: true,
+      defaultValue: "",
+      validator: "",
+      options: [{ text: { en: "" }, value: "" }],
+    } as ConfigurationItem;
 
-        this.addOrUpdateManifest(manifest);
+    editorStore.selectedManifest?.configuration?.push(configurationItem);
+  };
+
+  public addNewConfigurationOption = (index: number) => {
+    const configurations = this.selectedManifest?.configuration || [];
+
+    if (configurations.length < index) {
+      return;
+    }
+
+    const configuration = configurations[index];
+    const options = configuration.options || [];
+    options?.push({
+      text: {
+        en: "",
+      },
+      value: "",
+    });
+
+    const manifest = {
+      ...this.selectedManifest,
+      configuration: configurations,
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest);
+  };
+
+  public updateConfigurationItem = (item: ConfigurationItem, index: number) => {
+    const configurations = this.selectedManifest?.configuration || [];
+
+    if (configurations.length < index) {
+      return;
+    }
+
+    configurations.splice(index, 1, item);
+
+    const manifest = {
+      ...this.selectedManifest,
+      configuration: configurations,
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest);
+  };
+
+  public deleteConfigurationItem = (index: number) => {
+    const configurations = this.selectedManifest?.configuration || [];
+
+    if (configurations.length < index) {
+      return;
+    }
+
+    configurations.splice(index, 1);
+
+    const manifest = {
+      ...this.selectedManifest,
+      configuration: configurations,
+    } as Manifest;
+
+    this.addOrUpdateManifest(manifest);
+  };
+
+  public setUseApi = (useApi: boolean) => {
+    this.useApi = useApi;
+
+    if (!this.useApi) {
+      const manifest = JSON.parse(
+        JSON.stringify(this.selectedManifest)
+      ) as Manifest;
+      delete manifest.api;
+      this.addOrUpdateManifest(manifest);
+    }
+
+    this.cacheContextToLocalStorage();
+  };
+
+  public init = () => {
+    this.initialized = false;
+    const cachedManifests = localStorage.getItem(this.MANIFEST_CACHING_KEY);
+    if (cachedManifests) {
+      const data = JSON.parse(cachedManifests) as EditorCacheData;
+
+      this.manifests = data.manifests;
+      this.useApi = data.useApi;
+    } else {
+      this.manifests = [];
+      this.useApi = false;
+    }
+
+    this.selectedManifestId =
+      localStorage.getItem(this.SELECTED_MANIFEST_CACHING_KEY) || null;
+
+    this.initialized = true;
+  };
+
+  private newManifestApi = () => {
+    return {
+      scopes: [],
+      applicationId: "",
+      connect: "",
+      redirectUri: "",
+      token: "",
     };
+  };
 
-    public setAuthorPrivacyUrl = (privacyUrl: string) => {
-        if (!this.selectedManifest) {
-            return;
-        }
+  private cacheContextToLocalStorage = () => {
+    if (!this.initialized) {
+      return;
+    }
 
-        const manifest = {
-            ...this.selectedManifest,
-            author: {
-                ...this.selectedManifest.author,
-                privacyUrl,
-            },
-        };
+    const context = JSON.stringify({
+      manifests: this.manifests,
+      selectedManifestId: this.setSelectedManifestId,
+      useApi: this.useApi,
+    });
+    localStorage.setItem(this.MANIFEST_CACHING_KEY, context);
+  };
 
-        this.addOrUpdateManifest(manifest);
-    };
+  private cacheSelectedManifestIdToLocalStorage = () => {
+    if (!this.initialized) {
+      return;
+    }
 
-    public setAuthorTermsOfUseUrl = (termsOfUseUrl: string) => {
-        if (!this.selectedManifest) {
-            return;
-        }
-
-        const manifest = {
-            ...this.selectedManifest,
-            author: {
-                ...this.selectedManifest.author,
-                termsOfUseUrl,
-            },
-        };
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public setApiApplicationId = (applicationId: string) => {
-        const manifest = {
-            ...editorStore.selectedManifest!,
-        };
-        manifest.api = manifest.api || this.newManifestApi();
-        manifest.api.applicationId = applicationId;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public setApiRedirectUrl = (redirectUrl: string) => {
-        const manifest = {
-            ...editorStore.selectedManifest!,
-        };
-        manifest.api = manifest.api || this.newManifestApi();
-        manifest.api.redirectUri = redirectUrl;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public setApiConnectEndpoint = (connect: string) => {
-        const manifest = {
-            ...editorStore.selectedManifest!,
-        };
-        manifest.api = manifest.api || this.newManifestApi();
-        manifest.api.connect = connect;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public setApiTokenEndpoint = (token: string) => {
-        const manifest = {
-            ...editorStore.selectedManifest!,
-        };
-        manifest.api = manifest.api || this.newManifestApi();
-        manifest.api.token = token;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public createNewConfigurationItem = () => {
-        const configurationItem = {
-            id: Date.now(),
-            key: '',
-            text: {
-                en: '',
-            },
-            required: true,
-            type: 'string',
-            urlInclude: true,
-            defaultValue: '',
-            validator: '',
-            options: [{ text: { en: '' }, value: '' }],
-        } as ConfigurationItem;
-
-        editorStore.selectedManifest?.configuration?.push(configurationItem);
-    };
-
-    public addNewConfigurationOption = (index: number) => {
-        const configurations = this.selectedManifest?.configuration || [];
-
-        if (configurations.length < index) {
-            return;
-        }
-
-        const configuration = configurations[index];
-        const options = configuration.options || [];
-        options?.push({
-            text: {
-                en: '',
-            },
-            value: '',
-        });
-
-        const manifest = {
-            ...this.selectedManifest,
-            configuration: configurations,
-        } as Manifest;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public updateConfigurationItem = (
-        item: ConfigurationItem,
-        index: number
-    ) => {
-        const configurations = this.selectedManifest?.configuration || [];
-
-        if (configurations.length < index) {
-            return;
-        }
-
-        configurations.splice(index, 1, item);
-
-        const manifest = {
-            ...this.selectedManifest,
-            configuration: configurations,
-        } as Manifest;
-
-        this.addOrUpdateManifest(manifest);
-    };
-
-    public setUseApi = (useApi: boolean) => {
-        this.useApi = useApi;
-
-        if (!this.useApi) {
-            const manifest = JSON.parse(
-                JSON.stringify(this.selectedManifest)
-            ) as Manifest;
-            delete manifest.api;
-            this.addOrUpdateManifest(manifest);
-        }
-
-        this.cacheContextToLocalStorage();
-    };
-
-    public init = () => {
-        const cachedManifests = localStorage.getItem(this.MANIFEST_CACHING_KEY);
-        if (cachedManifests) {
-            const data = JSON.parse(cachedManifests) as EditorCacheData;
-            this.manifests = data.manifests;
-            this.useApi = data.useApi;
-            this.selectedManifestId = data.selectedManifestId;
-        } else {
-            this.manifests = [];
-            this.useApi = false;
-            this.selectedManifestId = null;
-        }
-    };
-
-    private newManifestApi = () => {
-        return {
-            scopes: [],
-            applicationId: '',
-            connect: '',
-            redirectUri: '',
-            token: '',
-        };
-    };
-
-    private cacheContextToLocalStorage = () => {
-        localStorage.setItem(
-            this.MANIFEST_CACHING_KEY,
-            JSON.stringify({
-                manifests: this.manifests,
-                selectedManifestId: this.setSelectedManifestId,
-                useApi: this.useApi,
-            })
-        );
-    };
+    localStorage.setItem(
+      this.SELECTED_MANIFEST_CACHING_KEY,
+      this.selectedManifestId || ""
+    );
+  };
 }
 
 const editorStore = new EditorStore();
