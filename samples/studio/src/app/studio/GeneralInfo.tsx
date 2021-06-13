@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         select: {},
         textField: {
-            marginBottom: theme.spacing(),
+            marginBottom: theme.spacing(2),
         },
     })
 );
@@ -73,7 +73,7 @@ const BasicInfo: React.FC = observer(() => {
                     label="App version"
                     variant="outlined"
                     style={{
-                        marginLeft: 8,
+                        marginLeft: 16,
                     }}
                     value={editorStore.selectedManifest?.version || ''}
                     placeholder="ex. 0.10"
@@ -121,6 +121,7 @@ const BasicInfo: React.FC = observer(() => {
                     variant="outlined"
                     label="Extension store"
                     value={editorStore.selectedManifest?.store}
+                    style={{ marginLeft: 16 }}
                     onChange={(e) => {
                         const manifest = {
                             ...editorStore.selectedManifest!,
@@ -200,7 +201,7 @@ const AuthorInfo: React.FC = observer(() => {
                     variant="outlined"
                     placeholder="ex: https://www.contoso.com"
                     style={{
-                        marginLeft: 8,
+                        marginLeft: 16,
                     }}
                     value={
                         editorStore.selectedManifest?.author.websiteUrl || ''
@@ -241,7 +242,7 @@ const AuthorInfo: React.FC = observer(() => {
                     variant="outlined"
                     placeholder="ex: https://www.contoso.com/tos"
                     style={{
-                        marginLeft: 8,
+                        marginLeft: 16,
                     }}
                     value={
                         editorStore.selectedManifest?.author.termsOfUseUrl || ''
