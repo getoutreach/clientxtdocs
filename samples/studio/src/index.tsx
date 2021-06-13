@@ -4,6 +4,7 @@ import './index.css';
 import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 import editorStore from './stores/EditorStore';
+import extensionStore from './stores/ExtensionsStore';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -13,3 +14,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 reportWebVitals();
 
 editorStore.init();
+extensionStore.init();

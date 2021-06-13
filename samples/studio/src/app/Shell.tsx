@@ -9,6 +9,7 @@ import { PredefinedRoute } from './enums/PredefinedRoute';
 import Studio from './studio/Studio';
 import Editor from './studio/Editor';
 import Toast from './shared/Toast';
+import Store from './marketplace/Store';
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,6 +35,12 @@ const Shell: React.FC = observer(() => {
                         path={`/${PredefinedRoute.STUDIO}`}
                         component={Studio}
                         key="studio"
+                        exact={true}
+                    />
+                    <Route
+                        path={`/${PredefinedRoute.STORE}`}
+                        component={Store}
+                        key="store"
                         exact={true}
                     />
                     <Route path="/" component={Studio} key="home" />
