@@ -6,48 +6,51 @@ import {
   IconButton,
   TextField,
   Theme,
-} from '@material-ui/core';
-import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItem';
-import { useContext } from 'react';
-import { EditorStoreContext } from '../../stores/EditorStore';
-import DeleteIcon from '@material-ui/icons/Delete';
+} from "@material-ui/core";
+import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
+import { useContext } from "react";
+import { EditorStoreContext } from "../../stores/EditorStore";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      alignSelf: 'flex-start',
-      marginBottom: theme.spacing(2),
+      alignSelf: "flex-start",
     },
     configItemOptions: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
     },
     input: {
-      '&:invalid': {
-        borderLeft: 'red solid 4px',
+      "&:invalid": {
+        borderLeft: "red solid 4px",
       },
     },
     option: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
       borderColor: theme.palette.divider,
-      borderStyle: 'solid',
+      borderStyle: "solid",
       borderWidth: 1,
       padding: theme.spacing(),
       margin: theme.spacing(),
     },
     optionHeading: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
     },
     optionGroup: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
+    },
+    select: {
+      witdh: 100,
+      marginBottom: theme.spacing(),
     },
     textField: {
       width: 250,
-      marginBottom: theme.spacing(1.5),
+      marginBottom: theme.spacing(),
     },
   })
 );
@@ -64,6 +67,7 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
   const editorStore = useContext(EditorStoreContext);
 
   const handleAddConfigItemOption = () => {
+    console.log("[ConfigItemOptions.tsx]::handleAddConfigItemOption-CLICK");
     editorStore.addNewConfigurationOption(props.index);
   };
 
@@ -98,13 +102,14 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
   return (
     <div className={classes.configItemOptions}>
       <Button
-        variant="outlined"
+        color="secondary"
+        variant="contained"
         className={classes.button}
         onClick={handleAddConfigItemOption}
       >
         Add config option
       </Button>
-      {props.item.options!.map((opt, idx) => (
+      {props.item.options?.map((opt, idx) => (
         <div className={classes.optionGroup}>
           <div className={classes.optionHeading}>
             <Typography variant="subtitle1">Option # {idx + 1}</Typography>
@@ -116,10 +121,10 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
               <DeleteIcon />
             </IconButton>
           </div>
-          <div className={classes.option}>
+
+          <div className={classes.option} key={`opt-${idx}-general`}>
             <TextField
-              key={`opt-${idx}-key`}
-              className={classes.textField}
+              className={classes.select}
               required={true}
               type="text"
               label={`Option #${idx + 1} text`}
@@ -131,8 +136,7 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
               }}
             ></TextField>
             <TextField
-              key={`opt-${idx}-value`}
-              className={classes.textField}
+              className={classes.select}
               required={true}
               type="text"
               label={`Option #${idx + 1} value`}

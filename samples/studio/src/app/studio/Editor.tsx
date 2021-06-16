@@ -1,15 +1,15 @@
-import { Link, Typography } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { EditorStoreContext } from '../../stores/EditorStore';
-import ApiInfo from './ApiInfo';
-import ConfigInfo from './ConfigInfo';
-import EditorStepper from './EditorStepper';
-import ExtensionsInfo from './ExtensionContainer';
-import GeneralInfo from './GeneralInfo';
-import ManifestInfo from './ManifestInfo';
+import { Typography } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { observer } from "mobx-react-lite";
+import React, { useContext, useEffect, useState } from "react";
+import { RouteComponentProps } from "react-router";
+import { EditorStoreContext } from "../../stores/EditorStore";
+import ApiInfo from "./ApiInfo";
+import ConfigInfo from "./ConfigInfo";
+import EditorStepper from "./EditorStepper";
+import ExtensionsInfo from "./ExtensionContainer";
+import GeneralInfo from "./GeneralInfo";
+import ManifestInfo from "./ManifestInfo";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,21 +18,21 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
 
     details: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
       flexGrow: 1,
       margin: theme.spacing(2),
       marginTop: theme.spacing(4),
     },
     root: {
-      display: 'flex',
-      flexDirection: 'row',
-      height: '100%',
+      display: "flex",
+      flexDirection: "row",
+      height: "100%",
       margin: theme.spacing(2),
     },
     stepper: {
       borderRightColor: theme.palette.divider,
-      borderRightStyle: 'solid',
+      borderRightStyle: "solid",
       borderRightWidth: 1,
     },
     title: {
@@ -64,20 +64,6 @@ const Editor: React.FC<RouteComponentProps<IEditorProps>> = observer(
           <EditorStepper onStepChanged={(step) => setActiveStep(step)} />
         </div>
         <div className={classes.details}>
-          <div className={classes.title}>
-            <Typography variant="h5">App details</Typography>
-            <Typography>
-              Provide some basic info about your app to get things going. Learn
-              more about Outreach Apps and the &nbsp;
-              <Link
-                href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md"
-                target="_blank"
-              >
-                Manifest Schema
-              </Link>
-            </Typography>
-          </div>
-
           {activeStep === 0 && <GeneralInfo />}
           {activeStep === 1 && <ApiInfo />}
           {activeStep === 2 && <ConfigInfo />}

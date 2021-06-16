@@ -1,16 +1,16 @@
-import React from 'react';
-import { makeAutoObservable } from 'mobx';
-import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItem';
-import { Manifest, urlValidation } from '@outreach/client-addon-sdk';
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import { makeAutoObservable } from "mobx";
+import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
+import { Manifest, urlValidation } from "@outreach/client-addon-sdk";
+import { v4 as uuidv4 } from "uuid";
 
 interface EditorCacheData {
   manifests: Manifest[];
 }
 
 export class EditorStore {
-  private MANIFEST_CACHING_KEY = 'cxt-studio-manifests-v1';
-  private SELECTED_MANIFEST_CACHING_KEY = 'cxt-studio-selected-manifest-v1';
+  private MANIFEST_CACHING_KEY = "cxt-studio-manifests-v1";
+  private SELECTED_MANIFEST_CACHING_KEY = "cxt-studio-selected-manifest-v1";
 
   public manifests: Manifest[] = [];
 
@@ -97,30 +97,30 @@ export class EditorStore {
   public createNewManifest = (): Manifest => {
     const manifest = {
       identifier: uuidv4(),
-      version: '',
+      version: "",
       author: {
-        company: '',
-        privacyUrl: '',
-        termsOfUseUrl: '',
-        websiteUrl: '',
+        company: "",
+        privacyUrl: "",
+        termsOfUseUrl: "",
+        websiteUrl: "",
       },
       host: {
-        type: 'left-side-menu',
-        url: '',
-        icon: '',
+        type: "left-side-menu",
+        url: "",
+        icon: "",
         environment: {
           fullWidth: false,
-          decoration: 'none',
+          decoration: "none",
         },
       },
       title: {
-        en: '',
+        en: "",
       },
       description: {
-        en: '',
+        en: "",
       },
       context: [],
-      store: 'personal',
+      store: "personal",
       configuration: [],
     } as Manifest;
 
@@ -290,16 +290,16 @@ export class EditorStore {
 
     const configurationItem = {
       id: Date.now(),
-      key: '',
+      key: "",
       text: {
-        en: '',
+        en: "",
       },
       required: true,
-      type: 'string',
+      type: "string",
       urlInclude: true,
-      defaultValue: '',
-      validator: '',
-      options: [{ text: { en: '' }, value: '' }],
+      defaultValue: "",
+      validator: "",
+      options: [{ text: { en: "" }, value: "" }],
     } as ConfigurationItem;
 
     configItems.push(configurationItem);
@@ -313,6 +313,8 @@ export class EditorStore {
   };
 
   public addNewConfigurationOption = (index: number) => {
+    console.log("[EditorStore.tsx]::addNewConfigurationOption", index);
+
     const configurations = this.selectedManifest?.configuration || [];
 
     if (configurations.length < index) {
@@ -323,9 +325,9 @@ export class EditorStore {
     const options = configuration.options || [];
     options?.push({
       text: {
-        en: '',
+        en: "",
       },
-      value: '',
+      value: "",
     });
 
     const manifest = {
@@ -390,10 +392,10 @@ export class EditorStore {
   private newManifestApi = () => {
     return {
       scopes: [],
-      applicationId: '',
-      connect: '',
-      redirectUri: '',
-      token: '',
+      applicationId: "",
+      connect: "",
+      redirectUri: "",
+      token: "",
     };
   };
 
@@ -416,7 +418,7 @@ export class EditorStore {
 
     localStorage.setItem(
       this.SELECTED_MANIFEST_CACHING_KEY,
-      this.selectedManifestId || ''
+      this.selectedManifestId || ""
     );
   };
 }
