@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
 import {
   Accordion,
@@ -9,11 +9,10 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Link,
   makeStyles,
   Theme,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import {
   AccountContextKeys,
   AllContextKeys,
@@ -21,11 +20,11 @@ import {
   OpportunityContextKeys,
   ProspectContextKeys,
   UserContextKeys,
-} from "@outreach/client-addon-sdk";
-import { observer } from "mobx-react-lite";
+} from '@outreach/client-addon-sdk';
+import { observer } from 'mobx-react-lite';
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { EditorStoreContext } from "../../stores/EditorStore";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { EditorStoreContext } from '../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +33,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(),
     },
     bold: {
-      fontWeight: 800,
+      fontWeight: 600,
     },
     formControl: {
       margin: theme.spacing(1),
@@ -43,8 +42,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 350,
     },
     root: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       marginTop: theme.spacing(2),
     },
   })
@@ -81,13 +80,22 @@ const ContextInfo: React.FC = observer(() => {
     );
   };
 
+  const getUserExpanded = (): boolean => {
+    return (
+      getUserChecked() === 0 &&
+      getAccountChecked() === 0 &&
+      getProspectChecked() === 0 &&
+      getOpportunityChecked() === 0
+    );
+  };
+
   const getUserChecked = () => {
     if (!editorStore.selectedManifest) {
       return 0;
     }
 
     return editorStore.selectedManifest?.context.filter((p) =>
-      p.startsWith("usr")
+      p.startsWith('usr')
     ).length;
   };
 
@@ -97,7 +105,7 @@ const ContextInfo: React.FC = observer(() => {
     }
 
     return editorStore.selectedManifest?.context.filter((p) =>
-      p.startsWith("acc")
+      p.startsWith('acc')
     ).length;
   };
 
@@ -107,7 +115,7 @@ const ContextInfo: React.FC = observer(() => {
     }
 
     return editorStore.selectedManifest?.context.filter((p) =>
-      p.startsWith("pro")
+      p.startsWith('pro')
     ).length;
   };
 
@@ -117,15 +125,19 @@ const ContextInfo: React.FC = observer(() => {
     }
 
     return editorStore.selectedManifest?.context.filter((p) =>
-      p.startsWith("opp")
+      p.startsWith('opp')
     ).length;
   };
 
   const renderUserContextPicker = () => {
     return (
-      <Accordion className={classes.accordion} variant="elevation">
+      <Accordion
+        className={classes.accordion}
+        variant="outlined"
+        defaultExpanded={getUserExpanded()}
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h5">
+          <Typography variant="subtitle1" className={classes.bold}>
             User contextual information ({getUserChecked()})
           </Typography>
         </AccordionSummary>
@@ -262,9 +274,9 @@ const ContextInfo: React.FC = observer(() => {
 
   const renderAccountContextPicker = () => {
     return (
-      <Accordion className={classes.accordion}>
+      <Accordion className={classes.accordion} variant="outlined">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h5">
+          <Typography variant="subtitle1" className={classes.bold}>
             Account contextual information ({getAccountChecked()})
           </Typography>
         </AccordionSummary>
@@ -1563,9 +1575,9 @@ const ContextInfo: React.FC = observer(() => {
 
   const renderProspectContextPicker = () => {
     return (
-      <Accordion className={classes.accordion}>
+      <Accordion className={classes.accordion} variant="outlined">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h5">
+          <Typography variant="subtitle1" className={classes.bold}>
             Prospect contextual information ({getProspectChecked()})
           </Typography>
         </AccordionSummary>
@@ -2888,9 +2900,9 @@ const ContextInfo: React.FC = observer(() => {
 
   const renderOpportunityContextPicker = () => {
     return (
-      <Accordion className={classes.accordion}>
+      <Accordion className={classes.accordion} variant="outlined">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h5">
+          <Typography variant="subtitle1" className={classes.bold}>
             Opportunity contextual information ({getOpportunityChecked()})
           </Typography>
         </AccordionSummary>
@@ -4227,18 +4239,7 @@ const ContextInfo: React.FC = observer(() => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h4">Outreach contextual information </Typography>
       <Typography variant="caption" style={{ marginBottom: 8 }}>
-        To learn more read{" "}
-        <Link
-          href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/context.md"
-          target="_blank"
-        >
-          here
-        </Link>
-      </Typography>
-
-      <Typography variant="overline" style={{ marginLeft: 8 }}>
         Select the contextual information your application needs from Outreach
       </Typography>
 

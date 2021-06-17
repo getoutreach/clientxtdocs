@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
 import {
   Checkbox,
@@ -10,11 +10,11 @@ import {
   TextField,
   Theme,
   Typography,
-} from "@material-ui/core";
-import { observer } from "mobx-react-lite";
+} from '@material-ui/core';
+import { observer } from 'mobx-react-lite';
 
-import { EditorStoreContext } from "../../stores/EditorStore";
-import { AddonType } from "@outreach/client-addon-sdk";
+import { EditorStoreContext } from '../../stores/EditorStore';
+import { AddonType } from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,17 +25,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 350,
     },
     input: {
-      "&:invalid": {
-        borderLeft: "red solid 4px",
+      '&:invalid': {
+        borderLeft: 'red solid 4px',
       },
     },
     root: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
+      marginTop: theme.spacing(2),
     },
     row: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
     textField: {
       marginTop: theme.spacing(),
@@ -53,10 +54,9 @@ const HostInfo: React.FC = observer(() => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h6">Host configuration</Typography>
       <Typography variant="caption" style={{ marginBottom: 8 }}>
         Describe the type of extension and where it will be hosted. To learn
-        more click
+        more click{' '}
         <Link
           href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md#host"
           target="_blank"
@@ -100,6 +100,7 @@ const HostInfo: React.FC = observer(() => {
       <div className={classes.row}>
         <TextField
           className={classes.textField}
+          style={{ marginRight: 16 }}
           fullWidth={true}
           required={true}
           type="url"
@@ -173,7 +174,7 @@ const HostInfo: React.FC = observer(() => {
                     environment: {
                       ...(editorStore.selectedManifest!.host.environment || {
                         fullWidth: false,
-                        decoration: "none",
+                        decoration: 'none',
                       }),
                       fullWidth: e.target.checked,
                     },
@@ -188,43 +189,57 @@ const HostInfo: React.FC = observer(() => {
       )}
 
       {appExtension && (
-        <TextField
-          className={classes.textField}
-          fullWidth={true}
-          required={true}
-          select={true}
-          label="Badge decoration type"
-          variant="outlined"
-          value={
-            editorStore.selectedManifest?.host.environment?.decoration || "none"
-          }
-          onChange={(e) => {
-            const manifest = {
-              ...editorStore.selectedManifest!,
-              host: {
-                ...editorStore.selectedManifest!.host,
-                environment: {
-                  ...(editorStore.selectedManifest!.host.environment || {
-                    fullWidth: false,
-                    decoration: "none",
-                  }),
-                  decoration: e.target.value as any,
+        <>
+          <Typography variant="caption" style={{ marginBottom: 8 }}>
+            Your application icon can show a badge informing user that there was
+            a change in app which needs to be checked out (ex. a new message
+            arrived). To learn more about badges click{' '}
+            <Link
+              href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md#environment"
+              target="_blank"
+            >
+              here
+            </Link>
+          </Typography>
+          <TextField
+            className={classes.textField}
+            fullWidth={true}
+            required={true}
+            select={true}
+            label="Badge decoration type"
+            variant="outlined"
+            value={
+              editorStore.selectedManifest?.host.environment?.decoration ||
+              'none'
+            }
+            onChange={(e) => {
+              const manifest = {
+                ...editorStore.selectedManifest!,
+                host: {
+                  ...editorStore.selectedManifest!.host,
+                  environment: {
+                    ...(editorStore.selectedManifest!.host.environment || {
+                      fullWidth: false,
+                      decoration: 'none',
+                    }),
+                    decoration: e.target.value as any,
+                  },
                 },
-              },
-            };
-            editorStore.addOrUpdateManifest(manifest);
-          }}
-        >
-          <MenuItem key="none" value="none">
-            None
-          </MenuItem>
-          <MenuItem key="simple" value="simple">
-            Simple
-          </MenuItem>
-          <MenuItem key="full" value="full">
-            Full
-          </MenuItem>
-        </TextField>
+              };
+              editorStore.addOrUpdateManifest(manifest);
+            }}
+          >
+            <MenuItem key="none" value="none">
+              None
+            </MenuItem>
+            <MenuItem key="simple" value="simple">
+              Simple
+            </MenuItem>
+            <MenuItem key="full" value="full">
+              Full
+            </MenuItem>
+          </TextField>
+        </>
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   createStyles,
   Link,
@@ -7,22 +7,22 @@ import {
   TextField,
   Theme,
   Typography,
-} from "@material-ui/core";
-import { observer } from "mobx-react-lite";
-import { PredefinedExtensionType } from "../enums/PredefinedExtensionType";
-import ClientExtensionInfo from "./ClientExtensionInfo";
+} from '@material-ui/core';
+import { observer } from 'mobx-react-lite';
+import { PredefinedExtensionType } from '../enums/PredefinedExtensionType';
+import ClientExtensionInfo from './ClientExtensionInfo';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     input: {
-      "&:invalid": {
-        borderLeft: "red solid 4px",
+      '&:invalid': {
+        borderLeft: 'red solid 4px',
       },
     },
     root: {
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
     },
     select: {
       width: 250,
@@ -43,10 +43,10 @@ const ExtensionContainer: React.FC = observer(() => {
   return (
     <div id="extensions-container" className={classes.root}>
       <div className={classes.title}>
-        <Typography variant="h5">General extension info</Typography>
+        <Typography variant="h5">Outreach app extension type</Typography>
         <Typography>
-          Provide some basic info about your app to get things going. Learn more
-          about Outreach Apps
+          Please select the type of extension which you want to include in your
+          Outreach application extension. To learn more click{' '}
           <Link
             href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md"
             target="_blank"
@@ -72,7 +72,7 @@ const ExtensionContainer: React.FC = observer(() => {
           key="extension-client-app"
           value={PredefinedExtensionType.EXTENSION_CLIENT_APP}
         >
-          App client extension
+          Client extension
         </MenuItem>
         <MenuItem
           key="extension-tile"

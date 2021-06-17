@@ -9,12 +9,13 @@ import {
   RadioGroup,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import { Manifest, Scopes } from "@outreach/client-addon-sdk";
-import { observer } from "mobx-react-lite";
-import React, { useContext, useState } from "react";
-import { EditorStoreContext } from "../../stores/EditorStore";
+} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { Manifest, Scopes } from '@outreach/client-addon-sdk';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import React, { useContext, useState } from 'react';
+import { EditorStoreContext } from '../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,34 +27,34 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     formLabel: {
       marginBottom: theme.spacing(),
-      fontWeight: "bolder",
+      fontWeight: 'bolder',
     },
 
     info: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
     },
     input: {
-      "&:invalid": {
-        borderLeft: "red solid 4px",
+      '&:invalid': {
+        borderLeft: 'red solid 4px',
       },
     },
     invalid: {
-      borderLeft: "red solid 4px",
+      borderLeft: 'red solid 4px',
       paddingLeft: theme.spacing(0.5),
     },
     root: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       flexGrow: 1,
     },
     row: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
     scopes: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       marginTop: theme.spacing(2),
     },
     textField: {
@@ -67,19 +68,19 @@ const ApiInfoEditor: React.FC = observer(() => {
   const editorStore = useContext(EditorStoreContext);
 
   const [appId, setAppId] = useState<string>(
-    editorStore.selectedManifest?.api?.applicationId || ""
+    editorStore.selectedManifest?.api?.applicationId || ''
   );
 
   const [redirectUri, setRedirectUri] = useState<string>(
-    editorStore.selectedManifest?.api?.redirectUri || ""
+    editorStore.selectedManifest?.api?.redirectUri || ''
   );
 
   const [tokenUrl, setTokenUrl] = useState<string>(
-    editorStore.selectedManifest?.api?.token || ""
+    editorStore.selectedManifest?.api?.token || ''
   );
 
   const [connectUrl, setConnectUrl] = useState<string>(
-    editorStore.selectedManifest?.api?.connect || ""
+    editorStore.selectedManifest?.api?.connect || ''
   );
 
   return (
@@ -179,10 +180,10 @@ const ScopesEditor: React.FC = observer(() => {
     );
     manifest.api = manifest.api || {
       scopes: [],
-      applicationId: "",
-      connect: "",
-      redirectUri: "",
-      token: "",
+      applicationId: '',
+      connect: '',
+      redirectUri: '',
+      token: '',
     };
     manifest.api!.scopes = scopes;
 
@@ -203,7 +204,7 @@ const ScopesEditor: React.FC = observer(() => {
     return editorStore.selectedManifest!.api?.scopes.length || 0;
   };
 
-  const headingClass = selectedApiCount() === 0 ? classes.invalid : "";
+  const headingClass = selectedApiCount() === 0 ? classes.invalid : '';
 
   return (
     <div className={classes.scopes}>
@@ -2117,7 +2118,7 @@ const ApiInfo: React.FC = observer(() => {
       <Typography variant="h6">API info (optional)</Typography>
       <Typography variant="body2" style={{ marginBottom: 8 }}>
         Outreach Application ID and redirect uri are values created by Outreach.
-        To learn more read{" "}
+        To learn more read{' '}
         <Link
           href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#setup-outreach-oauth-application"
           target="_blank"
@@ -2143,7 +2144,7 @@ const ApiInfo: React.FC = observer(() => {
               ) as Manifest;
 
               delete manifest.api;
-
+              console.log('[ApiInfo.tsx]::onChange', toJS(manifest));
               editorStore.addOrUpdateManifest(manifest);
             }
           }}
