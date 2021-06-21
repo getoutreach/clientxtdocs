@@ -2,6 +2,7 @@ import React from "react";
 import { makeAutoObservable } from "mobx";
 import {
   AccountContextKeys,
+  AddonCategory,
   AddonStore,
   AddonType,
   Manifest,
@@ -10,7 +11,6 @@ import {
   Scopes,
   UserContextKeys,
 } from "@outreach/client-addon-sdk";
-import { AddonCategory } from "@outreach/client-addon-sdk/store/AddonCategory";
 
 export class ExtensionStore {
   public correlationId = Date.now().toString();
@@ -237,6 +237,7 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://cxt-demo.azurewebsites.net/addon",
       },
+      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,
@@ -300,6 +301,7 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,
@@ -348,6 +350,7 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.EMAIL,
@@ -397,6 +400,7 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,
@@ -445,6 +449,11 @@ export class ExtensionStore {
         type: AddonType.LeftSideMenu,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [
+        AddonCategory.CHAT,
+        AddonCategory.CONVERSATION_INTELLIGENCE,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       api: {
         applicationId: "Nw6vD8Az5tUb4AXio0lVqQ-OEq6rscAVapOm0rTdvYg",
         connect: "https://planapi.outreach.io/outreach-oauth/oauth-connect",
@@ -492,6 +501,11 @@ export class ExtensionStore {
         type: AddonType.OpportunityTab,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [
+        AddonCategory.CHAT,
+        AddonCategory.CONVERSATION_INTELLIGENCE,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       api: {
         applicationId: "Nw6vD8Az5tUb4AXio0lVqQ-OEq6rscAVapOm0rTdvYg",
         connect: "https://planapi.outreach.io/outreach-oauth/oauth-connect",
@@ -541,6 +555,7 @@ export class ExtensionStore {
         type: AddonType.ProspectTab,
         url: "https://account-analytics-khuranaji.dev.6si.com/outreach/sales/",
       },
+      categories: [AddonCategory.VIDEO, AddonCategory.SALES_INTELLIGENCE_DATA],
       api: {
         applicationId: "on24rLrl1XEBP3liH1YIzVgrWD2xxVcEdr_zmwLGcQ0",
         connect: "https://on24-outreach-app-qa.azurewebsites.net/connect",
@@ -616,6 +631,10 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://app.stg.salesintel.io/outreach/",
       },
+      categories: [
+        AddonCategory.SALES_INTELLIGENCE_DATA,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       api: {
         applicationId: "pmYJMqmCBe2P9Ujedn51qusCo2aFLMa0xqI2W1aprJ0",
         connect: "https://api.circleback.com/outreach/connect",
@@ -692,6 +711,10 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: "https://app.stg.salesintel.io/outreach/",
       },
+      categories: [
+        AddonCategory.SALES_INTELLIGENCE_DATA,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       api: {
         applicationId: "pmYJMqmCBe2P9Ujedn51qusCo2aFLMa0xqI2W1aprJ0",
         connect: "https://api.circleback.com/outreach/connect",
@@ -768,6 +791,10 @@ export class ExtensionStore {
         type: AddonType.ProspectTab,
         url: "https://app.stg.salesintel.io/outreach/",
       },
+      categories: [
+        AddonCategory.SALES_INTELLIGENCE_DATA,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       api: {
         applicationId: "pmYJMqmCBe2P9Ujedn51qusCo2aFLMa0xqI2W1aprJ0",
         connect: "https://api.circleback.com/outreach/connect",
@@ -822,7 +849,7 @@ export class ExtensionStore {
       ],
     });
 
-    // Sales Intel prospect tab
+    // SAP Ruum prospect tab
     this.manifests.push({
       identifier: "salesintel-prospect",
       version: "0.11",
@@ -845,6 +872,10 @@ export class ExtensionStore {
         type: AddonType.ProspectTab,
         url: "https://sidekickfrontend-br339jmc4c.dispatcher.int.sap.eu2.hana.ondemand.com/OutreachHostAddon_Example1.html",
       },
+      categories: [
+        AddonCategory.SALES_INTELLIGENCE_DATA,
+        AddonCategory.SALES_PRODUCTIVITY,
+      ],
       context: [
         UserContextKeys.ID,
         ProspectContextKeys.ID,
