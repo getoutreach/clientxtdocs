@@ -11,6 +11,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       flexGrow: 8,
+      flexWrap: 'wrap',
+      alignContent: 'flex-start',
     },
   })
 );
@@ -27,7 +29,7 @@ const StoreItems: React.FC<IStoreItemsProps> = observer(
     console.log('[StoreItems.tsx]::render');
 
     return (
-      <div className={classes.root}>
+      <div id="store-items-container" className={classes.root}>
         {extensionStore.manifests.map((m, idx) => (
           <Tile
             key={`tile-${idx}`}
