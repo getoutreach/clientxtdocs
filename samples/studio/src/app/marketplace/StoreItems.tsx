@@ -10,7 +10,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       flexDirection: 'row',
-      flexGrow: 8,
       flexWrap: 'wrap',
       alignContent: 'flex-start',
     },
