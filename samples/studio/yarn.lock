@@ -1512,10 +1512,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@outreach/client-addon-sdk@^0.1.53":
-  version "0.1.53"
-  resolved "https://registry.yarnpkg.com/@outreach/client-addon-sdk/-/client-addon-sdk-0.1.53.tgz#39eb8734e146bb6b3850c3f9fdf7603d6b2fa5de"
-  integrity sha512-EJRiNg82uRee4wyom0RyCoSEiGiU+NBUMl0ZymI2aMa0WraJGzfWBmGoUSgEYdWx5xoTh1moujfn+mT5XHgTHA==
+"@outreach/client-addon-sdk@^0.1.62":
+  version "0.1.62"
+  resolved "https://registry.yarnpkg.com/@outreach/client-addon-sdk/-/client-addon-sdk-0.1.62.tgz#95d726e70249ffdb653108ff557eb5f8bfb54959"
+  integrity sha512-d1uLdSdwHy+uM/I1Wuo3JkNKBY4YNZN2/EZZYeWb/qGi5w/xFcaMZt3kbNL7z907e8UX89pqyN7bfuZ086MN6w==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.3":
   version "0.4.3"
