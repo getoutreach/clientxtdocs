@@ -14,7 +14,6 @@ import UserContextInfo from './context/UserContextInfo';
 import AccountContextInfo from './context/AccountContextInfo';
 import ProspectContextInfo from './context/ProspectContextInfo';
 import OpportunityContextInfo from './context/OpportunityContextInfo';
-import { AddonType } from '@outreach/client-addon-sdk';
 import { EditorStoreContext } from '../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -50,9 +49,9 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
     const editorStore = useContext(EditorStoreContext);
 
     const [value, setValue] = useState<number>(0);
-    const [addonType, setAddonType] = useState<AddonType>(
-      AddonType.LeftSideMenu
-    );
+    // const [setAddonType] = useState<AddonType>(
+    //   AddonType.LeftSideMenu
+    // );
 
     const handleTabChange = (event: React.ChangeEvent<{}>, value: number) => {
       setValue(value);
@@ -133,7 +132,11 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
           />
         </Tabs>
         <TabContainer index={0} value={value} dir={theme.direction}>
-          <HostInfo onChange={(type) => setAddonType(type)} />
+          <HostInfo
+            onChange={(type) =>
+              console.log('[ClientExtensionInfo]::onChangeHostInfo', { type })
+            }
+          />
         </TabContainer>
         <TabContainer
           index={1}

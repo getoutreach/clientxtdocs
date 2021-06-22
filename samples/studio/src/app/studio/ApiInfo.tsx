@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { Manifest, Scopes } from '@outreach/client-addon-sdk';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react';
 import { EditorStoreContext } from '../../stores/EditorStore';
