@@ -11,8 +11,8 @@ import {
 
 import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
 import { observer } from "mobx-react-lite";
-import { EditorStoreContext } from "../../stores/EditorStore";
-import Configuration from "../marketplace/Configuration";
+import { EditorStoreContext } from "../../../stores/EditorStore";
+import Configuration from "../../marketplace/Configuration";
 
 import ConfigItemInfo from "./ConfigItemInfo";
 

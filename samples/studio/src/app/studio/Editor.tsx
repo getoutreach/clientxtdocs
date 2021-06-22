@@ -5,10 +5,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { EditorStoreContext } from "../../stores/EditorStore";
 import ApiInfo from "./ApiInfo";
-import ConfigInfo from "./ConfigInfo";
+import ConfigInfo from "./config/ConfigInfo";
 import EditorStepper from "./EditorStepper";
 import ExtensionsInfo from "./ExtensionContainer";
-import GeneralInfo from "./GeneralInfo";
+import GeneralInfo from "./general/GeneralInfo";
 import ManifestInfo from "./ManifestInfo";
 
 export const useStyles = makeStyles((theme: Theme) =>

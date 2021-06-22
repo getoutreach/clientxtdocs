@@ -10,7 +10,7 @@ import {
   ProspectContextKeys,
   Scopes,
   UserContextKeys,
-} from "@outreach/client-addon-sdk";
+} from '@outreach/client-addon-sdk';
 
 export class ExtensionStore {
   public correlationId = Date.now().toString();
@@ -238,7 +238,6 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: 'https://cxt-demo.azurewebsites.net/addon',
       },
-      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,
@@ -306,7 +305,6 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: 'https://account-analytics-khuranaji.dev.6si.com/outreach/sales/',
       },
-      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,
@@ -359,7 +357,6 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: 'https://account-analytics-khuranaji.dev.6si.com/outreach/sales/',
       },
-      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.EMAIL,
@@ -413,7 +410,6 @@ export class ExtensionStore {
         type: AddonType.AccountTab,
         url: 'https://account-analytics-khuranaji.dev.6si.com/outreach/sales/',
       },
-      categories: [AddonCategory.SALES_PRODUCTIVITY, AddonCategory.MARKETING],
       context: [
         AccountContextKeys.CUSTOM_ID,
         UserContextKeys.ID,

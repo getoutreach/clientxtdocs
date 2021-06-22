@@ -1,16 +1,18 @@
 import {
-  createStyles,
-  Link,
-  makeStyles,
   MenuItem,
+  Link,
+  Typography,
   TextField,
   Theme,
-  Typography,
-} from "@material-ui/core";
-import { AddonStore } from "@outreach/client-addon-sdk";
-import { observer } from "mobx-react-lite";
-import React, { useContext } from "react";
-import { EditorStoreContext } from "../../stores/EditorStore";
+  createStyles,
+  makeStyles,
+} from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import { AddonCategory, AddonStore } from '@outreach/client-addon-sdk';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { useContext, useState } from 'react';
+import { EditorStoreContext } from '../../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,17 +24,17 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(6),
     },
     input: {
-      "&:invalid": {
-        borderLeft: "red solid 4px",
+      '&:invalid': {
+        borderLeft: 'red solid 4px',
       },
     },
     root: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
     },
     row: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
     select: {},
     textField: {
@@ -44,9 +46,61 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface Option {
+  title: string;
+  value: AddonCategory;
+}
+
+const CATEGORIES_DATA: Option[] = [
+  {
+    title: 'Account Based Marketing',
+    value: AddonCategory.ACCOUNT_BASED_MARKETING,
+  },
+  { title: 'Chat', value: AddonCategory.CHAT },
+  {
+    title: 'Conversation Intelligence',
+    value: AddonCategory.CONVERSATION_INTELLIGENCE,
+  },
+  { title: 'CRM', value: AddonCategory.CRM },
+  { title: 'Direct Mail', value: AddonCategory.DIRECT_MAIL },
+  { title: 'Inbox', value: AddonCategory.INBOX },
+  { title: 'Integration Platform', value: AddonCategory.INTEGRATION_PLATFORM },
+  { title: 'Marketing', value: AddonCategory.MARKETING },
+  { title: 'Privacy & Security', value: AddonCategory.PRIVACY_SECURITY },
+  {
+    title: 'Sales assets management',
+    value: AddonCategory.SALES_ASSETS_MANAGEMENT,
+  },
+  {
+    title: 'Sales intelligence data',
+    value: AddonCategory.SALES_INTELLIGENCE_DATA,
+  },
+  { title: 'Productivity', value: AddonCategory.SALES_PRODUCTIVITY },
+  { title: 'Video', value: AddonCategory.VIDEO },
+  { title: 'Voice', value: AddonCategory.VOICE },
+];
+
+const getSelectedOptions = (categories?: AddonCategory[]): Option[] => {
+  if (!categories) {
+    return [];
+  }
+  return categories
+    .map((category) => CATEGORIES_DATA.find((p) => p.value === category))
+    .filter((p) => p) as Option[];
+};
+
 const BasicInfo: React.FC = observer(() => {
   const classes = useStyles();
   const editorStore = useContext(EditorStoreContext);
+  const [categories, setCategories] = useState<Option[]>([]);
+
+  useEffect(() => {
+    const selectedOptions = getSelectedOptions(
+      editorStore.selectedManifest?.categories
+    );
+
+    setCategories(selectedOptions);
+  }, [editorStore.selectedManifest?.categories]);
 
   return (
     <div className={classes.basic}>
@@ -73,7 +127,7 @@ const BasicInfo: React.FC = observer(() => {
           type="text"
           label="App ID"
           variant="outlined"
-          value={editorStore.selectedManifest?.identifier || ""}
+          value={editorStore.selectedManifest?.identifier || ''}
           onChange={(e) => {
             const manifest = {
               ...editorStore.selectedManifest!,
@@ -93,7 +147,7 @@ const BasicInfo: React.FC = observer(() => {
           style={{
             marginLeft: 16,
           }}
-          value={editorStore.selectedManifest?.version || ""}
+          value={editorStore.selectedManifest?.version || ''}
           placeholder="ex. 0.10"
           onChange={(e) =>
             editorStore.addOrUpdateManifest({
@@ -103,7 +157,7 @@ const BasicInfo: React.FC = observer(() => {
           }
           inputProps={{
             className: classes.input,
-            pattern: "\\d+.\\d+",
+            pattern: '\\d+.\\d+',
           }}
         ></TextField>
       </div>
@@ -115,7 +169,7 @@ const BasicInfo: React.FC = observer(() => {
           type="text"
           label="App name"
           variant="outlined"
-          value={editorStore.selectedManifest?.title.en || ""}
+          value={editorStore.selectedManifest?.title.en || ''}
           onChange={(e) => {
             const manifest = {
               ...editorStore.selectedManifest!,
@@ -171,7 +225,7 @@ const BasicInfo: React.FC = observer(() => {
         type="text"
         label="App description"
         variant="outlined"
-        value={editorStore.selectedManifest?.description.en || ""}
+        value={editorStore.selectedManifest?.description.en || ''}
         onChange={(e) =>
           editorStore.addOrUpdateManifest({
             ...editorStore.selectedManifest!,
@@ -182,96 +236,37 @@ const BasicInfo: React.FC = observer(() => {
         }
         inputProps={{}}
       ></TextField>
+      <Autocomplete
+        multiple={true}
+        ChipProps={{
+          color: 'primary',
+        }}
+        id="categories"
+        options={CATEGORIES_DATA}
+        value={categories}
+        getOptionLabel={(option) => option.title}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            id="categories-editor"
+            variant="outlined"
+            className={classes.textField}
+            label="Marketplace category"
+            placeholder="Please select one or more categories"
+          />
+        )}
+        onChange={(_: any, options: Option[]) => {
+          setCategories(options);
+          const categories = options.map((p) => p.value);
+          console.log('[BasicInfo]::onChange', { categories });
+          editorStore.addOrUpdateManifest({
+            ...editorStore.selectedManifest!,
+            categories,
+          });
+        }}
+      />
     </div>
   );
 });
 
-const AuthorInfo: React.FC = observer(() => {
-  const classes = useStyles();
-  const editorStore = useContext(EditorStoreContext);
-
-  return (
-    <div className={classes.basic}>
-      <Typography variant="h6">Author info</Typography>
-      <div className={classes.row}>
-        <TextField
-          className={classes.textField}
-          fullWidth={true}
-          required={true}
-          type="text"
-          label="Developer/Company Name"
-          placeholder="ex: Contoso Ltd"
-          variant="outlined"
-          value={editorStore.selectedManifest?.author.company || ""}
-          onChange={(e) => editorStore.setAuthorCompany(e.target.value)}
-          inputProps={{
-            className: classes.input,
-          }}
-        ></TextField>
-        <TextField
-          className={classes.textField}
-          fullWidth={true}
-          required={true}
-          type="url"
-          label="Website"
-          variant="outlined"
-          placeholder="ex: https://www.contoso.com"
-          style={{
-            marginLeft: 16,
-          }}
-          value={editorStore.selectedManifest?.author.websiteUrl || ""}
-          onChange={(e) => editorStore.setAuthorWebsite(e.target.value)}
-          inputProps={{
-            className: classes.input,
-          }}
-        ></TextField>
-      </div>
-      <div className={classes.row}>
-        <TextField
-          className={classes.textField}
-          fullWidth={true}
-          required={true}
-          type="url"
-          label="Privacy statement"
-          placeholder="ex: https://www.contoso.com/privacy"
-          variant="outlined"
-          value={editorStore.selectedManifest?.author.privacyUrl || ""}
-          onChange={(e) => editorStore.setAuthorPrivacyUrl(e.target.value)}
-          inputProps={{
-            className: classes.input,
-          }}
-        ></TextField>
-        <TextField
-          className={classes.textField}
-          fullWidth={true}
-          required={true}
-          type="url"
-          label="Terms of use"
-          variant="outlined"
-          placeholder="ex: https://www.contoso.com/tos"
-          style={{
-            marginLeft: 16,
-          }}
-          value={editorStore.selectedManifest?.author.termsOfUseUrl || ""}
-          onChange={(e) => editorStore.setAuthorTermsOfUseUrl(e.target.value)}
-          inputProps={{
-            className: classes.input,
-          }}
-        ></TextField>
-      </div>
-    </div>
-  );
-});
-
-const GeneralInfo: React.FC = observer(() => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      <BasicInfo />
-      <AuthorInfo />
-    </div>
-  );
-});
-
-export default GeneralInfo;
+export default BasicInfo;

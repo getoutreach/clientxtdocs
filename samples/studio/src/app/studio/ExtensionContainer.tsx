@@ -113,7 +113,7 @@ const ExtensionContainer: React.FC = observer(() => {
       </TextField>
 
       {type === PredefinedExtensionType.EXTENSION_CLIENT_APP && (
-        <ClientExtensionInfo type={type} index={0} />
+        <ClientExtensionInfo index={0} />
       )}
     </div>
   );

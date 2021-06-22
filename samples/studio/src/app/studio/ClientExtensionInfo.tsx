@@ -8,10 +8,13 @@ import {
   useTheme,
 } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-import { PredefinedExtensionType } from '../enums/PredefinedExtensionType';
 import HostInfo from './HostInfo';
-import ContextInfo from './ContextInfo';
 import TabContainer from '../shared/TabContainer';
+import UserContextInfo from './context/UserContextInfo';
+import AccountContextInfo from './context/AccountContextInfo';
+import ProspectContextInfo from './context/ProspectContextInfo';
+import OpportunityContextInfo from './context/OpportunityContextInfo';
+import { AddonType } from '@outreach/client-addon-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +39,6 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IClientExtensionInfoProps {
-  type: PredefinedExtensionType;
   index: number;
 }
 
@@ -46,6 +48,9 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
     const theme = useTheme();
 
     const [value, setValue] = useState<number>(0);
+    const [addonType, setAddonType] = useState<AddonType>(
+      AddonType.LeftSideMenu
+    );
 
     const handleTabChange = (event: React.ChangeEvent<{}>, value: number) => {
       setValue(value);
@@ -65,10 +70,19 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
       >
         <Tabs value={value} onChange={handleTabChange}>
           <Tab label="Host configuration" {...getTabA11yProps(0)} />
-          <Tab label="Context info" {...getTabA11yProps(1)} />
+          <Tab label="User context" {...getTabA11yProps(1)} />
+          {addonType === AddonType.AccountTab && (
+            <Tab label="Account context" {...getTabA11yProps(2)} />
+          )}
+          {addonType === AddonType.ProspectTab && (
+            <Tab label="Prospect context" {...getTabA11yProps(2)} />
+          )}
+          {addonType === AddonType.OpportunityTab && (
+            <Tab label="Opportunity context" {...getTabA11yProps(2)} />
+          )}
         </Tabs>
         <TabContainer index={0} value={value} dir={theme.direction}>
-          <HostInfo />
+          <HostInfo onChange={(type) => setAddonType(type)} />
         </TabContainer>
         <TabContainer
           index={1}
@@ -76,7 +90,31 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
           dir={theme.direction}
           className={classes.tab}
         >
-          <ContextInfo />
+          <UserContextInfo />
+        </TabContainer>
+        <TabContainer
+          index={2}
+          value={value}
+          dir={theme.direction}
+          className={classes.tab}
+        >
+          <AccountContextInfo />
+        </TabContainer>
+        <TabContainer
+          index={3}
+          value={value}
+          dir={theme.direction}
+          className={classes.tab}
+        >
+          <ProspectContextInfo />
+        </TabContainer>
+        <TabContainer
+          index={4}
+          value={value}
+          dir={theme.direction}
+          className={classes.tab}
+        >
+          <OpportunityContextInfo />
         </TabContainer>
       </div>
     );

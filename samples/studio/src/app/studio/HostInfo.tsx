@@ -45,7 +45,11 @@ export const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const HostInfo: React.FC = observer(() => {
+interface IHostInfoProps {
+  onChange: (addonType: AddonType) => void;
+}
+
+const HostInfo: React.FC<IHostInfoProps> = observer((props: IHostInfoProps) => {
   const classes = useStyles();
   const editorStore = useContext(EditorStoreContext);
 
@@ -72,16 +76,19 @@ const HostInfo: React.FC = observer(() => {
         select={true}
         label="Addon type"
         variant="outlined"
+        color="primary"
         value={editorStore.selectedManifest?.host.type}
         onChange={(e) => {
+          const addonType = e.target.value as AddonType;
           const manifest = {
             ...editorStore.selectedManifest!,
             host: {
               ...editorStore.selectedManifest!.host,
-              type: e.target.value as AddonType,
+              type: addonType,
             },
           };
           editorStore.addOrUpdateManifest(manifest);
+          props.onChange(addonType);
         }}
       >
         <MenuItem key={`type-app-extension`} value={AddonType.LeftSideMenu}>

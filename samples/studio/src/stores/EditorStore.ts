@@ -98,6 +98,7 @@ export class EditorStore {
   public createNewManifest = (): Manifest => {
     const manifest = {
       identifier: uuidv4(),
+      categories: [],
       version: '',
       author: {
         company: '',
