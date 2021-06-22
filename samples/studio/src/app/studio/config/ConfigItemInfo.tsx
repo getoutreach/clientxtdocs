@@ -6,11 +6,11 @@ import {
   createStyles,
   makeStyles,
   Theme,
-} from "@material-ui/core";
-import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
-import { ConfigurationItemType } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItemType";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ConfigItemOptions from "./ConfigItemOptions";
+} from '@material-ui/core';
+import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItem';
+import { ConfigurationItemType } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItemType';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ConfigItemOptions from './ConfigItemOptions';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,19 +20,19 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     configItem: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       marginRight: theme.spacing(2),
     },
     input: {
-      "&:invalid": {
-        borderLeft: "red solid 4px",
+      '&:invalid': {
+        borderLeft: 'red solid 4px',
       },
     },
     optionHeading: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     select: {
       width: 110,
@@ -40,8 +40,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1.5),
     },
     row: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
     textField: {
       width: 345,
@@ -177,11 +177,13 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
               type: e.target.value as ConfigurationItemType,
             } as ConfigurationItem;
             if (
-              configurationItem.type !== "options" &&
-              configurationItem.type !== "select"
+              configurationItem.type !== 'options' &&
+              configurationItem.type !== 'select'
             ) {
               delete configurationItem.options;
             }
+            configurationItem.options = configurationItem.options || []; 
+
             props.onChange(configurationItem, props.index);
           }}
           inputProps={{
@@ -220,7 +222,7 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
             props.onChange(
               {
                 ...props.item,
-                required: e.target.value === "true",
+                required: e.target.value === 'true',
               },
               props.index
             )
@@ -248,7 +250,7 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
             props.onChange(
               {
                 ...props.item,
-                urlInclude: e.target.value === "true",
+                urlInclude: e.target.value === 'true',
               },
               props.index
             )
@@ -265,7 +267,7 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
           </MenuItem>
         </TextField>
       </div>
-      {(props.item.type === "options" || props.item.type === "select") && (
+      {(props.item.type === 'options' || props.item.type === 'select') && (
         <ConfigItemOptions item={props.item} index={props.index} />
       )}
     </div>

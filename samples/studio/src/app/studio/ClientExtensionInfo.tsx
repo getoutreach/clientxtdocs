@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   createStyles,
   makeStyles,
@@ -15,6 +15,7 @@ import AccountContextInfo from './context/AccountContextInfo';
 import ProspectContextInfo from './context/ProspectContextInfo';
 import OpportunityContextInfo from './context/OpportunityContextInfo';
 import { AddonType } from '@outreach/client-addon-sdk';
+import { EditorStoreContext } from '../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,6 +47,7 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
   (props: IClientExtensionInfoProps) => {
     const classes = useStyles();
     const theme = useTheme();
+    const editorStore = useContext(EditorStoreContext);
 
     const [value, setValue] = useState<number>(0);
     const [addonType, setAddonType] = useState<AddonType>(
@@ -63,6 +65,46 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
       };
     };
 
+    const getUserChecked = () => {
+      if (!editorStore.selectedManifest) {
+        return 0;
+      }
+
+      return editorStore.selectedManifest?.context.filter((p) =>
+        p.startsWith('usr')
+      ).length;
+    };
+
+    const getAccountChecked = () => {
+      if (!editorStore.selectedManifest) {
+        return false;
+      }
+
+      return editorStore.selectedManifest?.context.filter((p) =>
+        p.startsWith('acc')
+      ).length;
+    };
+
+    const getProspectChecked = () => {
+      if (!editorStore.selectedManifest) {
+        return false;
+      }
+
+      return editorStore.selectedManifest?.context.filter((p) =>
+        p.startsWith('pro')
+      ).length;
+    };
+
+    const getOpportunityChecked = () => {
+      if (!editorStore.selectedManifest) {
+        return false;
+      }
+
+      return editorStore.selectedManifest?.context.filter((p) =>
+        p.startsWith('opp')
+      ).length;
+    };
+
     return (
       <div
         id={`ckt-extension-container-${props.index}`}
@@ -70,16 +112,25 @@ const ClientExtensionInfo: React.FC<IClientExtensionInfoProps> = observer(
       >
         <Tabs value={value} onChange={handleTabChange}>
           <Tab label="Host configuration" {...getTabA11yProps(0)} />
-          <Tab label="User context" {...getTabA11yProps(1)} />
-          {addonType === AddonType.AccountTab && (
-            <Tab label="Account context" {...getTabA11yProps(2)} />
-          )}
-          {addonType === AddonType.ProspectTab && (
-            <Tab label="Prospect context" {...getTabA11yProps(2)} />
-          )}
-          {addonType === AddonType.OpportunityTab && (
-            <Tab label="Opportunity context" {...getTabA11yProps(2)} />
-          )}
+          <Tab
+            label={`User context (${getUserChecked()})`}
+            {...getTabA11yProps(1)}
+          />
+          <Tab
+            // disabled={addonType !== AddonType.AccountTab}
+            label={`Account context (${getAccountChecked()})`}
+            {...getTabA11yProps(2)}
+          />
+          <Tab
+            // disabled={addonType !== AddonType.ProspectTab}
+            label={`Prospect context (${getProspectChecked()})`}
+            {...getTabA11yProps(3)}
+          />
+          <Tab
+            // disabled={addonType !== AddonType.OpportunityTab}
+            label={`Opportunity context (${getOpportunityChecked()})`}
+            {...getTabA11yProps(4)}
+          />
         </Tabs>
         <TabContainer index={0} value={value} dir={theme.direction}>
           <HostInfo onChange={(type) => setAddonType(type)} />

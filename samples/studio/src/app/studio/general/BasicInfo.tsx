@@ -108,7 +108,7 @@ const BasicInfo: React.FC = observer(() => {
         <Typography variant="h5">General extension info</Typography>
         <Typography>
           Provide some basic info about your app to get things going. Learn more
-          about Outreach Apps
+          about Outreach Apps{' '}
           <Link
             href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md"
             target="_blank"
@@ -139,6 +139,7 @@ const BasicInfo: React.FC = observer(() => {
         ></TextField>
         <TextField
           className={classes.textField}
+          autoFocus={true}
           fullWidth={true}
           required={true}
           type="text"

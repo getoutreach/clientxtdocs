@@ -110,7 +110,7 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
         Add config option
       </Button>
       {props.item.options?.map((opt, idx) => (
-        <div className={classes.optionGroup}>
+        <div key={`option-group-${idx}`} className={classes.optionGroup}>
           <div className={classes.optionHeading}>
             <Typography variant="subtitle1">Option # {idx + 1}</Typography>
             <IconButton

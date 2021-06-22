@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
 import {
   Button,
@@ -7,40 +7,44 @@ import {
   makeStyles,
   Theme,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { ConfigurationItem } from "@outreach/client-addon-sdk/store/configuration/ConfigurationItem";
-import { observer } from "mobx-react-lite";
-import { EditorStoreContext } from "../../../stores/EditorStore";
-import Configuration from "../../marketplace/Configuration";
+import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItem';
+import { observer } from 'mobx-react-lite';
+import { EditorStoreContext } from '../../../stores/EditorStore';
+import Configuration from '../../marketplace/Configuration';
 
-import ConfigItemInfo from "./ConfigItemInfo";
+import ConfigItemInfo from './ConfigItemInfo';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
     },
 
     config: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
     },
     configCard: {
-      alignSelf: "center",
+      alignSelf: 'flex-start',
       backgroundColor: theme.palette.grey[100],
       borderColor: theme.palette.divider,
-      borderStyle: "solid",
+      borderStyle: 'solid',
       borderWidth: 1,
       padding: theme.spacing(2),
       width: 350,
       marginTop: theme.spacing(8),
+      marginLeft: theme.spacing(4),
     },
-    configEditor: {},
+    configEditor: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
 
     configItems: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
 
     formControl: {
@@ -50,8 +54,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     root: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
     },
   })
 );
@@ -71,41 +75,45 @@ const ConfigInfo: React.FC = observer(() => {
     editorStore.deleteConfigurationItem(index);
   };
 
-  const renderConfigItems = () => {
+  const renderConfigItems = (): JSX.Element => {
     if (editorStore.selectedManifest?.configuration?.length === 0) {
       return <></>;
     }
 
-    <div className={classes.configCard}>
-      <Typography variant="overline">Config screen preview</Typography>
+    return (
+      <div id="config-preview-container" className={classes.configCard}>
+        <Typography variant="overline">Config screen preview</Typography>
 
-      <Configuration
-        configuration={editorStore.selectedManifest!.configuration}
-      />
-    </div>;
+        <Configuration
+          configuration={editorStore.selectedManifest!.configuration}
+        />
+      </div>
+    );
   };
 
   const renderConfigEditor = () => {
     return (
       <div className={classes.configEditor}>
-        <Button
-          variant="contained"
-          className={classes.button}
-          onClick={() => editorStore.createNewConfigurationItem()}
-        >
-          Add config item
-        </Button>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Button
+            variant="contained"
+            className={classes.button}
+            onClick={() => editorStore.createNewConfigurationItem()}
+          >
+            Add config item
+          </Button>
 
-        <div className={classes.configItems}>
-          {editorStore.selectedManifest!.configuration?.map((cfg, idx) => (
-            <ConfigItemInfo
-              key={`cfg-${idx}`}
-              item={cfg}
-              index={idx}
-              onChange={handleConfigInfoItemChange}
-              onDelete={handleConfigInfoItemDelete}
-            />
-          ))}
+          <div className={classes.configItems}>
+            {editorStore.selectedManifest!.configuration?.map((cfg, idx) => (
+              <ConfigItemInfo
+                key={`cfg-${idx}`}
+                item={cfg}
+                index={idx}
+                onChange={handleConfigInfoItemChange}
+                onDelete={handleConfigInfoItemDelete}
+              />
+            ))}
+          </div>
         </div>
         {renderConfigItems()}
       </div>
@@ -124,7 +132,7 @@ const ConfigInfo: React.FC = observer(() => {
               href="https://github.com/getoutreach/clientxtsdk/blob/main/docs/configuration.md"
               target="_blank"
             >
-              {" "}
+              {' '}
               here
             </Link>
           </Typography>

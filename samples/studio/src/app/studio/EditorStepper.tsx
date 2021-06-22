@@ -173,12 +173,12 @@ const EditorStepper: React.FC<IEditorStepperProps> = observer(
             </Step>
             <Step key="extensions-info">
               <StepLabel>
-                Extension #1 {editorStore.hostInfoValid && <Done />}
+                Extension configuration {editorStore.hostInfoValid && <Done />}
               </StepLabel>
               <StepContent>
                 <Typography>
-                  Outreach app consists of one or more extensions which provide
-                  different ways of integration with Outreach
+                  Define the extension configuration needed for proper
+                  integration with Outreach
                 </Typography>
                 <div className={classes.actionsContainer}>
                   <div>

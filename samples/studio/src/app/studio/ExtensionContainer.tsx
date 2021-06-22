@@ -43,7 +43,7 @@ const ExtensionContainer: React.FC = observer(() => {
   return (
     <div id="extensions-container" className={classes.root}>
       <div className={classes.title}>
-        <Typography variant="h5">Outreach app extension type</Typography>
+        <Typography variant="h5">Extension type</Typography>
         <Typography>
           Please select the type of extension which you want to include in your
           Outreach application extension. To learn more click{' '}

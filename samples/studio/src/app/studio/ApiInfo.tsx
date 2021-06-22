@@ -2134,9 +2134,10 @@ const ApiInfo: React.FC = observer(() => {
           aria-label="Outreach API access"
           name="outreachApiAccess"
           value={useApi}
-          onChange={() => {
-            setUseApi(!useApi);
-            if (!useApi) {
+          onChange={(e) => {
+            const apiUsageNeeded = e.target.value === 'true';
+            setUseApi(apiUsageNeeded);
+            if (!apiUsageNeeded) {
               const manifest = JSON.parse(
                 JSON.stringify({
                   ...editorStore.selectedManifest,
@@ -2144,7 +2145,6 @@ const ApiInfo: React.FC = observer(() => {
               ) as Manifest;
 
               delete manifest.api;
-              console.log('[ApiInfo.tsx]::onChange', toJS(manifest));
               editorStore.addOrUpdateManifest(manifest);
             }
           }}
