@@ -115,8 +115,6 @@ const UriEditor: React.FC<IEditorProps> = observer((props: IEditorProps) => {
 const SelectEditor: React.FC<IEditorProps> = observer((props: IEditorProps) => {
   const classes = useStyles();
 
-  console.log('[Configuration.tsx]::SelectEditor', { item: toJS(props.item) });
-
   return (
     <TextField
       defaultValue={props.item.defaultValue}
@@ -147,6 +145,7 @@ const OptionsEditor: React.FC<IEditorProps> = observer(
         <FormLabel component="legend">{props.item.text.en}</FormLabel>
         <RadioGroup
           aria-label={props.item.text.en}
+          value={props.item.defaultValue}
           /*
                     value={props.item.value}
                     onChange={handleChange}

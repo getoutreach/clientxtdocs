@@ -12,6 +12,12 @@ import { PredefinedRoute } from '../enums/PredefinedRoute';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    bottom: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginTop: theme.spacing(4),
+      alignItems: 'center',
+    },
     capabilities: {
       display: 'flex',
       flexDirection: 'column',
@@ -126,9 +132,13 @@ const Capabilities = () => {
 const Studio = () => {
   const classes = useStyles();
   return (
-    <div id="studio-container" className={classes.featured}>
+    <div id="studio-container" className={classes.bottom}>
       <Typography variant="subtitle1">Developer tools</Typography>
-      <Button href={`/#/${PredefinedRoute.STUDIO}`} variant="outlined">
+      <Button
+        href={`/#/${PredefinedRoute.STUDIO}`}
+        variant="contained"
+        color="secondary"
+      >
         Extension studio
       </Button>
     </div>
@@ -137,8 +147,6 @@ const Studio = () => {
 
 const Sidebar: React.FC = observer(() => {
   const classes = useStyles();
-
-  console.log('[Sidebar.tsx]::render');
 
   return (
     <div id="sidebar-container" className={classes.root}>

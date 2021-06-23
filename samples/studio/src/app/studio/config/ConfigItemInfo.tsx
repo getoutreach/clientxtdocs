@@ -11,11 +11,22 @@ import { ConfigurationItem } from '@outreach/client-addon-sdk/store/configuratio
 import { ConfigurationItemType } from '@outreach/client-addon-sdk/store/configuration/ConfigurationItemType';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfigItemOptions from './ConfigItemOptions';
+import { useState } from 'react';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     column: {
       width: 170,
+      marginRight: theme.spacing(),
+      marginBottom: theme.spacing(1),
+    },
+    columnNarrow: {
+      width: 40,
+      marginRight: theme.spacing(),
+      marginBottom: theme.spacing(1),
+    },
+    columnWide: {
+      width: 300,
       marginRight: theme.spacing(),
       marginBottom: theme.spacing(1),
     },
@@ -61,6 +72,35 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
   props: IConfigItemInfoProps
 ) => {
   const classes = useStyles();
+
+  const [selected, setSelected] = useState<string>('');
+
+  const getDefaultValueClass = (): string => {
+    if (selected === 'default-value') {
+      return classes.columnWide;
+    }
+
+    if (selected === 'regex-validation') {
+      return classes.columnNarrow;
+    }
+
+    return classes.column;
+  };
+
+  const getRegexValueClass = (): string => {
+    if (selected === 'regex-validation') {
+      return classes.columnWide;
+    }
+
+    if (selected === 'default-value') {
+      return classes.columnNarrow;
+    }
+
+    return classes.column;
+  };
+
+  const defaultValueClass = getDefaultValueClass();
+  const regexClass = getRegexValueClass();
 
   return (
     <div className={classes.configItem}>
@@ -122,11 +162,15 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
       <div className={classes.row}>
         <TextField
           id="default-value"
-          className={classes.column}
+          className={defaultValueClass}
           variant="outlined"
-          label="Default value"
+          label={
+            defaultValueClass === classes.columnNarrow ? '' : 'Default value'
+          }
           required={false}
           value={props.item.defaultValue}
+          onFocus={() => setSelected('default-value')}
+          onBlur={() => setSelected('')}
           onChange={(e) =>
             props.onChange(
               {
@@ -142,11 +186,13 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
         />
         <TextField
           id="regex-validation"
-          className={classes.column}
+          className={regexClass}
           variant="outlined"
-          label="Regex validator"
+          label={regexClass === classes.columnNarrow ? '' : 'Regex validator'}
           required={false}
           value={props.item.validator}
+          onFocus={() => setSelected('regex-validation')}
+          onBlur={() => setSelected('')}
           onChange={(e) =>
             props.onChange(
               {
@@ -182,7 +228,7 @@ const ConfigItemInfo: React.FC<IConfigItemInfoProps> = (
             ) {
               delete configurationItem.options;
             }
-            configurationItem.options = configurationItem.options || []; 
+            configurationItem.options = configurationItem.options || [];
 
             props.onChange(configurationItem, props.index);
           }}

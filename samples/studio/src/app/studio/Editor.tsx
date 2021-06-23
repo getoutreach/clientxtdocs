@@ -1,15 +1,15 @@
-import { Typography } from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import { observer } from "mobx-react-lite";
-import React, { useContext, useEffect, useState } from "react";
-import { RouteComponentProps } from "react-router";
-import { EditorStoreContext } from "../../stores/EditorStore";
-import ApiInfo from "./ApiInfo";
-import ConfigInfo from "./config/ConfigInfo";
-import EditorStepper from "./EditorStepper";
-import ExtensionsInfo from "./ExtensionContainer";
-import GeneralInfo from "./general/GeneralInfo";
-import ManifestInfo from "./ManifestInfo";
+import { Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { EditorStoreContext } from '../../stores/EditorStore';
+import ApiInfo from './ApiInfo';
+import ConfigInfo from './config/ConfigInfo';
+import EditorStepper from './EditorStepper';
+import ExtensionsInfo from './ExtensionContainer';
+import GeneralInfo from './general/GeneralInfo';
+import ManifestInfo from './ManifestInfo';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,22 +18,23 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
 
     details: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       flexGrow: 1,
       margin: theme.spacing(2),
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(2),
     },
     root: {
-      display: "flex",
-      flexDirection: "row",
-      height: "100%",
+      display: 'flex',
+      flexDirection: 'row',
+      height: '100%',
       margin: theme.spacing(2),
     },
     stepper: {
       borderRightColor: theme.palette.divider,
-      borderRightStyle: "solid",
+      borderRightStyle: 'solid',
       borderRightWidth: 1,
+      display: 'flex',
     },
     title: {
       marginBottom: theme.spacing(2),

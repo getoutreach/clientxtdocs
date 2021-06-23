@@ -16,6 +16,12 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       alignSelf: 'flex-start',
+      marginBottom: theme.spacing(),
+    },
+    configItemContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: 340,
     },
     configItemOptions: {
       display: 'flex',
@@ -28,25 +34,27 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     option: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       borderColor: theme.palette.divider,
       borderStyle: 'solid',
       borderWidth: 1,
       padding: theme.spacing(),
-      margin: theme.spacing(),
     },
     optionHeading: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop: theme.spacing(0.5),
     },
     optionGroup: {
       display: 'flex',
       flexDirection: 'column',
     },
     select: {
-      witdh: 100,
-      marginBottom: theme.spacing(),
+      marginLeft: theme.spacing(0.5),
+      '&:first-child': {
+        marginLeft: 0,
+      },
     },
     textField: {
       width: 250,
@@ -100,7 +108,7 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
   };
 
   return (
-    <div className={classes.configItemOptions}>
+    <div className={classes.configItemContainer}>
       <Button
         color="secondary"
         variant="contained"
@@ -109,47 +117,49 @@ const ConfigItemOptions: React.FC<IConfigItemOptionsProps> = (
       >
         Add config option
       </Button>
-      {props.item.options?.map((opt, idx) => (
-        <div key={`option-group-${idx}`} className={classes.optionGroup}>
-          <div className={classes.optionHeading}>
-            <Typography variant="subtitle1">Option # {idx + 1}</Typography>
-            <IconButton
-              style={{ marginLeft: 4 }}
-              title="Delete configuration item option"
-              onClick={() => handleDeleteConfigurationItem(idx)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </div>
+      <div className={classes.configItemOptions}>
+        {props.item.options?.map((opt, idx) => (
+          <div key={`option-group-${idx}`} className={classes.optionGroup}>
+            <div className={classes.optionHeading}>
+              <Typography variant="subtitle1">Option # {idx + 1}</Typography>
+              <IconButton
+                style={{ marginLeft: 4, padding: 4 }}
+                title="Delete configuration item option"
+                onClick={() => handleDeleteConfigurationItem(idx)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
 
-          <div className={classes.option} key={`opt-${idx}-general`}>
-            <TextField
-              className={classes.select}
-              required={true}
-              type="text"
-              label={`Option #${idx + 1} text`}
-              variant="outlined"
-              value={opt.text.en}
-              onChange={(e) => handleOptionTextChanged(e.target.value, idx)}
-              inputProps={{
-                className: classes.input,
-              }}
-            ></TextField>
-            <TextField
-              className={classes.select}
-              required={true}
-              type="text"
-              label={`Option #${idx + 1} value`}
-              variant="outlined"
-              value={opt.value}
-              onChange={(e) => handleOptionValueChanged(e.target.value, idx)}
-              inputProps={{
-                className: classes.input,
-              }}
-            ></TextField>
+            <div className={classes.option} key={`opt-${idx}-general`}>
+              <TextField
+                className={classes.select}
+                required={true}
+                type="text"
+                label={`Option #${idx + 1} text`}
+                variant="outlined"
+                value={opt.text.en}
+                onChange={(e) => handleOptionTextChanged(e.target.value, idx)}
+                inputProps={{
+                  className: classes.input,
+                }}
+              ></TextField>
+              <TextField
+                className={classes.select}
+                required={true}
+                type="text"
+                label={`Option #${idx + 1} value`}
+                variant="outlined"
+                value={opt.value}
+                onChange={(e) => handleOptionValueChanged(e.target.value, idx)}
+                inputProps={{
+                  className: classes.input,
+                }}
+              ></TextField>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

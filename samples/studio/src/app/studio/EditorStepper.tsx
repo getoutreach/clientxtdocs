@@ -8,6 +8,7 @@ import {
   Stepper,
   Theme,
   Typography,
+  useTheme,
 } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react';
@@ -29,7 +30,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%',
+      flexGrow: 1,
+      maxWidth: 370,
+    },
+    stepperRoot: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+      marginTop: theme.spacing(2),
     },
     manifest: {
       bottom: 0,
@@ -47,6 +55,7 @@ interface IEditorStepperProps {
 const EditorStepper: React.FC<IEditorStepperProps> = observer(
   (props: IEditorStepperProps) => {
     const classes = useStyles();
+    const theme = useTheme();
     const editorStore = useContext(EditorStoreContext);
     const [activeStep, setActiveStep] = useState<number>(0);
 
@@ -65,17 +74,8 @@ const EditorStepper: React.FC<IEditorStepperProps> = observer(
     };
 
     return (
-      <div id="sidebar">
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon />}
-          fullWidth={false}
-          onClick={() => (window.location.hash = `/${PredefinedRoute.STUDIO}`)}
-        >
-          Back to studio
-        </Button>
-
-        <div id="stepper-root" className={classes.root}>
+      <div id="sidebar" className={classes.root}>
+        <div id="stepper-root" className={classes.stepperRoot}>
           <Typography variant="h6">Complete this steps</Typography>
           <Typography variant="caption">
             Complete these steps in order to create an Outreach app.
@@ -239,6 +239,20 @@ const EditorStepper: React.FC<IEditorStepperProps> = observer(
             }
           />
         </div>
+
+        <Button
+          startIcon={<ArrowBackIcon />}
+          fullWidth={false}
+          variant="contained"
+          color="secondary"
+          onClick={() => (window.location.hash = `/${PredefinedRoute.STUDIO}`)}
+          style={{
+            marginBottom: theme.spacing(3),
+            marginRight: theme.spacing(2),
+          }}
+        >
+          Back to studio
+        </Button>
       </div>
     );
   }
