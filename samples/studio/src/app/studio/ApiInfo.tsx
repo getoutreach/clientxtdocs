@@ -12,7 +12,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { Manifest, Scopes } from '@outreach/client-addon-sdk';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { EditorStoreContext } from '../../stores/EditorStore';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -847,21 +847,30 @@ const SCOPES_DATA: Option[] = [
   },
 ];
 
+const getSelectedScopes = (scopes?: Scopes[]): Option[] => {
+  if (!scopes) {
+    return [];
+  }
+  return scopes
+    .map((scope) => SCOPES_DATA.find((p) => p.value === scope))
+    .filter((p) => p) as Option[];
+};
+
 const ScopesEditor: React.FC = observer(() => {
   const classes = useStyles();
   const editorStore = useContext(EditorStoreContext);
+  const [scopes, setScopes] = useState<Option[]>([]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const scope = event.target.value as Scopes;
-    let scopes = [...(editorStore.selectedManifest!.api?.scopes || [])];
+  useEffect(() => {
+    const selectedOptions = getSelectedScopes(
+      editorStore.selectedManifest?.api?.scopes
+    );
+
+    setScopes(selectedOptions);
+  }, [editorStore.selectedManifest?.api?.scopes]);
+
+  const handleChange = (scopes: Scopes[]) => {
     scopes = JSON.parse(JSON.stringify(scopes));
-
-    const selectedIndex = scopes.findIndex((p) => p === scope);
-    if (selectedIndex === -1) {
-      scopes.push(scope);
-    } else {
-      scopes.splice(selectedIndex, 1);
-    }
 
     const manifest = JSON.parse(
       JSON.stringify({
@@ -878,16 +887,6 @@ const ScopesEditor: React.FC = observer(() => {
     manifest.api!.scopes = scopes;
 
     editorStore.addOrUpdateManifest(manifest);
-  };
-
-  const isChecked = (scope: Scopes) => {
-    if (!editorStore.selectedManifest?.api) {
-      return false;
-    }
-
-    return (
-      editorStore.selectedManifest.api.scopes.findIndex((p) => p === scope) > -1
-    );
   };
 
   const selectedApiCount = () => {
@@ -919,7 +918,8 @@ const ScopesEditor: React.FC = observer(() => {
         }}
         id="oauth-scopes"
         options={SCOPES_DATA}
-        value={categories}
+        value={scopes}
+        groupBy={(opt) => opt.group}
         getOptionLabel={(option) => option.title}
         renderInput={(params) => (
           <TextField
@@ -932,13 +932,9 @@ const ScopesEditor: React.FC = observer(() => {
           />
         )}
         onChange={(_: any, options: Option[]) => {
-          setCategories(options);
-          const categories = options.map((p) => p.value);
-          console.log('[BasicInfo]::onChange', { categories });
-          editorStore.addOrUpdateManifest({
-            ...editorStore.selectedManifest!,
-            categories,
-          });
+          setScopes(options);
+          const scopes = options.map((p) => p.value);
+          handleChange(scopes);
         }}
       />
     </div>
