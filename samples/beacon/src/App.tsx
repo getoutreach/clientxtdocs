@@ -9,9 +9,10 @@ function App() {
     console.debug("[Beacon]::App -  addonSdk.initialized", { ctx });
 
     setTimeout(() => {
-      setCounter(counter + 1);
-      console.log("[Beacon]::timeout - decorate #", counter);
-      addonSdk.decorate(counter.toString(), "badge");
+      const beacon = counter + 1;
+      setCounter(beacon);
+      console.log("[Beacon]::timeout - decorate #", beacon);
+      addonSdk.decorate(beacon.toString(), "badge");
     }, 10 * 1000);
   });
 
