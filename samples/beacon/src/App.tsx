@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import "./App.css";
-import addonSdk from "@outreach/client-addon-sdk";
+import React, { useState } from 'react';
+import './App.css';
+import extensibilitySdk from '@outreach/extensibility-sdk';
 
 function App() {
   const [counter, setCounter] = useState<number>(1);
 
-  console.debug("[CXT][Beacon]::App -  intializing....");
+  console.debug('[CXT][Beacon]::App -  intializing....');
 
-  addonSdk.init().then((ctx) => {
-    console.debug("[CXT][Beacon]::App -  addonSdk.initialized", { ctx });
+  extensibilitySdk.init().then((ctx) => {
+    console.debug('[CXT][Beacon]::App -  extensibilitySdk.initialized', {
+      ctx,
+    });
 
     // https://github.com/getoutreach/clientxtsdk/blob/main/docs/manifest.md#context
     // If you have in addon manifest context=['usr.email'] (or any other user property you may need),
@@ -24,18 +26,18 @@ function App() {
     }
     */
 
-    addonSdk.decorate(counter.toString(), "badge");
+    extensibilitySdk.decorate(counter.toString(), 'badge');
 
     setTimeout(() => {
       const beacon = counter + 1;
       setCounter(beacon);
-      console.debug("[CXT][Beacon]::timeout - decorate #", beacon);
-      addonSdk.decorate(beacon.toString(), "badge");
+      console.debug('[CXT][Beacon]::timeout - decorate #', beacon);
+      extensibilitySdk.decorate(beacon.toString(), 'badge');
     }, 10 * 1000);
 
     setTimeout(() => {
-      console.debug("[CXT][Beacon]::timeout - notify #" + counter);
-      addonSdk.notify("Notification #" + counter, "info");
+      console.debug('[CXT][Beacon]::timeout - notify #' + counter);
+      extensibilitySdk.notify('Notification #' + counter, 'info');
     }, 5 * 1000);
   });
 
