@@ -1520,10 +1520,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@outreach/extensibility-sdk@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@outreach/extensibility-sdk/-/extensibility-sdk-0.3.0.tgz#e70051143c2967daad0f7c227a767af329bc3308"
-  integrity sha512-SaCpEkaC/a5DfrF3zIXJz+FrMTPIhImfr90OZA0rRIXSNDSRE4FugCEGbkKJGyPHlNuaxB7ToGaGMrUW6V0k2w==
+"@outreach/extensibility-sdk@latest":
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/@outreach/extensibility-sdk/-/extensibility-sdk-0.3.1.tgz#3a4053cc6de16fc1e7f10f97eff012fa32f4653c"
+  integrity sha512-AigjNkBSMI5Ws0sUBYqv7JJbjqeZoAwKFAYKx5YdBWK4X6fmHEEIaDguqX/L52ATrbYD0XMo3lg7EGXU+p6IPQ==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.3":
   version "0.4.3"
