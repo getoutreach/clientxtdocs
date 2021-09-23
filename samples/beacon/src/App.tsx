@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
-import extensibilitySdk from '@outreach/extensibility-sdk';
+import extensibilitySdk, { LogLevel } from '@outreach/extensibility-sdk';
 
 function App() {
   const [counter, setCounter] = useState<number>(1);
 
   console.debug('[CXT][Beacon]::App -  intializing....');
+
+  extensibilitySdk.logLevel = LogLevel.Debug;
 
   extensibilitySdk.init().then((ctx) => {
     console.debug('[CXT][Beacon]::App -  extensibilitySdk.initialized', {
