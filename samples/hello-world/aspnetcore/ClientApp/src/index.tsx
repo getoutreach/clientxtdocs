@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import eventStore from './stores/EventStore';
 
-import addonSdk, { LogLevel, EventOrigin, EventType } from '@outreach/client-addon-sdk';
+import extensibilitySdk, { LogLevel, EventOrigin, EventType } from '@outreach/extensibility-sdk';
 import { HelloWorldAddonLogger, getLevel } from './HelloWorldAddonLogger';
 
 ReactDOM.render(
@@ -21,13 +21,13 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-addonSdk.logger = new HelloWorldAddonLogger();
-console.debug('[HelloWorld] starting... Log level:' + getLevel(addonSdk.logger.level));
+extensibilitySdk.setLogger(new HelloWorldAddonLogger());
+console.debug('[HelloWorld] starting... Log level:' + getLevel(extensibilitySdk.logLevel));
 
-addonSdk.init().then(ctx => {
-  console.debug('[HelloWorld] addonSdk.initialized', { ctx });
+extensibilitySdk.init().then(ctx => {
+  console.debug('[HelloWorld] extensibilitySdk.initialized', { ctx });
 
-  eventStore.setRuntime(addonSdk.getRuntime());
+  eventStore.setRuntime(extensibilitySdk.getRuntime());
 
   eventStore.addEvent({
     timestamp: new Date(),

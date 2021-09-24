@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogContent,
 } from '@material-ui/core';
-import addonSdk, { NavigationDestination } from '@outreach/client-addon-sdk';
+import extensibilitySdk, { NavigationDestination } from '@outreach/extensibility-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
 
@@ -25,7 +25,7 @@ const NavigateAction: React.FC<INavigateActionProps> = observer((props: INavigat
   const [destination, setDestination] = useState<NavigationDestination>(NavigationDestination.ACCOUNT);
 
   const navigate = () => {
-    addonSdk.navigate(destination, id);
+    extensibilitySdk.navigate(destination, id);
     setId('');
     props.onClose();
   };
@@ -74,10 +74,10 @@ const NavigateAction: React.FC<INavigateActionProps> = observer((props: INavigat
         </Button>
         <CodeSample>
           <>
-            {!id && <>addonSdk.navigate('{destination}');</>}
+            {!id && <>extensibilitySdk.navigate('{destination}');</>}
             {id && (
               <>
-                addonSdk.navigate('{destination}', '{id}');
+                extensibilitySdk.navigate('{destination}', '{id}');
               </>
             )}
           </>

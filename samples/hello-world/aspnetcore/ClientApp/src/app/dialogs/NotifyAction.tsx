@@ -11,7 +11,7 @@ import {
   DialogContent,
   InputLabel,
 } from '@material-ui/core';
-import addonSdk, { NotificationType } from '@outreach/client-addon-sdk';
+import extensibilitySdk, { NotificationType } from '@outreach/extensibility-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
 
@@ -54,7 +54,7 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props: INotifyActio
 
     const notificationType = getNotificationType();
 
-    addonSdk.notify(text, notificationType);
+    extensibilitySdk.notify(text, notificationType);
 
     setText('');
     props.onClose();
@@ -99,7 +99,7 @@ const NotifyAction: React.FC<INotifyActionProps> = observer((props: INotifyActio
         </Button>
         <CodeSample>
           <>
-            addonSdk.notify('{text}', '{getNotificationType()}')
+            extensibilitySdk.notify('{text}', '{getNotificationType()}')
           </>
         </CodeSample>
       </DialogContent>
