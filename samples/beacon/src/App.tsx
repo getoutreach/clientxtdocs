@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import extensibilitySdk, { LogLevel } from '@outreach/extensibility-sdk';
+import { DecorationUpdateType } from '@outreach/extensibility-sdk';
 
 function App() {
   const [counter, setCounter] = useState<number>(1);
@@ -28,13 +29,13 @@ function App() {
     }
     */
 
-    extensibilitySdk.decorate(counter.toString(), 'badge');
+    extensibilitySdk.decorate(counter.toString(), DecorationUpdateType.BADGE);
 
     setTimeout(() => {
       const beacon = counter + 1;
       setCounter(beacon);
       console.debug('[CXT][Beacon]::timeout - decorate #', beacon);
-      extensibilitySdk.decorate(beacon.toString(), 'badge');
+      extensibilitySdk.decorate(beacon.toString(), DecorationUpdateType.BADGE);
     }, 10 * 1000);
 
     setTimeout(() => {
