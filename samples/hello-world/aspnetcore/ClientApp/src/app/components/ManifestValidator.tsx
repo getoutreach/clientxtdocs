@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, Container, TextField } from '@material-ui/core';
-import { Manifest, validate } from '@outreach/client-addon-sdk';
+import { Application, validate } from '@outreach/extensibility-sdk';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid/Grid';
@@ -37,7 +37,7 @@ function getManifestValidatorMessages(key: ManifestValidatorMessages): string {
 
 const ManifestValidator = observer(() => {
   const eventStore = useContext(EventStoreContext);
-  const [text, setText] = useState<string>(JSON.stringify(eventStore.manifest, null, 2));
+  const [text, setText] = useState<string>(JSON.stringify(eventStore.application, null, 2));
   const [validationIssues, setValidationIssues] = useState<string[]>([]);
   const classes = useStyles();
 
@@ -45,7 +45,7 @@ const ManifestValidator = observer(() => {
     setText(text);
 
     try {
-      const manifest = JSON.parse(text) as Manifest;
+      const manifest = JSON.parse(text) as Application;
       setValidationIssues(validate(manifest));
     } catch (e) {
       setValidationIssues([getManifestValidatorMessages(ManifestValidatorMessages.InValidJson)]);

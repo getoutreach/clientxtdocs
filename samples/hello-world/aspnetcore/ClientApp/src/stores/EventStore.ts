@@ -1,13 +1,12 @@
 import { action, observable, computed } from 'mobx';
 import React from 'react';
 import { Event } from './Event';
-import { EventType, Manifest, RuntimeContext } from '@outreach/client-addon-sdk';
-import { ConfigurationValue } from '@outreach/client-addon-sdk/store/configuration/ConfigurationValue';
+import { EventType, Application, RuntimeContext } from '@outreach/extensibility-sdk';
+import { ConfigurationValue } from '@outreach/extensibility-sdk/configuration/ConfigurationValue';
 
 class EventStore {
-
   @observable
-  public manifest?: Manifest;
+  public application?: Application;
 
   @observable
   public token?: string;
@@ -16,7 +15,7 @@ class EventStore {
   public events: Event[] = [];
 
   @observable
-  public filter: EventFilter = { internalLogMessages: false }
+  public filter: EventFilter = { internalLogMessages: false };
 
   @observable
   public json: object | null = null;
@@ -37,23 +36,23 @@ class EventStore {
   @action
   public setJson = (json: object | null) => {
     this.json = json;
-  }
+  };
 
   @action
   public setRuntime = (runtime: RuntimeContext) => {
-    this.manifest = runtime.manifest;
+    this.application = runtime.application;
     this.configuration = runtime.configuration;
-  }
-  
-  @action 
+  };
+
+  @action
   public setToken = (token: string) => {
     this.token = token;
-  }
+  };
 
-  @action 
+  @action
   public setFilter = (filter: EventFilter) => {
     this.filter = filter;
-  }
+  };
 
   @action
   public addEvent = (event: Event) => {
@@ -65,7 +64,6 @@ const eventStore = new EventStore();
 export const EventStoreContext = React.createContext(eventStore);
 export default eventStore;
 
-
 export declare type EventFilter = {
   internalLogMessages: boolean;
-}
+};

@@ -1,5 +1,5 @@
 import eventStore from './stores/EventStore';
-import addonSdk, { LogLevel, ILogger, Event } from '@outreach/client-addon-sdk';
+import extensibilitySdk, { LogLevel, ILogger, Event } from '@outreach/extensibility-sdk';
 
 export const getLevel = (level: LogLevel) => {
   switch (level) {
@@ -20,8 +20,8 @@ export const getLevel = (level: LogLevel) => {
 export class HelloWorldAddonLogger implements ILogger {
   public level: LogLevel = LogLevel.Trace;
   public log = (e: Event) => {
-    console.log("[HelloWorldAddonLogger]::log", e);
-    if (e.level <= addonSdk.logger.level) {
+    console.log('[HelloWorldAddonLogger]::log', e);
+    if (e.level <= extensibilitySdk.logLevel) {
       // message is with to low level priority - ignore.
       return;
     }

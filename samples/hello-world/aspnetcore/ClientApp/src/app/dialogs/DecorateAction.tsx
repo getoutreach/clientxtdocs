@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import addonSdk, { DecorationType } from '@outreach/client-addon-sdk';
+import extensibilitySdk, { DecorationType } from '@outreach/extensibility-sdk';
 import { useStyles } from './DialogStyle';
 import CodeSample from '../components/CodeSample';
 
@@ -31,7 +31,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
       return;
     }
 
-    addonSdk.decorate(text, type);
+    extensibilitySdk.decorate(text, type);
 
     setText('');
     props.onClose();
@@ -73,7 +73,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
         </Button>
         <CodeSample>
           <>
-            addonSdk.decorate('{text}', '{type}');
+            extensibilitySdk.decorate('{text}', '{type}');
           </>
         </CodeSample>
       </DialogContent>

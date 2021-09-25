@@ -12,7 +12,7 @@ import {
   Select,
   InputLabel,
 } from '@material-ui/core';
-import addonSdk from '@outreach/client-addon-sdk';
+import extensibilitySdk from '@outreach/extensibility-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
 
@@ -29,7 +29,7 @@ const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props: IE
   const [badgeType, setBageType] = useState<DecorationType>('full');
 
   const update = () => {
-    addonSdk.environment({
+    extensibilitySdk.environment({
       fullWidth: fullWidth,
       decoration: badgeType,
     });
@@ -83,7 +83,7 @@ const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props: IE
           Send notification
         </Button>
         <CodeSample>
-          <>addonSdk.environment({payload})</>
+          <>extensibilitySdk.environment({payload})</>
         </CodeSample>
       </DialogContent>
     </Dialog>
