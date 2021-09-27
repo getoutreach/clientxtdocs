@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import extensibilitySdk, { DecorationType } from '@outreach/extensibility-sdk';
+import extensibilitySdk, { DecorationUpdateType } from '@outreach/extensibility-sdk';
 import { useStyles } from './DialogStyle';
 import CodeSample from '../components/CodeSample';
 
@@ -23,8 +23,12 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
   const classes = useStyles();
 
   const [text, setText] = useState<string>('');
-  const [type, setType] = useState<DecorationType>('badge');
-  const decorationTypes: DecorationType[] = ['text', 'badge', 'icon'];
+  const [type, setType] = useState<DecorationUpdateType>(DecorationUpdateType.BADGE);
+  const decorationTypes: DecorationUpdateType[] = [
+    DecorationUpdateType.TEXT,
+    DecorationUpdateType.BADGE,
+    DecorationUpdateType.ICON,
+  ];
 
   const decorate = () => {
     if (!text) {
@@ -53,7 +57,7 @@ const DecorateAction: React.FC<IDecorationActionProps> = observer((props: IDecor
             labelId="notification-type-title"
             variant="outlined"
             value={type}
-            onChange={e => setType(e.target.value as DecorationType)}
+            onChange={e => setType(e.target.value as DecorationUpdateType)}
           >
             {decorationTypes.map(decorationType => (
               <MenuItem key={decorationType} value={decorationType}>

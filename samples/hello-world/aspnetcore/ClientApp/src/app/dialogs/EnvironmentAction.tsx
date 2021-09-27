@@ -15,18 +15,17 @@ import {
 import extensibilitySdk from '@outreach/extensibility-sdk';
 import CodeSample from '../components/CodeSample';
 import { useStyles } from './DialogStyle';
+import { DecorationStyle } from '@outreach/extensibility-sdk';
 
 interface IEnvironmentActionProps {
   onClose: () => void;
   open: boolean;
 }
 
-declare type DecorationType = 'none' | 'simple' | 'full';
-
 const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props: IEnvironmentActionProps) => {
   const classes = useStyles();
   const [fullWidth, setFullWidth] = useState<boolean>(true);
-  const [badgeType, setBageType] = useState<DecorationType>('full');
+  const [badgeType, setBageType] = useState<DecorationStyle>(DecorationStyle.FULL);
 
   const update = () => {
     extensibilitySdk.environment({
@@ -59,7 +58,7 @@ const EnvironmentAction: React.FC<IEnvironmentActionProps> = observer((props: IE
             labelId="badge-type-title"
             variant="outlined"
             value={badgeType}
-            onChange={e => setBageType(e.target.value as DecorationType)}
+            onChange={e => setBageType(e.target.value as DecorationStyle)}
           >
             <MenuItem key="none" value="none">
               None
