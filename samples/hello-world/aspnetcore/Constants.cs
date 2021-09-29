@@ -6,7 +6,7 @@ namespace Outreach.CXT.Demo.Server
     {
         public const string DEFAULT_HTTP_CLIENT = "DEFAULT";
 
-        public const string AUTH_USER_COOKIE_NAME = "cxt-sdk-user";
+        public const string AUTH_USER_COOKIE_NAME = "cxt-sdk-user-v2";
 
         public static string GetTokenCacheKey(string userId) => "cxt-token-cache-" + userId;
     }
