@@ -37,11 +37,12 @@ function App() {
       console.debug('[CXT][Beacon]::timeout - decorate #', beacon);
       extensibilitySdk.decorate(beacon.toString(), DecorationUpdateType.BADGE);
     }, 10 * 1000);
-
+    /*
     setTimeout(() => {
       console.debug('[CXT][Beacon]::timeout - notify #' + counter);
       extensibilitySdk.notify('Notification #' + counter, 'info');
     }, 5 * 1000);
+*/
   });
 
   return <div className="App">Beacon beat # {counter}</div>;

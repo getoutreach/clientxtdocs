@@ -22,11 +22,8 @@ ReactDOM.render(
 serviceWorker.unregister();
 
 extensibilitySdk.setLogger(new HelloWorldAddonLogger());
-console.debug('[HelloWorld] starting... Log level:' + getLevel(extensibilitySdk.logLevel));
 
 extensibilitySdk.init().then(ctx => {
-  console.debug('[HelloWorld] extensibilitySdk.initialized', { ctx });
-
   eventStore.setRuntime(extensibilitySdk.getRuntime());
 
   eventStore.addEvent({
