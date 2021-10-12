@@ -1,12 +1,15 @@
 import { action, observable, computed } from 'mobx';
 import React from 'react';
 import { Event } from './Event';
-import { EventType, Application, RuntimeContext } from '@outreach/extensibility-sdk';
+import { EventType, Application, RuntimeContext, Extension } from '@outreach/extensibility-sdk';
 import { ConfigurationValue } from '@outreach/extensibility-sdk/configuration/ConfigurationValue';
 
 class EventStore {
   @observable
   public application?: Application;
+
+  @observable
+  public extension?: Extension;
 
   @observable
   public token?: string;
@@ -41,6 +44,7 @@ class EventStore {
   @action
   public setRuntime = (runtime: RuntimeContext) => {
     this.application = runtime.application;
+    this.extension = runtime.extension;
     this.configuration = runtime.configuration;
   };
 

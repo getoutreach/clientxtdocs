@@ -6,7 +6,8 @@ import InfoIcon from '@material-ui/icons/Info';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import { EventStoreContext } from '../stores/EventStore';
-import { ShellExtensionType } from '@outreach/extensibility-sdk/';
+import { ShellExtensionType, TabExtension } from '@outreach/extensibility-sdk/';
+import { TabExtensionType } from '@outreach/extensibility-sdk';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,11 +40,21 @@ const AppHeader: React.FC<IAppHeaderProps> = observer((props: IAppHeaderProps) =
     if (!eventStore.application) {
       return '...';
     } else {
-      return eventStore.application.store.title.en;
+      let title = eventStore.application.store.title.en;
+      switch (eventStore.extension?.type) {
+        case TabExtensionType.ACCOUNT:
+        case TabExtensionType.OPPORTUNITY:
+        case TabExtensionType.PROSPECT:
+          const tabExt = eventStore.extension as TabExtension;
+          title = tabExt?.title?.en || title;
+          break;
+      }
+
+      return title;
     }
   };
 
-  const isSidebar = eventStore.application?.extensions[0].type === ShellExtensionType.APPLICATION;
+  const isSidebar = eventStore.extension?.type === ShellExtensionType.APPLICATION;
 
   return (
     <AppBar color={isSidebar ? 'primary' : 'secondary'}>
