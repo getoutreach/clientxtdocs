@@ -20,11 +20,27 @@ export const getLevel = (level: LogLevel) => {
 export class HelloWorldAddonLogger implements ILogger {
   public level: LogLevel = LogLevel.Trace;
   public log = (e: Event) => {
-    console.log('[HelloWorldAddonLogger]::log', e);
     if (e.level <= extensibilitySdk.logLevel) {
       // message is with to low level priority - ignore.
       return;
     }
+
+    switch (this.level) {
+      case LogLevel.Debug:
+      case LogLevel.Trace:
+        console.debug('[CXT][HelloWorldAddonLogger]::log', e);
+        break;
+      case LogLevel.Info:
+        console.info('[CXT][HelloWorldAddonLogger]::log', e);
+        break;
+      case LogLevel.Warning:
+        console.warn('[CXT][HelloWorldAddonLogger]::log', e);
+        break;
+      case LogLevel.Error:
+        console.error('[CXT][HelloWorldAddonLogger]::log', e);
+        break;
+    }
+
     eventStore.addEvent({
       origin: e.origin,
       type: e.type,
