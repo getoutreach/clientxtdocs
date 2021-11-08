@@ -3,5 +3,7 @@
     public class TokenRequest
     {
         public string UserId { get; set; }
+
+        public string ClientId { get; set; }
     }
 }

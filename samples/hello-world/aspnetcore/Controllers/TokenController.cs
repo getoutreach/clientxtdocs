@@ -29,7 +29,7 @@ namespace Outreach.CXT.Demo.Server.Controllers
         public async Task<ActionResult<Token>> Post([FromBody] TokenRequest tokenRequest)
         {
 
-            var cacheKey = Constants.GetTokenCacheKey(tokenRequest.UserId);
+            var cacheKey = Constants.GetTokenCacheKey(tokenRequest.UserId, tokenRequest.ClientId);
 
             if (!this.memoryCache.TryGetValue<string>(cacheKey, out var serializedToken))
             {
@@ -44,9 +44,8 @@ namespace Outreach.CXT.Demo.Server.Controllers
             if (expiredToken)
             {
                 tokenInfo = await this.outreachService.RefreshTokenAsync(tokenInfo.RefreshToken);
-                var key = Constants.GetTokenCacheKey(tokenRequest.UserId);
                 var value = JsonConvert.SerializeObject(tokenInfo);
-                this.memoryCache.Set(key, value, DateTimeOffset.MaxValue);
+                this.memoryCache.Set(cacheKey, value, DateTimeOffset.MaxValue);
                 expiresAt = (tokenInfo.CreatedAt * 1000).FromEpochMillis().AddSeconds(tokenInfo.ExpiresIn);
             }
 

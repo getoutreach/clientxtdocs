@@ -8,7 +8,7 @@ namespace Outreach.CXT.Demo.Server
 
         public const string AUTH_USER_COOKIE_NAME = "cxt-sdk-user-v2";
 
-        public static string GetTokenCacheKey(string userId) => "cxt-token-cache-" + userId;
+        public static string GetTokenCacheKey(string userId, string clientId) => "cxt-token-cache-" + userId + "_" + clientId ;
     }
 
     public static class AzureServiceKeys {

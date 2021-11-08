@@ -30,11 +30,13 @@ namespace Outreach.CXT.Demo.Server.Controllers
         [HttpGet]
         public async Task<ActionResult> Login([FromQuery]string code)
         {
-            var userId = this.Request.Cookies[Constants.AUTH_USER_COOKIE_NAME];
+            var cookieValue = this.Request.Cookies[Constants.AUTH_USER_COOKIE_NAME];
+
+            var data = JsonConvert.DeserializeObject<AuthCookieData>(cookieValue);
             string connectPage = this.configuration.GetValue<string>(AzureServiceKeys.CONNECT_URI);
 
             var tokenInfo =  await this.outreachService.GetTokenAsync(code);
-            var key = Constants.GetTokenCacheKey(userId);
+            var key = Constants.GetTokenCacheKey(data.UserId, data.ClientId);
             var value = JsonConvert.SerializeObject(tokenInfo);
 
             this.memoryCache.Set(key, value, DateTimeOffset.MaxValue);
@@ -44,5 +46,12 @@ namespace Outreach.CXT.Demo.Server.Controllers
             var connectUri = $"{connectPage}?token={tokenInfo.AccessToken}&expiresAt={expiresAt.ToEpochMillis()}";
             return this.Redirect(connectUri);
         }
+    }
+
+    public class AuthCookieData
+    {
+        public string UserId { get; set; }
+
+        public string ClientId { get; set; }
     }
 }
