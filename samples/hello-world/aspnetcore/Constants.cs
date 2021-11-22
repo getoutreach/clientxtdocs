@@ -5,10 +5,6 @@ namespace Outreach.CXT.Demo.Server
     public static class Constants
     {
         public const string DEFAULT_HTTP_CLIENT = "DEFAULT";
-
-        public const string AUTH_USER_COOKIE_NAME = "cxt-sdk-user-v2";
-
-        public static string GetTokenCacheKey(string userId, string clientId) => "cxt-token-cache-" + userId + "_" + clientId ;
     }
 
     public static class AzureServiceKeys {
