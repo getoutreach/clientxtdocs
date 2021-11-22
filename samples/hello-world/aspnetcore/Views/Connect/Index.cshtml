@@ -13,14 +13,11 @@
 <body>
 <script>
         
-    var token = '@Model.Token';
-    var expiresAt = '@Model.ExpiresAt';
-    var target ='@Model.AddonHostOrigin';
+    var result = '@Model.Result';
 
     var data = JSON.stringify({
         type: 'cxt:connect:token',
-        token, 
-        expiresAt
+        result
     });
     if (window.opener) {
         window.opener.postMessage(data, target);
