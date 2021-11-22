@@ -8,9 +8,7 @@
         /// <value>
         /// The token.
         /// </value>
-        public string Token { get; set; }
-
-        public long ExpiresAt { get; set; }
+        public string Result { get; set; }
 
         public string AddonHostOrigin { get; set; }
     }
