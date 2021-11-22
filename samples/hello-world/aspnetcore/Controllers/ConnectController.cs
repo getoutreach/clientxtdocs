@@ -18,13 +18,12 @@ namespace Outreach.CXT.Demo.Server.Controllers
             this.configuration = configuration;
         }
 
-        public IActionResult Index(string token, long expiresAt)
+        public IActionResult Index(string result)
         {
 
             var viewModel = new ConnectViewModel
             {
-                Token = token,
-                ExpiresAt = expiresAt,
+                Result = result,
                 AddonHostOrigin = this.configuration.GetValue<string>(AzureServiceKeys.ADDON_HOST_ORIGIN)
             };
 

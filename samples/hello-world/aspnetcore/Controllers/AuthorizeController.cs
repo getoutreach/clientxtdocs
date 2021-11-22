@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using Outreach.CXT.Demo.Server.Services;
 namespace Outreach.CXT.Demo.Server.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class AuthorizeController : ControllerBase
     {
@@ -30,28 +32,17 @@ namespace Outreach.CXT.Demo.Server.Controllers
         [HttpGet]
         public async Task<ActionResult> Login([FromQuery]string code)
         {
-            var cookieValue = this.Request.Cookies[Constants.AUTH_USER_COOKIE_NAME];
-
-            var data = JsonConvert.DeserializeObject<AuthCookieData>(cookieValue);
             string connectPage = this.configuration.GetValue<string>(AzureServiceKeys.CONNECT_URI);
 
             var tokenInfo =  await this.outreachService.GetTokenAsync(code);
-            var key = Constants.GetTokenCacheKey(data.UserId, data.ClientId);
+            var key = User.Identity.Name;
             var value = JsonConvert.SerializeObject(tokenInfo);
 
             this.memoryCache.Set(key, value, DateTimeOffset.MaxValue);
 
             // now we redirect to connect page
-            var expiresAt = (tokenInfo.CreatedAt*1000).FromEpochMillis().AddSeconds(tokenInfo.ExpiresIn);
-            var connectUri = $"{connectPage}?token={tokenInfo.AccessToken}&expiresAt={expiresAt.ToEpochMillis()}";
+            var connectUri = $"{connectPage}?result=ok";
             return this.Redirect(connectUri);
         }
-    }
-
-    public class AuthCookieData
-    {
-        public string UserId { get; set; }
-
-        public string ClientId { get; set; }
     }
 }
